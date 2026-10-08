@@ -180,3 +180,23 @@ def test_commands_show_a_clean_error_instead_of_a_traceback(tmp_path, monkeypatc
     capsys.readouterr()
     assert ask.main(["stock", "--index", str(out), "--embedder", "openai"]) == 2
     assert "Rebuild it" in capsys.readouterr().out
+
+
+def test_the_default_dotenv_is_skipped_under_test_but_an_explicit_path_still_loads(
+    tmp_path, monkeypatch
+):
+    import os
+
+    from penny import config
+
+    (tmp_path / ".env").write_text("PENNY_TEST_DEFAULT_PATH=loaded\n")
+    monkeypatch.setattr(config, "PROJECT_ROOT", tmp_path)
+    monkeypatch.delenv("PENNY_TEST_DEFAULT_PATH", raising=False)
+
+    assert config.load_env() is False  # the autouse fixture set PENNY_NO_DOTENV
+    assert "PENNY_TEST_DEFAULT_PATH" not in os.environ
+
+    monkeypatch.delenv("PENNY_NO_DOTENV")
+    assert config.load_env() is True  # without the flag, the project .env is read
+    assert os.environ["PENNY_TEST_DEFAULT_PATH"] == "loaded"
+    monkeypatch.delenv("PENNY_TEST_DEFAULT_PATH")
