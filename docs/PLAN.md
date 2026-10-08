@@ -9,7 +9,7 @@
 | LLM access | **Adapter pattern**: `LLMClient` contract, one adapter per provider, chosen by `LLM_PROVIDER` | Swap providers with an env var. Tests use `FakeLLM` and need no key |
 | Providers to build | Anthropic first, then OpenAI (program key). Gemini only if time allows | Demo with whichever key works |
 | Vector store | **FAISS** + `all-MiniLM-L6-v2` (local, free) | No infra |
-| Market data | **yfinance** primary, mock fallback, TTL cache. Alpha Vantage optional | No key or daily cap. Provider interface keeps it swappable |
+| Market data | Fallback chain: **yfinance, then Alpha Vantage, then saved sample quotes**, all behind a TTL cache | yfinance has no cap but is unofficial. Alpha Vantage is official but limited to 25 requests a day, so it only runs when yfinance fails |
 | App database | Postgres (profiles, ledger, traces, market cache) | Needs Docker. Fallback: Homebrew Postgres |
 | Agent count | **5 specialist agents**, built well (rubric: 4-5 = "Good") | Quality over quantity |
 | UI | Streamlit, multi-tab, thin pages over testable modules | Rubric names Streamlit |
@@ -72,7 +72,8 @@ Legend: `done` is merged to `main`.
 | K knowledge | K1 | Article format, ingest script, FAISS retriever with attribution, 5 sample articles | 0 |
 | | K2 to K4 | Article batches (about 20 each), reviewed by the owner for accuracy | K1 |
 | M market | M1 | Provider interface, mock provider, TTL cache | 0 |
-| | M2 | yfinance provider (quotes and history), throttle handling, errors. Alpha Vantage only if time allows | M1 |
+| | M2 | yfinance provider (quotes and history), throttle handling, errors | M1 |
+| | M3 | Alpha Vantage provider with a daily request budget, and the fallback chain that tries providers in order and reports which one answered | M1, M2, owner's key |
 | A data | A1 | Docker Postgres, schema, migrations | Docker installed |
 | | A2 | Repositories: kids, profiles, answers, ledger, traces, cache | A1 |
 | E agents | E1 | Finance Q&A agent | K1, C3 |
@@ -97,7 +98,7 @@ Legend: `done` is merged to `main`.
 | Days | Parallel work | Milestone |
 |---|---|---|
 | 1-2 | C0, C1, B3, K1, M1, D1; A1 as soon as Docker works | Adapters run, FAISS answers a question, UI shell renders |
-| 3-5 | C2, C3, B4, M2, K2, A2, E1, D2 | First agent answers end to end through LangGraph |
+| 3-5 | C2, C3, B4, M2, M3, K2, A2, E1, D2 | First agent answers end to end through LangGraph |
 | 6-8 | E2, E3, E4, E5, K3, D3, D4 | All five agents work individually |
 | 9-10 | E6, E7, X1, D5 | Router, Guardian loop and MCP server done |
 | 11-12 | X2, X3, K4, UI polish and charts | Coverage at 90, evals run, knowledge base at 60+ |
@@ -109,11 +110,11 @@ Critical path: C0 to C1 to C3 to the agents. Long pole: knowledge-base content, 
 ## Owner tasks (accounts and installs I cannot do)
 1. Install Docker Desktop, then verify with `docker run --rm hello-world`.
 2. Get an LLM key you can demo with (program OpenAI key, or an Anthropic key). Put it in `.env`, never in chat or git.
-3. No market-data signup needed: yfinance has no key. (Alpha Vantage is optional later and would need a key.)
+3. Get an Alpha Vantage API key (free, can take up to 24 hours) and put it in `.env` as `ALPHAVANTAGE_API_KEY`. yfinance needs no key. Needed by M3, around day 4.
 4. Create the public GitHub repo near the end, and share the URL when you want me to prepare the push.
 
 ## Risks
 - **Content volume:** 60 articles is the long pole. Mitigation: LLM-drafted originals in batches, with your review for accuracy. We do not copy third-party text.
-- **Market data reliability:** yfinance is unofficial and Yahoo can throttle or change endpoints. Mitigation: provider interface, cache with about 30 minute TTL, saved sample quotes as a mock fallback, and a demo mode that never touches the network.
+- **Market data reliability:** yfinance is unofficial and Yahoo can throttle or change endpoints, and Alpha Vantage allows only 25 requests a day. Mitigation: provider chain (yfinance, then Alpha Vantage, then saved sample quotes), cache with about 30 minute TTL, a request budget on Alpha Vantage, and a demo mode that never touches the network.
 - **Scope:** five agents plus MCP plus charts in 14 days is tight. Cut order if behind: Parent tab, then evals extras, then 60 articles down to 50, never the tests or docs.
 - **Child safety:** local only, nickname only, Guardian on every reply, education not advice.
