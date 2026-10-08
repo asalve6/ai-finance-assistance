@@ -13,7 +13,7 @@
 | App database | Postgres (profiles, ledger, traces, market cache) | Needs Docker. Fallback: Homebrew Postgres |
 | MCP server | **Dropped** | Owner's call. Costs up to 5 rubric points. Can be revived late |
 | Agent count | **5 specialist agents**, built well (rubric: 4-5 = "Good") | Quality over quantity |
-| UI | Streamlit, multi-tab, thin pages over testable modules | Rubric names Streamlit |
+| UI | **Keep it simple.** Streamlit, 4 tabs (Chat, Play, Portfolio and Markets, Goals), default look with a light theme, no custom CSS. Pages are thin over testable modules | Rubric names Streamlit and rewards tabs, a chat that keeps context, and clear charts, not custom styling |
 
 ### The five agents (plus supporting nodes)
 
@@ -37,7 +37,7 @@ Stretch agent if time remains: News Synthesizer (needs Tavily or SerpApi). The r
 | RAG (8) | FAISS, chunking, source attribution, low-confidence refusal | Excellent |
 | Real-time data (7) | Provider interface, TTL cache, mock fallback, error handling | Excellent |
 | MCP server (5) | **Not built.** Owner decision: not required. Gives up at most 5 points | 0 of 5 |
-| Web interface (10) | Streamlit tabs: Chat, Games, Portfolio, Markets, Goals, Knowledge, Parent | Excellent |
+| Web interface (10) | Streamlit, 4 clearly labeled tabs, sidebar with coins and level | Good |
 | Conversational flow (8) | Session memory in graph state, profile-aware tone | Good |
 | Data viz (7) | Allocation chart, price history, goal progress, game profit | Good |
 | Knowledge base (8) | 60 articles (Good), 100 stretch (Excellent) | Good |
@@ -84,11 +84,11 @@ Legend: `done` is merged to `main`.
 | | E5 | Tax Education agent | K1, C3 |
 | | E6 | Guardian + reject and rewrite loop in the graph | C2, C3 |
 | | E7 | Router: real classification, mixed-query handling | E1 to E5 |
-| D UI | D1 | Streamlit shell, theme, tabs on fake data | 0 |
-| | D2 | Chat tab wired to the graph, session memory | D1, C2 |
-| | D3 | Games tab | D1, B1, B2 |
-| | D4 | Portfolio and Markets tabs with charts | D1, B4, M1 |
-| | D5 | Goals, Knowledge, Parent tabs | D1, B3, K1, A2 |
+| D UI | D1 | Streamlit shell: 4 tabs and a sidebar coin counter, default look, fake data | 0 |
+| | D2 | Chat tab wired to the graph, session memory, sources shown under each answer | D1, C2 |
+| | D3 | Play tab: Piggy Bank and Lemonade with a profit chart | D1, B1, B2 |
+| | D4 | Portfolio and Markets tab (one tab, two sections) with allocation and price charts | D1, B4, M1 |
+| | D5 | Goals tab (goal progress chart) and rewards in the sidebar | D1, B3, A2 |
 | X | X2 | Eval suites and report | E7 |
 | | X3 | Coverage gate at 90 percent | most code merged |
 | | X4 | README, architecture diagram, demo script, final polish | all |
@@ -116,5 +116,5 @@ Critical path: C0 to C1 to C3 to the agents. Long pole: knowledge-base content, 
 ## Risks
 - **Content volume:** 60 articles is the long pole. Mitigation: LLM-drafted originals in batches, with your review for accuracy. We do not copy third-party text.
 - **Market data reliability:** yfinance is unofficial and Yahoo can throttle or change endpoints, and Alpha Vantage allows only 25 requests a day. Mitigation: provider chain (yfinance, then Alpha Vantage, then saved sample quotes), cache with about 30 minute TTL, a request budget on Alpha Vantage, and a demo mode that never touches the network.
-- **Scope:** five agents plus charts in 14 days is tight. If days 9-10 finish early, an MCP server (about one PR, wrapping the existing tools) can be added back for up to 5 points. Cut order if behind: Parent tab, then evals extras, then 60 articles down to 50, never the tests or docs.
+- **Scope:** five agents plus charts in 14 days is tight. If days 9-10 finish early, an MCP server (about one PR, wrapping the existing tools) can be added back for up to 5 points. Cut order if behind: evals extras, then 60 articles down to 50, never the tests or docs.
 - **Child safety:** local only, nickname only, Guardian on every reply, education not advice.
