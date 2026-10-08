@@ -1,0 +1,81 @@
+# The 60 planned topics. An article's id must match its file name and an entry here.
+# area: saving | interest | earning | budgeting | markets | risk | companies | taxes | safety
+# level: starter | saver | builder
+
+# saving (8)
+- {id: piggy-bank-basics, title: "Your piggy bank: where saving starts", area: saving, level: starter}
+- {id: needs-vs-wants, title: "Needs and wants: spending on purpose", area: saving, level: starter}
+- {id: setting-a-savings-goal, title: "Setting a savings goal", area: saving, level: starter}
+- {id: allowance-and-habits, title: "Allowance and money habits", area: saving, level: starter}
+- {id: saving-vs-spending, title: "Saving or spending: how to choose", area: saving, level: starter}
+- {id: banks-and-accounts, title: "Banks and accounts", area: saving, level: saver}
+- {id: emergency-fund, title: "The emergency fund", area: saving, level: saver}
+- {id: delayed-gratification, title: "The power of waiting", area: saving, level: starter}
+
+# interest (7)
+- {id: what-is-interest, title: "What is interest?", area: interest, level: saver}
+- {id: simple-interest, title: "Simple interest", area: interest, level: saver}
+- {id: compound-interest, title: "Compound interest: money that grows on money", area: interest, level: saver}
+- {id: rule-of-72, title: "The rule of 72", area: interest, level: builder}
+- {id: inflation, title: "Inflation: why prices creep up", area: interest, level: saver}
+- {id: savings-accounts-and-apy, title: "Savings accounts and APY", area: interest, level: saver}
+- {id: why-start-early, title: "Why starting early wins", area: interest, level: saver}
+
+# earning (8)
+- {id: what-is-profit, title: "What is profit?", area: earning, level: starter}
+- {id: costs-and-revenue, title: "Costs and revenue", area: earning, level: starter}
+- {id: supply-and-demand, title: "Supply and demand", area: earning, level: saver}
+- {id: setting-a-price, title: "How to set a price", area: earning, level: saver}
+- {id: running-a-lemonade-stand, title: "Running a lemonade stand", area: earning, level: starter}
+- {id: ways-kids-earn-money, title: "Ways kids can earn money", area: earning, level: starter}
+- {id: profit-per-sale, title: "How much you keep from each sale", area: earning, level: builder}
+- {id: entrepreneurship, title: "What is an entrepreneur?", area: earning, level: saver}
+
+# budgeting (6)
+- {id: what-is-a-budget, title: "What is a budget?", area: budgeting, level: starter}
+- {id: tracking-spending, title: "Tracking where your money goes", area: budgeting, level: starter}
+- {id: impulse-buying, title: "Impulse buying and the 24-hour rule", area: budgeting, level: starter}
+- {id: comparing-prices, title: "Comparing prices", area: budgeting, level: starter}
+- {id: sharing-and-giving, title: "Sharing and giving", area: budgeting, level: starter}
+- {id: save-spend-give-split, title: "Save, spend, give: splitting your money", area: budgeting, level: saver}
+
+# markets (10)
+- {id: what-is-a-stock, title: "What is a stock?", area: markets, level: saver}
+- {id: stock-exchange, title: "The stock exchange", area: markets, level: saver}
+- {id: share-prices-move, title: "Why share prices move", area: markets, level: saver}
+- {id: dividends, title: "Dividends", area: markets, level: builder}
+- {id: what-is-a-bond, title: "What is a bond?", area: markets, level: builder}
+- {id: what-is-an-etf, title: "What is an ETF?", area: markets, level: builder}
+- {id: index-funds, title: "Index funds", area: markets, level: builder}
+- {id: mutual-funds, title: "Mutual funds", area: markets, level: builder}
+- {id: reading-a-stock-quote, title: "How to read a stock quote", area: markets, level: saver}
+- {id: stock-market-indexes, title: "Stock market indexes", area: markets, level: builder}
+
+# risk (7)
+- {id: risk-and-reward, title: "Risk and reward", area: risk, level: saver}
+- {id: diversification, title: "Don't put all your eggs in one basket", area: risk, level: saver}
+- {id: what-is-a-portfolio, title: "What is a portfolio?", area: risk, level: saver}
+- {id: volatility, title: "Volatility: the ups and downs", area: risk, level: builder}
+- {id: long-term-investing, title: "Thinking long term", area: risk, level: saver}
+- {id: panic-selling, title: "Why panic selling hurts", area: risk, level: builder}
+- {id: asset-allocation, title: "Asset allocation", area: risk, level: builder}
+
+# companies (4)
+- {id: what-is-a-company, title: "What is a company?", area: companies, level: starter}
+- {id: what-is-an-ipo, title: "What is an IPO?", area: companies, level: builder}
+- {id: owning-part-of-a-company, title: "Owning part of a company", area: companies, level: saver}
+- {id: market-cap, title: "Market cap: how big is a company?", area: companies, level: builder}
+
+# taxes (6)
+- {id: what-are-taxes, title: "What are taxes?", area: taxes, level: starter}
+- {id: income-tax, title: "Income tax", area: taxes, level: saver}
+- {id: sales-tax, title: "Sales tax", area: taxes, level: starter}
+- {id: paycheck-withholding, title: "Why your paycheck is smaller", area: taxes, level: saver}
+- {id: retirement-accounts-401k-ira-roth, title: "401(k), IRA and Roth: retirement accounts", area: taxes, level: builder}
+- {id: where-taxes-go, title: "Where taxes go", area: taxes, level: starter}
+
+# safety (4)
+- {id: scams-and-fraud, title: "Spotting scams", area: safety, level: starter}
+- {id: debit-vs-credit, title: "Debit cards and credit cards", area: safety, level: saver}
+- {id: borrowing-and-debt, title: "Borrowing and debt", area: safety, level: saver}
+- {id: online-privacy-and-money, title: "Keeping your money info private", area: safety, level: starter}
