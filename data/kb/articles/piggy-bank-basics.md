@@ -10,7 +10,7 @@ sources:
     url: https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/
   - title: MyMoney.gov
     url: https://www.mymoney.gov/
-reviewed: false
+reviewed: true
 ---
 
 A piggy bank is a simple tool with a big job. It keeps your money safe so you can use it later.
