@@ -7,3 +7,6 @@ __pycache__/
 *.log
 .DS_Store
 .streamlit/secrets.toml
+.coverage
+htmlcov/
+coverage.xml

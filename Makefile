@@ -1,4 +1,4 @@
-.PHONY: setup test lint fmt run
+.PHONY: setup test lint fmt run kb-check kb-links
 
 setup:
 	uv sync
@@ -14,3 +14,9 @@ fmt:
 
 run:
 	uv run streamlit run src/penny/ui/app.py
+
+kb-check:
+	uv run python -m penny.kb
+
+kb-links:
+	uv run python -m penny.kb --links
