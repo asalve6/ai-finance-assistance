@@ -1,8 +1,9 @@
-"""Turn text into vectors. Two embedders share one small interface.
+"""Turn text into vectors. Three embedders share one small interface.
 
-- `HashingEmbedder`: deterministic, word-based, needs no download. For tests, offline work and a
-  last-resort demo mode. It matches on shared words, not meaning.
-- `SentenceTransformerEmbedder`: the real semantic model (all-MiniLM-L6-v2). It needs the optional
+- `OpenAIEmbedder` (the default): OpenAI text-embedding-3-small, semantic. Needs OPENAI_API_KEY.
+- `HashingEmbedder`: deterministic, word-based, needs no download or key. For tests and offline
+  work. It matches on shared words, not meaning.
+- `SentenceTransformerEmbedder`: a local semantic model (all-MiniLM-L6-v2). It needs the optional
   install `uv sync --extra embeddings` and downloads the model weights on first use.
 
 Vectors are float32 and L2-normalised, so a dot product is cosine similarity.
@@ -10,12 +11,16 @@ Vectors are float32 and L2-normalised, so a dot product is cosine similarity.
 
 from __future__ import annotations
 
+import os
 import re
 import zlib
 from typing import Any, Protocol
 
 import numpy as np
 
+DEFAULT_EMBEDDER = "openai"
+OPENAI_MODEL = "text-embedding-3-small"
+OPENAI_DIM = 1536
 MINILM_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 MINILM_DIM = 384
 
@@ -84,10 +89,68 @@ class SentenceTransformerEmbedder:
         return _normalise(np.asarray(vectors, dtype=np.float32))
 
 
-def get_embedder(name: str) -> Embedder:
-    """`hashing` (offline) or `minilm` (semantic)."""
+class OpenAIEmbedder:
+    """OpenAI's text-embedding-3-small. Needs OPENAI_API_KEY and the network.
+
+    Each question a child asks is sent to OpenAI to be embedded. Repeated texts are remembered, so
+    asking the same thing twice costs no second call. Blank texts become zero vectors without
+    calling the API (it rejects empty input).
+    """
+
+    name = f"openai/{OPENAI_MODEL}"
+    dim = OPENAI_DIM
+    default_min_score = 0.30  # provisional: calibrate against real questions
+
+    def __init__(self, client: Any = None, *, batch_size: int = 100, cache_size: int = 512) -> None:
+        self._client = client
+        self._batch_size = batch_size
+        self._cache_size = cache_size
+        self._cache: dict[str, np.ndarray] = {}
+
+    def _api(self) -> Any:
+        if self._client is None:
+            if not os.environ.get("OPENAI_API_KEY"):
+                raise RuntimeError(
+                    "OPENAI_API_KEY is not set. Add it to .env (see .env.example) or use "
+                    "--embedder hashing for the offline test embedder."
+                )
+            from openai import OpenAI
+
+            self._client = OpenAI()
+        return self._client
+
+    def _remember(self, text: str, vector: np.ndarray) -> None:
+        if len(self._cache) >= self._cache_size:
+            self._cache.pop(next(iter(self._cache)))  # drop the oldest
+        self._cache[text] = vector
+
+    def embed(self, texts: list[str]) -> np.ndarray:
+        matrix = np.zeros((len(texts), self.dim), dtype=np.float32)
+        unique = list(dict.fromkeys(t for t in texts if t.strip() and t not in self._cache))
+        fetched: dict[str, np.ndarray] = {}
+        for start in range(0, len(unique), self._batch_size):
+            batch = unique[start : start + self._batch_size]
+            response = self._api().embeddings.create(model=OPENAI_MODEL, input=batch)
+            for item in sorted(response.data, key=lambda d: d.index):
+                fetched[batch[item.index]] = _normalise(
+                    np.asarray([item.embedding], dtype=np.float32)
+                )[0]
+        for row, text in enumerate(texts):
+            if text.strip():
+                # Read from this call's own results first: the bounded cache may already have
+                # evicted a text that was fetched earlier in the same call.
+                matrix[row] = fetched[text] if text in fetched else self._cache[text]
+        for text, vector in fetched.items():
+            self._remember(text, vector)
+        return matrix
+
+
+def get_embedder(name: str = DEFAULT_EMBEDDER) -> Embedder:
+    """`openai` (default), `minilm` (local semantic), or `hashing` (offline, for tests)."""
+    if name == "openai":
+        return OpenAIEmbedder()
     if name == "hashing":
         return HashingEmbedder()
     if name == "minilm":
         return SentenceTransformerEmbedder()
-    raise ValueError(f"unknown embedder '{name}', expected 'hashing' or 'minilm'")
+    raise ValueError(f"unknown embedder '{name}', expected 'openai', 'minilm' or 'hashing'")

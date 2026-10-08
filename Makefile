@@ -25,10 +25,10 @@ kb-links:
 kb-index-dev:
 	uv run python -m penny.kb.build --embedder hashing --include-drafts
 
-# Real index: reviewed articles only, semantic model. Needs: uv sync --extra embeddings
+# Real index: reviewed articles only, OpenAI embeddings (needs OPENAI_API_KEY in .env)
 kb-index:
 	uv run python -m penny.kb.build
 
-# Usage: make kb-ask Q="what is a stock?" EMB=hashing
+# Usage: make kb-ask Q="what is a stock?"   (add EMB=hashing for the offline test index)
 kb-ask:
-	uv run python -m penny.kb.ask "$(Q)" --embedder $(or $(EMB),minilm)
+	uv run python -m penny.kb.ask "$(Q)" $(if $(EMB),--embedder $(EMB),)

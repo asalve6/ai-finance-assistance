@@ -12,6 +12,8 @@ dependencies = [
     "pyyaml>=6.0.3",
     "numpy>=2.5.3",
     "faiss-cpu>=1.15.1",
+    "openai>=3.26.0",
+    "python-dotenv>=1.2.4",
 ]
 
 [project.optional-dependencies]
@@ -31,7 +33,7 @@ packages = ["src/penny"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["src"]
+pythonpath = ["src", "tests"]
 
 [tool.ruff]
 line-length = 100
