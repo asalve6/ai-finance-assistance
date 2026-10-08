@@ -43,6 +43,23 @@ make kb-links      # also confirms every source url responds (needs network)
 
 The reading grade is an estimate (Flesch-Kincaid with a simple syllable counter). It catches text that is too hard but is not a substitute for a human read.
 
+## Searching (RAG)
+
+Articles are split into chunks (a summary plus one per section), embedded, and stored in a FAISS index under `data/kb/index/` (not committed). Each result carries its article and sources, so answers can cite them.
+
+**Only reviewed articles are indexed** by default, so a child never gets an answer from an article you have not checked.
+
+```bash
+make kb-index-dev                          # offline test index: word matching, includes drafts
+make kb-ask Q="what is a stock?" EMB=hashing
+
+uv sync --extra embeddings                 # one time: installs PyTorch, downloads the model on first use
+make kb-index                              # real index: semantic model, reviewed articles only
+make kb-ask Q="why is my paycheck smaller?"
+```
+
+If nothing scores above the embedder's threshold, the result is "not confident" and the agent must say it does not know. The semantic model's threshold (0.30) is provisional and should be tuned on real questions once it is installed.
+
 ## Owner review checklist (about 5 minutes per article)
 1. Are the facts correct?
 2. Would a 12-year-old follow it? (Even better: have your son read a few.)
