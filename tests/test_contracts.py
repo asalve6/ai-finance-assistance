@@ -57,3 +57,9 @@ def test_provider_state_is_never_serialised():
     assert "provider_state" not in dumped
     assert "secret" not in message.model_dump_json()
     assert Message.model_validate_json(message.model_dump_json()).provider_state is None
+
+
+def test_a_tool_call_can_carry_a_parse_error_and_defaults_to_none():
+    assert ToolCall(id="1", name="x", input={}).error is None
+    bad = ToolCall(id="2", name="x", input={}, error="arguments were not valid JSON")
+    assert ToolCall.model_validate_json(bad.model_dump_json()).error == bad.error
