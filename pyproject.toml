@@ -10,6 +10,12 @@ dependencies = [
     "psycopg[binary]>=3.2",
     "streamlit>=1.40",
     "pyyaml>=6.0.3",
+    "numpy>=2.5.3",
+]
+
+[project.optional-dependencies]
+embeddings = [
+    "sentence-transformers>=3",
 ]
 
 [dependency-groups]
