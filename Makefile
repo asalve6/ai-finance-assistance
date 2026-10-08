@@ -1,4 +1,4 @@
-.PHONY: setup test lint fmt run kb-check kb-links kb-index kb-index-dev kb-ask
+.PHONY: setup test lint fmt run kb-check kb-links kb-index kb-index-dev kb-ask llm-smoke
 
 setup:
 	uv sync
@@ -32,3 +32,7 @@ kb-index:
 # Usage: make kb-ask Q="what is a stock?"   (add EMB=hashing for the offline test index)
 kb-ask:
 	uv run python -m penny.kb.ask "$(Q)" $(if $(EMB),--embedder $(EMB),)
+
+# Live check of the configured LLM provider (a few hundred tokens). Needs a key in .env.
+llm-smoke:
+	uv run python -m penny.llm.smoke

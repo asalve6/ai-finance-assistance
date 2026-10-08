@@ -108,6 +108,9 @@ class ToolCall(BaseModel):
     id: str
     name: str
     input: dict[str, Any]
+    # Set by an adapter when the model's arguments could not be parsed. The agent loop reports it
+    # back to the model as a tool error instead of running the tool.
+    error: str | None = None
 
 
 class Message(BaseModel):
