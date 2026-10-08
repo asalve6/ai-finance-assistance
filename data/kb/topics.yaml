@@ -1,5 +1,5 @@
-# The 60 planned topics. An article's id must match its file name and an entry here.
-# area: saving | interest | earning | budgeting | markets | risk | companies | taxes | safety
+# The 64 planned topics. An article's id must match its file name and an entry here.
+# area: saving | interest | earning | budgeting | markets | risk | companies | taxes | safety | mindset
 # level: starter | saver | builder
 
 # saving (8)
@@ -79,3 +79,9 @@
 - {id: debit-vs-credit, title: "Debit cards and credit cards", area: safety, level: saver}
 - {id: borrowing-and-debt, title: "Borrowing and debt", area: safety, level: saver}
 - {id: online-privacy-and-money, title: "Keeping your money info private", area: safety, level: starter}
+
+# mindset (4): see docs/PHILOSOPHY.md
+- {id: drop-by-drop, title: "Drop by drop: how small habits fill a big jar", area: mindset, level: starter}
+- {id: family-money-talks, title: "Money talks at home: learning together", area: mindset, level: starter}
+- {id: enough-and-gratitude, title: "Enough, and being thankful", area: mindset, level: starter}
+- {id: mistakes-are-practice, title: "Mistakes are practice", area: mindset, level: starter}
