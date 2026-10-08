@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from penny.contracts import LLMResponse, ToolSpec
+from penny.contracts import Effort, LLMResponse, Message, ToolSpec
 
 
 class FakeLLM:
@@ -19,10 +19,21 @@ class FakeLLM:
         *,
         model: str,
         system: str,
-        messages: list[dict[str, Any]],
+        messages: list[Message],
         tools: list[ToolSpec] | None = None,
+        max_tokens: int | None = None,
+        effort: Effort | None = None,
     ) -> LLMResponse:
-        self.calls.append({"model": model, "system": system, "messages": messages, "tools": tools})
+        self.calls.append(
+            {
+                "model": model,
+                "system": system,
+                "messages": list(messages),
+                "tools": tools,
+                "max_tokens": max_tokens,
+                "effort": effort,
+            }
+        )
         if not self._script:
             raise AssertionError("FakeLLM script exhausted: more LLM calls than expected")
         return self._script.pop(0)
