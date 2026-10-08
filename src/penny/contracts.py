@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from enum import StrEnum
-from typing import Any, Protocol
+from typing import Any, Literal, Protocol
 
 from pydantic import BaseModel, Field
 
@@ -97,6 +97,11 @@ class ToolSpec(BaseModel):
 
 
 # ---------------------------------------------------------------- LLM boundary
+# A provider-neutral conversation format. Each adapter (Anthropic, OpenAI, ...) translates it to
+# its own wire format and back, so agents, the graph and tests never see provider details.
+
+StopReason = Literal["end_turn", "tool_use", "max_tokens", "refusal", "other"]
+Effort = Literal["low", "medium", "high"]
 
 
 class ToolCall(BaseModel):
@@ -105,11 +110,43 @@ class ToolCall(BaseModel):
     input: dict[str, Any]
 
 
+class Message(BaseModel):
+    """One turn of a conversation. A `tool` message carries the result of exactly one ToolCall."""
+
+    role: Literal["user", "assistant", "tool"]
+    content: str = ""
+    tool_calls: list[ToolCall] = Field(default_factory=list)  # assistant only
+    tool_call_id: str | None = None  # tool only
+    is_error: bool = False  # tool only
+    # Provider-private data (for example thinking blocks) that must go back unchanged on the next
+    # call. Opaque to everything except the adapter that produced it. Never serialised.
+    provider_state: Any = Field(default=None, exclude=True)
+
+    @classmethod
+    def user(cls, text: str) -> Message:
+        return cls(role="user", content=text)
+
+    @classmethod
+    def tool_result(cls, call_id: str, content: str, *, is_error: bool = False) -> Message:
+        return cls(role="tool", content=content, tool_call_id=call_id, is_error=is_error)
+
+
 class LLMResponse(BaseModel):
     text: str = ""
     tool_calls: list[ToolCall] = Field(default_factory=list)
+    stop_reason: StopReason = "end_turn"
+    provider_state: Any = Field(default=None, exclude=True)
     input_tokens: int = 0
     output_tokens: int = 0
+
+    def to_message(self) -> Message:
+        """The assistant turn to append to the conversation before sending tool results."""
+        return Message(
+            role="assistant",
+            content=self.text,
+            tool_calls=self.tool_calls,
+            provider_state=self.provider_state,
+        )
 
 
 class LLMClient(Protocol):
@@ -118,8 +155,10 @@ class LLMClient(Protocol):
         *,
         model: str,
         system: str,
-        messages: list[dict[str, Any]],
+        messages: list[Message],
         tools: list[ToolSpec] | None = None,
+        max_tokens: int | None = None,
+        effort: Effort | None = None,
     ) -> LLMResponse: ...
 
 
