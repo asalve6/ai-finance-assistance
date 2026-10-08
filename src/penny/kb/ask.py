@@ -6,24 +6,33 @@ import argparse
 import os
 from pathlib import Path
 
+from penny.config import load_env
 from penny.contracts import Level
-from penny.kb.embedding import get_embedder
+from penny.kb.embedding import DEFAULT_EMBEDDER, get_embedder
 from penny.kb.index import INDEX_DIR, KBIndex
 from penny.kb.retriever import retrieve
 
 
 def main(argv: list[str] | None = None) -> int:
+    load_env()  # first, so KB_EMBEDDER from .env is seen by the argument defaults
     parser = argparse.ArgumentParser(prog="python -m penny.kb.ask")
     parser.add_argument("query")
     parser.add_argument("--index", type=Path, default=INDEX_DIR)
-    parser.add_argument("--embedder", default=os.getenv("KB_EMBEDDER", "minilm"))
+    parser.add_argument("--embedder", default=os.getenv("KB_EMBEDDER", DEFAULT_EMBEDDER))
     parser.add_argument("--level", choices=[level.value for level in Level], default=None)
     parser.add_argument("-k", type=int, default=4)
     args = parser.parse_args(argv)
 
-    index = KBIndex.load(get_embedder(args.embedder), args.index)
     level = Level(args.level) if args.level else None
-    result = retrieve(index, args.query, k=args.k, max_level=level)
+    try:
+        index = KBIndex.load(get_embedder(args.embedder), args.index)
+        result = retrieve(index, args.query, k=args.k, max_level=level)
+    except FileNotFoundError:
+        print(f"No index found at {args.index}. Build one first: make kb-index")
+        return 2
+    except (RuntimeError, ValueError) as exc:
+        print(f"Error: {exc}")
+        return 2
 
     if not result.confident:
         print(f"Not confident ({result.reason}). Penny would say it does not know.")

@@ -6,16 +6,18 @@ import argparse
 import os
 from pathlib import Path
 
+from penny.config import load_env
 from penny.kb.article import KB_DIR, load_articles
-from penny.kb.embedding import get_embedder
+from penny.kb.embedding import DEFAULT_EMBEDDER, get_embedder
 from penny.kb.index import INDEX_DIR, KBIndex
 
 
 def main(argv: list[str] | None = None) -> int:
+    load_env()  # first, so KB_EMBEDDER from .env is seen by the argument defaults
     parser = argparse.ArgumentParser(prog="python -m penny.kb.build")
     parser.add_argument("--dir", type=Path, default=KB_DIR, help="knowledge-base folder")
     parser.add_argument("--out", type=Path, default=INDEX_DIR, help="where to save the index")
-    parser.add_argument("--embedder", default=os.getenv("KB_EMBEDDER", "minilm"))
+    parser.add_argument("--embedder", default=os.getenv("KB_EMBEDDER", DEFAULT_EMBEDDER))
     parser.add_argument(
         "--include-drafts", action="store_true", help="also index articles not yet reviewed"
     )
@@ -26,7 +28,12 @@ def main(argv: list[str] | None = None) -> int:
         print("No articles found.")
         return 1
     reviewed = sum(a.reviewed for a in articles)
-    index = KBIndex.build(articles, get_embedder(args.embedder), include_drafts=args.include_drafts)
+    try:
+        embedder = get_embedder(args.embedder)
+        index = KBIndex.build(articles, embedder, include_drafts=args.include_drafts)
+    except (RuntimeError, ValueError) as exc:
+        print(f"Error: {exc}")
+        return 2
     index.save(args.out)
 
     indexed = len(articles) if args.include_drafts else reviewed

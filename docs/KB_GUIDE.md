@@ -50,15 +50,19 @@ Articles are split into chunks (a summary plus one per section), embedded, and s
 **Only reviewed articles are indexed** by default, so a child never gets an answer from an article you have not checked.
 
 ```bash
-make kb-index-dev                          # offline test index: word matching, includes drafts
+make kb-index-dev                          # offline test index: word matching, includes drafts, no key
 make kb-ask Q="what is a stock?" EMB=hashing
 
-uv sync --extra embeddings                 # one time: installs PyTorch, downloads the model on first use
-make kb-index                              # real index: semantic model, reviewed articles only
+# Real index. Needs OPENAI_API_KEY in .env (see .env.example):
+make kb-index                              # OpenAI text-embedding-3-small, reviewed articles only
 make kb-ask Q="why is my paycheck smaller?"
 ```
 
-If nothing scores above the embedder's threshold, the result is "not confident" and the agent must say it does not know. The semantic model's threshold (0.30) is provisional and should be tuned on real questions once it is installed.
+**Privacy note:** with OpenAI embeddings, each question a child types is sent to OpenAI to be embedded, and the article text is sent once when the index is built. No names or personal details are stored or sent.
+
+The default embedder is `openai` (set `KB_EMBEDDER` in `.env` to change it). `hashing` is for tests and offline work, and `minilm` is an optional local model (`uv sync --extra embeddings`).
+
+If nothing scores above the embedder's threshold, the result is "not confident" and the agent must say it does not know. The threshold (0.30) is provisional and has to be calibrated on real questions, because every embedding model produces scores on its own scale.
 
 ## Owner review checklist (about 5 minutes per article)
 1. Are the facts correct?
