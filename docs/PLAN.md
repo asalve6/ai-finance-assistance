@@ -11,6 +11,7 @@
 | Vector store | **FAISS** + `all-MiniLM-L6-v2` (local, free) | No infra |
 | Market data | Fallback chain: **yfinance, then Alpha Vantage, then saved sample quotes**, all behind a TTL cache | yfinance has no cap but is unofficial. Alpha Vantage is official but limited to 25 requests a day, so it only runs when yfinance fails |
 | App database | Postgres (profiles, ledger, traces, market cache) | Needs Docker. Fallback: Homebrew Postgres |
+| MCP server | **Dropped** | Owner's call. Costs up to 5 rubric points. Can be revived late |
 | Agent count | **5 specialist agents**, built well (rubric: 4-5 = "Good") | Quality over quantity |
 | UI | Streamlit, multi-tab, thin pages over testable modules | Rubric names Streamlit |
 
@@ -35,7 +36,7 @@ Stretch agent if time remains: News Synthesizer (needs Tavily or SerpApi). The r
 | LangGraph workflow (10) | Typed state, router edges, Guardian retry loop, trace id | Excellent |
 | RAG (8) | FAISS, chunking, source attribution, low-confidence refusal | Excellent |
 | Real-time data (7) | Provider interface, TTL cache, mock fallback, error handling | Excellent |
-| MCP server (5) | FastMCP server exposing KB search, quotes, portfolio, goal planner, game sim | Good |
+| MCP server (5) | **Not built.** Owner decision: not required. Gives up at most 5 points | 0 of 5 |
 | Web interface (10) | Streamlit tabs: Chat, Games, Portfolio, Markets, Goals, Knowledge, Parent | Excellent |
 | Conversational flow (8) | Session memory in graph state, profile-aware tone | Good |
 | Data viz (7) | Allocation chart, price history, goal progress, game profit | Good |
@@ -88,8 +89,7 @@ Legend: `done` is merged to `main`.
 | | D3 | Games tab | D1, B1, B2 |
 | | D4 | Portfolio and Markets tabs with charts | D1, B4, M1 |
 | | D5 | Goals, Knowledge, Parent tabs | D1, B3, K1, A2 |
-| X | X1 | MCP server | B3, B4, K1, M1 |
-| | X2 | Eval suites and report | E7 |
+| X | X2 | Eval suites and report | E7 |
 | | X3 | Coverage gate at 90 percent | most code merged |
 | | X4 | README, architecture diagram, demo script, final polish | all |
 
@@ -100,7 +100,7 @@ Legend: `done` is merged to `main`.
 | 1-2 | C0, C1, B3, K1, M1, D1; A1 as soon as Docker works | Adapters run, FAISS answers a question, UI shell renders |
 | 3-5 | C2, C3, B4, M2, M3, K2, A2, E1, D2 | First agent answers end to end through LangGraph |
 | 6-8 | E2, E3, E4, E5, K3, D3, D4 | All five agents work individually |
-| 9-10 | E6, E7, X1, D5 | Router, Guardian loop and MCP server done |
+| 9-10 | E6, E7, D5 | Router and Guardian loop done |
 | 11-12 | X2, X3, K4, UI polish and charts | Coverage at 90, evals run, knowledge base at 60+ |
 | 13 | X4 | README, diagram, setup guide |
 | 14 | Buffer, demo video (5-10 min) | Submission |
@@ -116,5 +116,5 @@ Critical path: C0 to C1 to C3 to the agents. Long pole: knowledge-base content, 
 ## Risks
 - **Content volume:** 60 articles is the long pole. Mitigation: LLM-drafted originals in batches, with your review for accuracy. We do not copy third-party text.
 - **Market data reliability:** yfinance is unofficial and Yahoo can throttle or change endpoints, and Alpha Vantage allows only 25 requests a day. Mitigation: provider chain (yfinance, then Alpha Vantage, then saved sample quotes), cache with about 30 minute TTL, a request budget on Alpha Vantage, and a demo mode that never touches the network.
-- **Scope:** five agents plus MCP plus charts in 14 days is tight. Cut order if behind: Parent tab, then evals extras, then 60 articles down to 50, never the tests or docs.
+- **Scope:** five agents plus charts in 14 days is tight. If days 9-10 finish early, an MCP server (about one PR, wrapping the existing tools) can be added back for up to 5 points. Cut order if behind: Parent tab, then evals extras, then 60 articles down to 50, never the tests or docs.
 - **Child safety:** local only, nickname only, Guardian on every reply, education not advice.
