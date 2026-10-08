@@ -1,0 +1,223 @@
+"""A specialist that answers only from Penny's own reviewed articles (RAG).
+
+How one answer is produced:
+
+1. The code searches the article index for the question. The reader's level is a preference, not
+   a wall: articles at or below it are tried first, and only if nothing matches are harder
+   articles used, with a note telling the model to explain them extra simply.
+2. The model gets those passages and writes a short answer. It may search again, at most twice,
+   through the `search_articles` tool, which helps with follow-ups such as "tell me more".
+3. Grounding is enforced in code, not left to the model: if no search in this turn found a
+   confident match, the model's text is discarded and a fixed "I don't know that yet" reply is
+   returned. Greetings and thanks are the only exception.
+
+The Finance Q&A agent (E1) is one instance of this class. The Tax Education agent (E5) is another.
+"""
+
+from __future__ import annotations
+
+import re
+import time
+
+from pydantic import BaseModel, Field
+
+from penny.agents.loop import run_agent
+from penny.agents.tools import make_tool
+from penny.contracts import Level, LLMClient, Message, TraceEvent, TraceSink
+from penny.graph.types import AgentReply, AgentRequest
+from penny.kb.index import KBIndex
+from penny.kb.retriever import Citation, Retrieval, retrieve
+from penny.observability import NullTraceSink
+from penny.principles import voice_block
+
+NOT_SURE = (
+    "I don't know that one yet. I only answer from what I have learned about money so far. "
+    "Could you ask it another way, or try a different money question?"
+)
+
+OLDER_READER_NOTE = (
+    "(These passages were written for older readers. Explain the idea in extra simple words.)"
+)
+
+MAX_TOOL_SEARCHES = 2
+MAX_CITATIONS = 3
+HISTORY_MESSAGES = 6
+
+_SMALL_TALK = re.compile(
+    r"^(hi|hello|hey|yo|thanks|thank you|thx|bye|goodbye|ok|okay|cool|nice|"
+    r"good (morning|afternoon|evening|night))\b[\sa-z!,.']*$"
+)
+
+_LEVEL_STYLE = {
+    Level.STARTER: "Use very simple words and 2 to 4 short sentences. Explain any money word.",
+    Level.SAVER: "Use simple words and 3 to 5 short sentences. Explain new money words briefly.",
+    Level.BUILDER: "Use 3 to 6 sentences. You can use the correct money terms, with a quick "
+    "explanation the first time.",
+}
+
+_RULES = """\
+How to answer:
+- Answer ONLY from the article passages you are given or that search_articles returns. Do not use
+  anything else you know, even if you are sure it is right.
+- If the passages do not answer the question, say you do not know that yet.
+- Write plain sentences and stay inside the sentence limit below. No lists, headings or bold.
+- You may reuse a comparison from the passages. Do not invent new ones, and never make money sound
+  like it grows by itself.
+- If you say that money or a price can go up, also say that it can go down.
+- This is for learning. Never tell the child what to buy, sell or invest in, and never promise
+  that money will grow.
+- Do not list sources or article ids. The app shows the sources.
+- For a greeting or a thank-you, reply in one friendly sentence and invite a money question."""
+
+
+def is_small_talk(text: str) -> bool:
+    cleaned = text.strip().lower()
+    return len(cleaned.split()) <= 4 and bool(_SMALL_TALK.match(cleaned))
+
+
+class SearchArgs(BaseModel):
+    query: str = Field(description="What to look for, in a few plain words", min_length=1)
+
+
+class KnowledgeAgent:
+    def __init__(
+        self,
+        llm: LLMClient,
+        model: str,
+        index: KBIndex,
+        *,
+        name: str = "finance_qa",
+        role: str = "You answer children's questions about money.",
+        sink: TraceSink | None = None,
+        max_steps: int = 4,
+        max_tokens: int | None = 1200,
+    ) -> None:
+        self.llm = llm
+        self.model = model
+        self.index = index
+        self.name = name
+        self.role = role
+        self.sink = sink or NullTraceSink()
+        self.max_steps = max_steps
+        self.max_tokens = max_tokens
+
+    # ------------------------------------------------------------------ prompt
+
+    def system_prompt(self, request: AgentRequest) -> str:
+        parts = [
+            f"You are Penny, a friendly money coach for a child called {request.kid.nickname}. "
+            f"{self.role}",
+            voice_block(),
+            _RULES,
+            f"Reading level: {_LEVEL_STYLE[request.kid.level]}",
+        ]
+        if request.feedback:
+            problems = "\n".join(f"- {item}" for item in request.feedback)
+            parts.append(
+                "Your previous draft was not accepted by the safety reviewer. Write a new answer "
+                f"that fixes these problems:\n{problems}"
+            )
+        return "\n\n".join(parts)
+
+    @staticmethod
+    def _passages(found: Retrieval, above_level: bool) -> str:
+        if not found.confident:
+            return "(no matching articles)"
+        note = f"{OLDER_READER_NOTE}\n" if above_level else ""
+        return note + found.as_prompt_context()
+
+    # ------------------------------------------------------------------ one answer
+
+    def respond(self, request: AgentRequest) -> AgentReply:
+        level = request.kid.level
+        confident: list[Retrieval] = []
+        searches = 0
+
+        def search(query: str) -> tuple[Retrieval, bool]:
+            """Returns (what was found, whether it came from above the reader's level)."""
+            started = time.perf_counter()
+            found = retrieve(self.index, query, max_level=level)
+            above_level = False
+            if not found.confident and level is not Level.BUILDER:
+                wider = retrieve(self.index, query)  # nothing at their level: try every level
+                if wider.confident:
+                    found, above_level = wider, True
+            if found.confident:
+                confident.append(found)
+            self.sink.record(
+                TraceEvent(
+                    trace_id=request.trace_id,
+                    agent=self.name,
+                    kind="retrieval",
+                    name="search_articles",
+                    input={"query": query, "max_level": level.value},
+                    output={
+                        "confident": found.confident,
+                        "reason": found.reason,
+                        "top_score": round(found.top_score, 3),
+                        "articles": [c.article_id for c in found.citations()],
+                        "above_level": above_level,
+                    },
+                    latency_ms=int((time.perf_counter() - started) * 1000),
+                )
+            )
+            return found, above_level
+
+        def search_tool(query: str) -> str:
+            nonlocal searches
+            if searches >= MAX_TOOL_SEARCHES:
+                return "Search limit reached. Answer from what you have, or say you do not know."
+            searches += 1
+            found, above_level = search(query)
+            if not found.confident:
+                return "No articles matched. If nothing else helps, say you do not know that yet."
+            return self._passages(found, above_level)
+
+        tool = make_tool(
+            "search_articles",
+            "Search Penny's own library of kid-level money articles. Call it when the passages you "
+            "were given do not answer the question: use different or simpler words, and for a "
+            "follow-up include the topic from earlier in the conversation. Do not call it for "
+            f"greetings. At most {MAX_TOOL_SEARCHES} searches.",
+            SearchArgs,
+            search_tool,
+        )
+
+        first, first_above_level = search(request.question)
+        history = [
+            Message(role=m.role, content=m.content)
+            for m in request.history[-HISTORY_MESSAGES:]
+            if m.role in ("user", "assistant") and m.content
+        ]
+        passages = self._passages(first, first_above_level)
+        prompt = f"Question: {request.question}\n\nArticle passages:\n{passages}"
+        result = run_agent(
+            self.llm,
+            model=self.model,
+            system=self.system_prompt(request),
+            messages=[*history, Message.user(prompt)],
+            tools=[tool],
+            sink=self.sink,
+            trace_id=request.trace_id,
+            agent=self.name,
+            max_steps=self.max_steps,
+            max_tokens=self.max_tokens,
+        )
+
+        if not confident:
+            if is_small_talk(request.question):
+                return AgentReply(text=result.text.strip())
+            return AgentReply(text=NOT_SURE)  # grounding enforced here, whatever the model wrote
+        return AgentReply(text=result.text.strip(), citations=self._citations(confident))
+
+    @staticmethod
+    def _citations(found: list[Retrieval]) -> list[Citation]:
+        best: dict[str, tuple[float, Citation]] = {}
+        for retrieval in found:
+            scores = {h.chunk.article_id: h.score for h in reversed(retrieval.hits)}
+            for citation in retrieval.citations():
+                score = scores[citation.article_id]
+                if citation.article_id not in best or score > best[citation.article_id][0]:
+                    best[citation.article_id] = (score, citation)
+        ranked = sorted(best.values(), key=lambda pair: pair[0], reverse=True)
+        return [citation for _, citation in ranked[:MAX_CITATIONS]]

@@ -75,12 +75,36 @@ Different sessions never see each other. The classes stored in the state are reg
 | Piece | Today (C2) | Replaced by |
 |---|---|---|
 | Router | `KeywordRouter`: first matching keyword group | E7: LLM classification, mixed questions |
-| Specialists | `StubSpecialist`: echoes the question | E1 Finance Q&A, E2 Coach, E3 Market, E4 Portfolio, E5 Tax |
+| Specialists | `finance_qa` is real (`KnowledgeAgent`, E1). The other four are `StubSpecialist` | E2 Coach, E3 Market, E4 Portfolio, E5 Tax |
 | Guardian | `RuleGuardian`: empty replies, advice and promise wording | E6: LLM review (tone, reading level, facts) on top |
 | Trace sink | `InMemoryTraceSink` | A2: Postgres, for the trace viewer |
+
+## The agent loop
+
+Real agents run on `run_agent` (`src/penny/agents/loop.py`): call the model, run the tools it asks for,
+send the results back, repeat, capped at `max_steps`. An agent can only use the tools it was given.
+Failing tools, unknown tools and invalid arguments go back to the model as error results. A cut-off
+answer or a refusal raises `AgentError`, which the graph treats as a rejected draft.
+
+## Finance Q&A (grounded answers)
+
+`KnowledgeAgent` (`src/penny/agents/knowledge.py`) answers only from reviewed articles:
+
+1. The code searches the index first. The reader's level is a preference: articles at or below it are
+   tried first, and harder ones are used only if nothing matches, with a note to explain extra simply.
+2. The model writes a short answer from those passages. It may search again (`search_articles`, at
+   most twice), which rescues follow-ups such as "tell me more".
+3. **"I don't know" is enforced in code.** If no search in the turn found a confident match, the model's
+   text is discarded and a fixed reply is returned. Greetings and thanks are the only exception.
+
+Sources come back as citations and are shown under the answer. `src/penny/runtime.py` wires the real
+agents into the graph. Agents not built yet stay as stubs there.
 
 ## Try it
 
 ```bash
-uv run python -m penny.graph.demo "why is my paycheck smaller?" "what is a stock?"
+uv run python -m penny.graph.demo "why is my paycheck smaller?" "what is a stock?"   # stubs, no key
+uv run python -m penny.graph.demo --live "what is a stock?" "tell me more"         # real LLM + index
 ```
+
+`--live` needs a key in `.env` and a built index (`make kb-index`).
