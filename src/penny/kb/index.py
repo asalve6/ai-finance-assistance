@@ -17,7 +17,7 @@ from pydantic import BaseModel
 
 from penny.contracts import Level
 from penny.kb.article import KB_DIR, Article
-from penny.kb.chunking import Chunk, chunk_article
+from penny.kb.chunking import CHUNKER_VERSION, Chunk, chunk_article
 from penny.kb.embedding import Embedder
 
 INDEX_DIR = KB_DIR / "index"
@@ -47,7 +47,9 @@ def select_articles(articles: list[Article], include_drafts: bool) -> list[Artic
 
 
 def content_hash(articles: list[Article]) -> str:
+    """Fingerprint of what the index was built from: the articles and the chunking rules."""
     digest = hashlib.sha256()
+    digest.update(f"chunker:{CHUNKER_VERSION}\n".encode())
     for a in sorted(articles, key=lambda a: a.id):
         digest.update(f"{a.id}|{a.level}|{int(a.reviewed)}|{a.summary}|{a.body}\n".encode())
     return digest.hexdigest()

@@ -288,3 +288,20 @@ def test_real_index_only_contains_reviewed_articles_by_default():
 def test_vectors_stay_unit_length_through_the_index(real_index):
     vectors = embedder.embed([c.embed_text for c in real_index.chunks])
     assert np.allclose(np.linalg.norm(vectors, axis=1), 1.0, atol=1e-5)
+
+
+# ------------------------------------------------------------------ chunking rules and structure
+
+
+def test_changing_the_chunking_rules_makes_a_saved_index_stale(monkeypatch):
+    articles = corpus()
+    index = KBIndex.build(articles, embedder)
+    assert not index.is_stale(articles)
+    monkeypatch.setattr("penny.kb.index.CHUNKER_VERSION", 999)
+    assert index.is_stale(articles)
+
+
+def test_prompt_context_keeps_lists_on_separate_lines(real_index):
+    result = retrieve(real_index, "how does compound interest grow after year 2")
+    context = result.as_prompt_context()
+    assert "\n- Start: $100.00\n- After year 1: $105.00\n- After year 2: $110.25" in context
