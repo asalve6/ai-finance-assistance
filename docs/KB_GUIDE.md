@@ -1,12 +1,12 @@
 # Knowledge base guide
 
-60 original, kid-level articles. They power the Finance Q&A and Tax Education agents (RAG), and every answer shows the article it came from.
+64 original, kid-level articles (60 on money topics plus 4 on money mindset, see PHILOSOPHY.md). They power the Finance Q&A and Tax Education agents (RAG), and every answer shows the article it came from.
 
 ## Where things live
 
 | Path | What |
 |---|---|
-| `data/kb/topics.yaml` | The 60 planned topics: id, title, area, level |
+| `data/kb/topics.yaml` | The 64 planned topics: id, title, area, level |
 | `data/kb/articles/<id>.md` | One article per topic. File name must equal the id |
 | `src/penny/kb/` | Parsing and checks (retrieval comes in a later PR) |
 
@@ -16,7 +16,7 @@
 ---
 id: piggy-bank-basics            # same as the file name and a topics.yaml entry
 title: "Your piggy bank: where saving starts"
-area: saving                     # saving|interest|earning|budgeting|markets|risk|companies|taxes|safety
+area: saving                     # saving|interest|earning|budgeting|markets|risk|companies|taxes|safety|mindset
 level: starter                   # starter|saver|builder (must match topics.yaml)
 summary: One sentence, 160 characters or fewer.
 key_terms: [saving, goal]        # 1 to 6

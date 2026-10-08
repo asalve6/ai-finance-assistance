@@ -29,6 +29,7 @@ class Area(StrEnum):
     COMPANIES = "companies"
     TAXES = "taxes"
     SAFETY = "safety"
+    MINDSET = "mindset"
 
 
 class Source(BaseModel):
