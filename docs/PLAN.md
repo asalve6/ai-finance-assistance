@@ -9,6 +9,7 @@
 | LLM access | **Adapter pattern**: `LLMClient` contract, one adapter per provider, chosen by `LLM_PROVIDER` | Swap providers with an env var. Tests use `FakeLLM` and need no key |
 | Providers to build | Anthropic first, then OpenAI (program key). Gemini only if time allows | Demo with whichever key works |
 | Vector store | **FAISS** + `all-MiniLM-L6-v2` (local, free) | No infra |
+| Market data | **yfinance** primary, mock fallback, TTL cache. Alpha Vantage optional | No key or daily cap. Provider interface keeps it swappable |
 | App database | Postgres (profiles, ledger, traces, market cache) | Needs Docker. Fallback: Homebrew Postgres |
 | Agent count | **5 specialist agents**, built well (rubric: 4-5 = "Good") | Quality over quantity |
 | UI | Streamlit, multi-tab, thin pages over testable modules | Rubric names Streamlit |
@@ -71,7 +72,7 @@ Legend: `done` is merged to `main`.
 | K knowledge | K1 | Article format, ingest script, FAISS retriever with attribution, 5 sample articles | 0 |
 | | K2 to K4 | Article batches (about 20 each), reviewed by the owner for accuracy | K1 |
 | M market | M1 | Provider interface, mock provider, TTL cache | 0 |
-| | M2 | Alpha Vantage and yfinance providers, rate limiting, errors | M1 |
+| | M2 | yfinance provider (quotes and history), throttle handling, errors. Alpha Vantage only if time allows | M1 |
 | A data | A1 | Docker Postgres, schema, migrations | Docker installed |
 | | A2 | Repositories: kids, profiles, answers, ledger, traces, cache | A1 |
 | E agents | E1 | Finance Q&A agent | K1, C3 |
@@ -108,11 +109,11 @@ Critical path: C0 to C1 to C3 to the agents. Long pole: knowledge-base content, 
 ## Owner tasks (accounts and installs I cannot do)
 1. Install Docker Desktop, then verify with `docker run --rm hello-world`.
 2. Get an LLM key you can demo with (program OpenAI key, or an Anthropic key). Put it in `.env`, never in chat or git.
-3. Sign up for Alpha Vantage this week. Keys can take up to 24 hours. Free tier is 25 requests a day, so the cache and mock fallback are mandatory.
+3. No market-data signup needed: yfinance has no key. (Alpha Vantage is optional later and would need a key.)
 4. Create the public GitHub repo near the end, and share the URL when you want me to prepare the push.
 
 ## Risks
 - **Content volume:** 60 articles is the long pole. Mitigation: LLM-drafted originals in batches, with your review for accuracy. We do not copy third-party text.
-- **Market API limits:** 25 requests a day. Mitigation: cache with about 30 minute TTL, mock fallback, and a demo mode.
+- **Market data reliability:** yfinance is unofficial and Yahoo can throttle or change endpoints. Mitigation: provider interface, cache with about 30 minute TTL, saved sample quotes as a mock fallback, and a demo mode that never touches the network.
 - **Scope:** five agents plus MCP plus charts in 14 days is tight. Cut order if behind: Parent tab, then evals extras, then 60 articles down to 50, never the tests or docs.
 - **Child safety:** local only, nickname only, Guardian on every reply, education not advice.
