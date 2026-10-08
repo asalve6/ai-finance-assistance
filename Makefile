@@ -1,4 +1,4 @@
-.PHONY: setup test lint fmt run kb-check kb-links
+.PHONY: setup test lint fmt run kb-check kb-links kb-index kb-index-dev kb-ask
 
 setup:
 	uv sync
@@ -20,3 +20,15 @@ kb-check:
 
 kb-links:
 	uv run python -m penny.kb --links
+
+# Offline development index (word matching, includes unreviewed articles). No downloads.
+kb-index-dev:
+	uv run python -m penny.kb.build --embedder hashing --include-drafts
+
+# Real index: reviewed articles only, semantic model. Needs: uv sync --extra embeddings
+kb-index:
+	uv run python -m penny.kb.build
+
+# Usage: make kb-ask Q="what is a stock?" EMB=hashing
+kb-ask:
+	uv run python -m penny.kb.ask "$(Q)" --embedder $(or $(EMB),minilm)

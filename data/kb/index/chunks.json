@@ -1,1 +1,895 @@
-[]
+[
+ {
+  "id": "compound-interest#0",
+  "article_id": "compound-interest",
+  "title": "Compound interest: money that grows on money",
+  "area": "interest",
+  "level": "saver",
+  "heading": "Summary",
+  "text": "With compound interest, you earn interest on your savings and on the interest you already earned.",
+  "sources": [
+   {
+    "title": "Investor.gov, Compound interest calculator",
+    "url": "https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator"
+   },
+   {
+    "title": "Investor.gov, Glossary",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/glossary"
+   }
+  ]
+ },
+ {
+  "id": "compound-interest#1",
+  "article_id": "compound-interest",
+  "title": "Compound interest: money that grows on money",
+  "area": "interest",
+  "level": "saver",
+  "heading": "Overview",
+  "text": "When you keep money in a savings account, the bank pays you a small extra amount for holding it. That extra amount is called interest. You can think of it as a thank-you from the bank.",
+  "sources": [
+   {
+    "title": "Investor.gov, Compound interest calculator",
+    "url": "https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator"
+   },
+   {
+    "title": "Investor.gov, Glossary",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/glossary"
+   }
+  ]
+ },
+ {
+  "id": "compound-interest#2",
+  "article_id": "compound-interest",
+  "title": "Compound interest: money that grows on money",
+  "area": "interest",
+  "level": "saver",
+  "heading": "Simple interest first",
+  "text": "Say you put one hundred dollars in an account that pays five percent each year. After one year, you earn five dollars. If the bank only ever paid interest on your first hundred dollars, you would earn five dollars every year. After two years you would have one hundred ten dollars.",
+  "sources": [
+   {
+    "title": "Investor.gov, Compound interest calculator",
+    "url": "https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator"
+   },
+   {
+    "title": "Investor.gov, Glossary",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/glossary"
+   }
+  ]
+ },
+ {
+  "id": "compound-interest#3",
+  "article_id": "compound-interest",
+  "title": "Compound interest: money that grows on money",
+  "area": "interest",
+  "level": "saver",
+  "heading": "Where compounding comes in",
+  "text": "Most savings accounts work a little differently. In year two, the bank pays interest on your whole balance, including the five dollars you already earned. That is compound interest.\n\n- Start: $100.00\n- After year 1: $105.00\n- After year 2: $110.25\n\nThat extra twenty-five cents does not look like much. It came from interest earning its own interest. Over many years, the gap gets bigger, because each year's growth is built on a larger pile.",
+  "sources": [
+   {
+    "title": "Investor.gov, Compound interest calculator",
+    "url": "https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator"
+   },
+   {
+    "title": "Investor.gov, Glossary",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/glossary"
+   }
+  ]
+ },
+ {
+  "id": "compound-interest#4",
+  "article_id": "compound-interest",
+  "title": "Compound interest: money that grows on money",
+  "area": "interest",
+  "level": "saver",
+  "heading": "Time is the secret ingredient",
+  "text": "The longer money stays in the account, the more time it has to compound. Starting early can matter more than starting big. Someone who saves a small amount for many years can end up with more than someone who saves a larger amount for only a short time.\n\nRates change, and the numbers here are only examples. Always check the rate that an account really pays.",
+  "sources": [
+   {
+    "title": "Investor.gov, Compound interest calculator",
+    "url": "https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator"
+   },
+   {
+    "title": "Investor.gov, Glossary",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/glossary"
+   }
+  ]
+ },
+ {
+  "id": "compound-interest#5",
+  "article_id": "compound-interest",
+  "title": "Compound interest: money that grows on money",
+  "area": "interest",
+  "level": "saver",
+  "heading": "Try it",
+  "text": "Use a compound interest calculator. The one on Investor.gov is a good place to start. Enter one hundred dollars and a rate of five percent. Compare ten years with twenty years, and notice how much the second ten years adds.",
+  "sources": [
+   {
+    "title": "Investor.gov, Compound interest calculator",
+    "url": "https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator"
+   },
+   {
+    "title": "Investor.gov, Glossary",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/glossary"
+   }
+  ]
+ },
+ {
+  "id": "drop-by-drop#0",
+  "article_id": "drop-by-drop",
+  "title": "Drop by drop: how small habits fill a big jar",
+  "area": "mindset",
+  "level": "starter",
+  "heading": "Summary",
+  "text": "Small amounts, added again and again, can grow into something big.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "MyMoney.gov",
+    "url": "https://www.mymoney.gov/"
+   }
+  ]
+ },
+ {
+  "id": "drop-by-drop#1",
+  "article_id": "drop-by-drop",
+  "title": "Drop by drop: how small habits fill a big jar",
+  "area": "mindset",
+  "level": "starter",
+  "heading": "Overview",
+  "text": "There is an old saying that water drops, one at a time, can fill a very large jar. One drop looks like nothing. But the drops keep coming, and over time the jar fills up.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "MyMoney.gov",
+    "url": "https://www.mymoney.gov/"
+   }
+  ]
+ },
+ {
+  "id": "drop-by-drop#2",
+  "article_id": "drop-by-drop",
+  "title": "Drop by drop: how small habits fill a big jar",
+  "area": "mindset",
+  "level": "starter",
+  "heading": "Money works the same way",
+  "text": "Saving one dollar does not feel like much. It will not buy a bike or a game. But if you save one dollar every week, that is fifty-two dollars in a year. Add a little more when you can, and the jar fills faster.\n\nThe important part is not the size of each drop. It is that the drops keep coming. A small amount saved every week often beats a big amount saved once and then forgotten.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "MyMoney.gov",
+    "url": "https://www.mymoney.gov/"
+   }
+  ]
+ },
+ {
+  "id": "drop-by-drop#3",
+  "article_id": "drop-by-drop",
+  "title": "Drop by drop: how small habits fill a big jar",
+  "area": "mindset",
+  "level": "starter",
+  "heading": "Habits make it easy",
+  "text": "When you save at the same time every week, such as the day you get your allowance, you stop having to decide each time. It becomes part of your routine, like brushing your teeth. Habits take the effort out of doing the right thing.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "MyMoney.gov",
+    "url": "https://www.mymoney.gov/"
+   }
+  ]
+ },
+ {
+  "id": "drop-by-drop#4",
+  "article_id": "drop-by-drop",
+  "title": "Drop by drop: how small habits fill a big jar",
+  "area": "mindset",
+  "level": "starter",
+  "heading": "It works the other way too",
+  "text": "Small spending drops add up as well. A snack here and a sticker there may feel tiny, but together they can empty a jar without you noticing. This is not a reason to feel bad about spending. It is a reason to notice, so you can spend on purpose.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "MyMoney.gov",
+    "url": "https://www.mymoney.gov/"
+   }
+  ]
+ },
+ {
+  "id": "drop-by-drop#5",
+  "article_id": "drop-by-drop",
+  "title": "Drop by drop: how small habits fill a big jar",
+  "area": "mindset",
+  "level": "starter",
+  "heading": "Patience is part of the plan",
+  "text": "Some weeks, the jar will look almost the same. Keep going. Slow growth is still growth, and each week that you keep the habit, you get better at it.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "MyMoney.gov",
+    "url": "https://www.mymoney.gov/"
+   }
+  ]
+ },
+ {
+  "id": "drop-by-drop#6",
+  "article_id": "drop-by-drop",
+  "title": "Drop by drop: how small habits fill a big jar",
+  "area": "mindset",
+  "level": "starter",
+  "heading": "Try it",
+  "text": "Pick a small amount you can save every week without it feeling hard. Choose a day, and put it in your jar at the same time each week. After four weeks, count your drops and see how much you have.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "MyMoney.gov",
+    "url": "https://www.mymoney.gov/"
+   }
+  ]
+ },
+ {
+  "id": "family-money-talks#0",
+  "article_id": "family-money-talks",
+  "title": "Money talks at home: learning together",
+  "area": "mindset",
+  "level": "starter",
+  "heading": "Summary",
+  "text": "Families learn more about money when they talk about it together.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "FDIC, Money Smart",
+    "url": "https://www.fdic.gov/resources/consumers/money-smart/"
+   }
+  ]
+ },
+ {
+  "id": "family-money-talks#1",
+  "article_id": "family-money-talks",
+  "title": "Money talks at home: learning together",
+  "area": "mindset",
+  "level": "starter",
+  "heading": "Overview",
+  "text": "Money is something every family deals with. Many families do not talk about it much, but talking about money together can help everyone learn.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "FDIC, Money Smart",
+    "url": "https://www.fdic.gov/resources/consumers/money-smart/"
+   }
+  ]
+ },
+ {
+  "id": "family-money-talks#2",
+  "article_id": "family-money-talks",
+  "title": "Money talks at home: learning together",
+  "area": "mindset",
+  "level": "starter",
+  "heading": "Why talk about money?",
+  "text": "You learn many things from the people around you. If you see an adult compare prices, make a budget, or wait before buying something, you pick up that habit too. When you ask questions, adults can share what they have learned, including their own mistakes. Everyone in a family can learn from each other, grown-ups included.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "FDIC, Money Smart",
+    "url": "https://www.fdic.gov/resources/consumers/money-smart/"
+   }
+  ]
+ },
+ {
+  "id": "family-money-talks#3",
+  "article_id": "family-money-talks",
+  "title": "Money talks at home: learning together",
+  "area": "mindset",
+  "level": "starter",
+  "heading": "What can a family talk about?",
+  "text": "You do not need to share private details, like how much money a person has. Grown-ups decide what to share. There are plenty of easy topics to start with.\n\n- How do you decide what is a need and what is a want?\n- What is something our family is saving for together?\n- What is one money lesson you learned when you were young?\n- What is a good way to share or give to others?",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "FDIC, Money Smart",
+    "url": "https://www.fdic.gov/resources/consumers/money-smart/"
+   }
+  ]
+ },
+ {
+  "id": "family-money-talks#4",
+  "article_id": "family-money-talks",
+  "title": "Money talks at home: learning together",
+  "area": "mindset",
+  "level": "starter",
+  "heading": "Small steps, shared goals",
+  "text": "A family can pick a goal together, like a trip or a special dinner, and each person can add their own drops. Everyone's effort counts, whether it is a big amount or a small one. When each person learns to handle money wisely, the whole family becomes more prepared, and more generous too.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "FDIC, Money Smart",
+    "url": "https://www.fdic.gov/resources/consumers/money-smart/"
+   }
+  ]
+ },
+ {
+  "id": "family-money-talks#5",
+  "article_id": "family-money-talks",
+  "title": "Money talks at home: learning together",
+  "area": "mindset",
+  "level": "starter",
+  "heading": "Be kind and curious",
+  "text": "Money can feel stressful for some families. If a question feels hard, it is okay to pause and come back to it later. The goal is to learn together, not to judge anyone.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "FDIC, Money Smart",
+    "url": "https://www.fdic.gov/resources/consumers/money-smart/"
+   }
+  ]
+ },
+ {
+  "id": "family-money-talks#6",
+  "article_id": "family-money-talks",
+  "title": "Money talks at home: learning together",
+  "area": "mindset",
+  "level": "starter",
+  "heading": "Try it",
+  "text": "Pick one question from the list and ask someone in your family at dinner this week. Listen to their answer, then share yours. Write down one new idea you heard.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "FDIC, Money Smart",
+    "url": "https://www.fdic.gov/resources/consumers/money-smart/"
+   }
+  ]
+ },
+ {
+  "id": "needs-vs-wants#0",
+  "article_id": "needs-vs-wants",
+  "title": "Needs and wants: spending on purpose",
+  "area": "saving",
+  "level": "starter",
+  "heading": "Summary",
+  "text": "A need is something you must have. A want is something that would be nice to have.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "FDIC, Money Smart",
+    "url": "https://www.fdic.gov/resources/consumers/money-smart/"
+   }
+  ]
+ },
+ {
+  "id": "needs-vs-wants#1",
+  "article_id": "needs-vs-wants",
+  "title": "Needs and wants: spending on purpose",
+  "area": "saving",
+  "level": "starter",
+  "heading": "Overview",
+  "text": "Every day, people make choices about money. One of the best habits you can build is to ask a simple question first: is this a need or a want?",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "FDIC, Money Smart",
+    "url": "https://www.fdic.gov/resources/consumers/money-smart/"
+   }
+  ]
+ },
+ {
+  "id": "needs-vs-wants#2",
+  "article_id": "needs-vs-wants",
+  "title": "Needs and wants: spending on purpose",
+  "area": "saving",
+  "level": "starter",
+  "heading": "What is a need?",
+  "text": "A need is something you must have to stay healthy and safe. Food, a place to live, clothes for the weather, and medicine are needs. You cannot go without them.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "FDIC, Money Smart",
+    "url": "https://www.fdic.gov/resources/consumers/money-smart/"
+   }
+  ]
+ },
+ {
+  "id": "needs-vs-wants#3",
+  "article_id": "needs-vs-wants",
+  "title": "Needs and wants: spending on purpose",
+  "area": "saving",
+  "level": "starter",
+  "heading": "What is a want?",
+  "text": "A want is something that would be nice to have, but you can live without it. A new video game, a second pair of fancy shoes, or a snack at the mall are wants. Wants are not bad. They make life fun. The trick is to choose them on purpose.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "FDIC, Money Smart",
+    "url": "https://www.fdic.gov/resources/consumers/money-smart/"
+   }
+  ]
+ },
+ {
+  "id": "needs-vs-wants#4",
+  "article_id": "needs-vs-wants",
+  "title": "Needs and wants: spending on purpose",
+  "area": "saving",
+  "level": "starter",
+  "heading": "Some things are in the middle",
+  "text": "Sometimes the line is blurry. You need shoes, but you may not need the most expensive pair. You need to eat, but you do not need a meal at a restaurant. When a need has a cheaper choice and a fancier choice, the cheaper one already covers the need. The extra money you pay for the fancy one is the want part.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "FDIC, Money Smart",
+    "url": "https://www.fdic.gov/resources/consumers/money-smart/"
+   }
+  ]
+ },
+ {
+  "id": "needs-vs-wants#5",
+  "article_id": "needs-vs-wants",
+  "title": "Needs and wants: spending on purpose",
+  "area": "saving",
+  "level": "starter",
+  "heading": "Trade-offs",
+  "text": "Money is limited, so choosing one thing often means giving up another. This is called a trade-off. If you spend ten dollars on a toy today, you cannot also put that ten dollars toward your bike fund. Neither choice is always right. What matters is that you notice the trade-off before you spend.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "FDIC, Money Smart",
+    "url": "https://www.fdic.gov/resources/consumers/money-smart/"
+   }
+  ]
+ },
+ {
+  "id": "needs-vs-wants#6",
+  "article_id": "needs-vs-wants",
+  "title": "Needs and wants: spending on purpose",
+  "area": "saving",
+  "level": "starter",
+  "heading": "Try it",
+  "text": "Look at the last three things you bought or asked for. Label each one as a need or a want. Then pick one want you could wait on for a week. When the week is over, ask yourself if you still want it just as much.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "FDIC, Money Smart",
+    "url": "https://www.fdic.gov/resources/consumers/money-smart/"
+   }
+  ]
+ },
+ {
+  "id": "piggy-bank-basics#0",
+  "article_id": "piggy-bank-basics",
+  "title": "Your piggy bank: where saving starts",
+  "area": "saving",
+  "level": "starter",
+  "heading": "Summary",
+  "text": "A piggy bank is a safe place to keep money you do not spend today.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "MyMoney.gov",
+    "url": "https://www.mymoney.gov/"
+   }
+  ]
+ },
+ {
+  "id": "piggy-bank-basics#1",
+  "article_id": "piggy-bank-basics",
+  "title": "Your piggy bank: where saving starts",
+  "area": "saving",
+  "level": "starter",
+  "heading": "Overview",
+  "text": "A piggy bank is a simple tool with a big job. It keeps your money safe so you can use it later.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "MyMoney.gov",
+    "url": "https://www.mymoney.gov/"
+   }
+  ]
+ },
+ {
+  "id": "piggy-bank-basics#2",
+  "article_id": "piggy-bank-basics",
+  "title": "Your piggy bank: where saving starts",
+  "area": "saving",
+  "level": "starter",
+  "heading": "Why save?",
+  "text": "When you get money, you have a choice. You can spend it now, or you can save some for later. Saving means keeping money instead of spending it right away. Saved money can help you buy something bigger, like a game or a bike, that you could not afford with just one allowance.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "MyMoney.gov",
+    "url": "https://www.mymoney.gov/"
+   }
+  ]
+ },
+ {
+  "id": "piggy-bank-basics#3",
+  "article_id": "piggy-bank-basics",
+  "title": "Your piggy bank: where saving starts",
+  "area": "saving",
+  "level": "starter",
+  "heading": "How a piggy bank works",
+  "text": "Every time you put money in, it is called a deposit. Your pile grows a little at a time, and small deposits add up. If you put in five dollars a week, you will have twenty dollars after four weeks. After twelve weeks, you will have sixty dollars.\n\nA piggy bank also gives you a pause. Because your money is tucked away, you have to stop and think before you take it out. That pause helps you avoid spending on things you will forget about next week.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "MyMoney.gov",
+    "url": "https://www.mymoney.gov/"
+   }
+  ]
+ },
+ {
+  "id": "piggy-bank-basics#4",
+  "article_id": "piggy-bank-basics",
+  "title": "Your piggy bank: where saving starts",
+  "area": "saving",
+  "level": "starter",
+  "heading": "Saving with a goal",
+  "text": "Saving is easier when you know what you are saving for. A goal is something you want to reach. Pick your goal and find out its price. Then divide the price by the number of weeks you are willing to wait.\n\nSay a game costs forty dollars and you want it in eight weeks. Forty divided by eight is five, so you need to save five dollars each week. If you save a little more some weeks, you will get there even sooner.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "MyMoney.gov",
+    "url": "https://www.mymoney.gov/"
+   }
+  ]
+ },
+ {
+  "id": "piggy-bank-basics#5",
+  "article_id": "piggy-bank-basics",
+  "title": "Your piggy bank: where saving starts",
+  "area": "saving",
+  "level": "starter",
+  "heading": "What if you slip?",
+  "text": "Everyone spends some of their savings by accident sometimes. That is okay. Look at your goal again, work out the new weekly amount, and keep going. A small setback does not cancel your plan.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "MyMoney.gov",
+    "url": "https://www.mymoney.gov/"
+   }
+  ]
+ },
+ {
+  "id": "piggy-bank-basics#6",
+  "article_id": "piggy-bank-basics",
+  "title": "Your piggy bank: where saving starts",
+  "area": "saving",
+  "level": "starter",
+  "heading": "Try it",
+  "text": "Pick one thing you really want. Write down its price. Decide how many weeks you can wait, and work out how much to save each week. Then make your first deposit today, even if it is only a little.",
+  "sources": [
+   {
+    "title": "CFPB, Youth financial education",
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/"
+   },
+   {
+    "title": "MyMoney.gov",
+    "url": "https://www.mymoney.gov/"
+   }
+  ]
+ },
+ {
+  "id": "what-are-taxes#0",
+  "article_id": "what-are-taxes",
+  "title": "What are taxes?",
+  "area": "taxes",
+  "level": "starter",
+  "heading": "Summary",
+  "text": "Taxes are money that people and businesses pay to the government to fund shared services.",
+  "sources": [
+   {
+    "title": "USA.gov, Taxes",
+    "url": "https://www.usa.gov/taxes"
+   },
+   {
+    "title": "IRS",
+    "url": "https://www.irs.gov/"
+   }
+  ]
+ },
+ {
+  "id": "what-are-taxes#1",
+  "article_id": "what-are-taxes",
+  "title": "What are taxes?",
+  "area": "taxes",
+  "level": "starter",
+  "heading": "Overview",
+  "text": "Taxes are money that people and businesses pay to the government. The government uses that money to pay for things that everyone shares.",
+  "sources": [
+   {
+    "title": "USA.gov, Taxes",
+    "url": "https://www.usa.gov/taxes"
+   },
+   {
+    "title": "IRS",
+    "url": "https://www.irs.gov/"
+   }
+  ]
+ },
+ {
+  "id": "what-are-taxes#2",
+  "article_id": "what-are-taxes",
+  "title": "What are taxes?",
+  "area": "taxes",
+  "level": "starter",
+  "heading": "What do taxes pay for?",
+  "text": "Think about the things you use every day that you do not pay for at the door. Public schools, roads and bridges, parks, libraries, fire trucks, and police all depend on tax money. Taxes also help pay for people who are sick or out of work, and for keeping the country safe.",
+  "sources": [
+   {
+    "title": "USA.gov, Taxes",
+    "url": "https://www.usa.gov/taxes"
+   },
+   {
+    "title": "IRS",
+    "url": "https://www.irs.gov/"
+   }
+  ]
+ },
+ {
+  "id": "what-are-taxes#3",
+  "article_id": "what-are-taxes",
+  "title": "What are taxes?",
+  "area": "taxes",
+  "level": "starter",
+  "heading": "Who pays taxes?",
+  "text": "Most adults pay taxes, and so do businesses. There are a few main kinds.\n\n- **Income tax:** a part of the money you earn from a job.\n- **Sales tax:** a small amount added when you buy something in a store.\n- **Property tax:** money paid by people who own land or buildings, which often helps pay for local schools.\n\nYou may have seen sales tax already. If a toy has a ten dollar price tag, the total at the register can be a bit higher because of the tax.",
+  "sources": [
+   {
+    "title": "USA.gov, Taxes",
+    "url": "https://www.usa.gov/taxes"
+   },
+   {
+    "title": "IRS",
+    "url": "https://www.irs.gov/"
+   }
+  ]
+ },
+ {
+  "id": "what-are-taxes#4",
+  "article_id": "what-are-taxes",
+  "title": "What are taxes?",
+  "area": "taxes",
+  "level": "starter",
+  "heading": "Why do taxes matter to you?",
+  "text": "When you get your first paycheck, it may be smaller than you expected. That is because some of the money was already sent to the government as tax. Knowing this ahead of time helps you plan how much you will really have to spend and save.\n\nTax rules differ from place to place and change over time. This article is for learning and is not tax advice.",
+  "sources": [
+   {
+    "title": "USA.gov, Taxes",
+    "url": "https://www.usa.gov/taxes"
+   },
+   {
+    "title": "IRS",
+    "url": "https://www.irs.gov/"
+   }
+  ]
+ },
+ {
+  "id": "what-are-taxes#5",
+  "article_id": "what-are-taxes",
+  "title": "What are taxes?",
+  "area": "taxes",
+  "level": "starter",
+  "heading": "Try it",
+  "text": "Look at a receipt from a store and find the line that says tax. Work out how much extra you paid compared to the price tags. Then list three things in your town that taxes help pay for.",
+  "sources": [
+   {
+    "title": "USA.gov, Taxes",
+    "url": "https://www.usa.gov/taxes"
+   },
+   {
+    "title": "IRS",
+    "url": "https://www.irs.gov/"
+   }
+  ]
+ },
+ {
+  "id": "what-is-a-stock#0",
+  "article_id": "what-is-a-stock",
+  "title": "What is a stock?",
+  "area": "markets",
+  "level": "saver",
+  "heading": "Summary",
+  "text": "A stock is a small piece of ownership in a company.",
+  "sources": [
+   {
+    "title": "Investor.gov, Stocks",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/investment-products/stocks"
+   },
+   {
+    "title": "Investor.gov, Glossary",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/glossary"
+   }
+  ]
+ },
+ {
+  "id": "what-is-a-stock#1",
+  "article_id": "what-is-a-stock",
+  "title": "What is a stock?",
+  "area": "markets",
+  "level": "saver",
+  "heading": "Overview",
+  "text": "A stock is a tiny slice of ownership in a company. If a company were a pizza, a stock would be one slice. People who own stock are called shareholders, and each slice is called a share.",
+  "sources": [
+   {
+    "title": "Investor.gov, Stocks",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/investment-products/stocks"
+   },
+   {
+    "title": "Investor.gov, Glossary",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/glossary"
+   }
+  ]
+ },
+ {
+  "id": "what-is-a-stock#2",
+  "article_id": "what-is-a-stock",
+  "title": "What is a stock?",
+  "area": "markets",
+  "level": "saver",
+  "heading": "Why do companies sell stock?",
+  "text": "Building a business takes money. A company might need money to open stores, build products, or hire workers. One way to raise money is to sell shares to the public. The company gets cash to grow, and the buyers get a small piece of the company.",
+  "sources": [
+   {
+    "title": "Investor.gov, Stocks",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/investment-products/stocks"
+   },
+   {
+    "title": "Investor.gov, Glossary",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/glossary"
+   }
+  ]
+ },
+ {
+  "id": "what-is-a-stock#3",
+  "article_id": "what-is-a-stock",
+  "title": "What is a stock?",
+  "area": "markets",
+  "level": "saver",
+  "heading": "How do shareholders make money?",
+  "text": "There are two main ways.\n\n- **The price goes up.** If you buy a share and later sell it for more than you paid, you keep the difference.\n- **Dividends.** Some companies share part of their profits with their shareholders. That payment is called a dividend.",
+  "sources": [
+   {
+    "title": "Investor.gov, Stocks",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/investment-products/stocks"
+   },
+   {
+    "title": "Investor.gov, Glossary",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/glossary"
+   }
+  ]
+ },
+ {
+  "id": "what-is-a-stock#4",
+  "article_id": "what-is-a-stock",
+  "title": "What is a stock?",
+  "area": "markets",
+  "level": "saver",
+  "heading": "Prices can fall too",
+  "text": "A share price can go down as well as up. If the company does poorly, or people lose faith in it, the price can drop, and you could get back less than you paid. This is why stocks are called risky. Nobody can know ahead of time which way a price will move.",
+  "sources": [
+   {
+    "title": "Investor.gov, Stocks",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/investment-products/stocks"
+   },
+   {
+    "title": "Investor.gov, Glossary",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/glossary"
+   }
+  ]
+ },
+ {
+  "id": "what-is-a-stock#5",
+  "article_id": "what-is-a-stock",
+  "title": "What is a stock?",
+  "area": "markets",
+  "level": "saver",
+  "heading": "Where are stocks bought and sold?",
+  "text": "Shares trade on a stock market. That is a place, often online, where buyers and sellers meet. The price of a share changes during the day as people buy and sell.\n\nThis article is for learning. It is not advice about what to buy.",
+  "sources": [
+   {
+    "title": "Investor.gov, Stocks",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/investment-products/stocks"
+   },
+   {
+    "title": "Investor.gov, Glossary",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/glossary"
+   }
+  ]
+ },
+ {
+  "id": "what-is-a-stock#6",
+  "article_id": "what-is-a-stock",
+  "title": "What is a stock?",
+  "area": "markets",
+  "level": "saver",
+  "heading": "Try it",
+  "text": "Pick a company you know, like a game maker or a snack brand. Find out whether it sells stock to the public. If it does, look up its share price today and again in a week. Write down whether it moved, and one reason why it might have.",
+  "sources": [
+   {
+    "title": "Investor.gov, Stocks",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/investment-products/stocks"
+   },
+   {
+    "title": "Investor.gov, Glossary",
+    "url": "https://www.investor.gov/introduction-investing/investing-basics/glossary"
+   }
+  ]
+ }
+]

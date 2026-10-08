@@ -1,7 +1,7 @@
 {
- "embedder": "sentence-transformers/all-MiniLM-L6-v2",
- "dim": 384,
- "content_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
- "include_drafts": false,
- "chunk_count": 0
+ "embedder": "hashing-512",
+ "dim": 512,
+ "content_hash": "13dd9603d691ccd0ebc3c7c41ff4f48f01222578edea2fb41afecb3806b00a1f",
+ "include_drafts": true,
+ "chunk_count": 47
 }
