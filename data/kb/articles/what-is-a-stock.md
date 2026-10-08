@@ -10,7 +10,7 @@ sources:
     url: https://www.investor.gov/introduction-investing/investing-basics/investment-products/stocks
   - title: Investor.gov, Glossary
     url: https://www.investor.gov/introduction-investing/investing-basics/glossary
-reviewed: false
+reviewed: true
 ---
 
 A stock is a tiny slice of ownership in a company. If a company were a pizza, a stock would be one slice. People who own stock are called shareholders, and each slice is called a share.

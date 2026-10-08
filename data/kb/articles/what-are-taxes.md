@@ -10,7 +10,7 @@ sources:
     url: https://www.usa.gov/taxes
   - title: IRS
     url: https://www.irs.gov/
-reviewed: false
+reviewed: true
 ---
 
 Taxes are money that people and businesses pay to the government. The government uses that money to pay for things that everyone shares.
