@@ -43,6 +43,23 @@ def _is_int(value: Any) -> bool:
     return isinstance(value, int) and not isinstance(value, bool)
 
 
+def rules(level: Level) -> dict[str, Any]:
+    """The game's rules as plain facts, for explaining them without inventing anything."""
+    cfg = _SETTINGS[level]
+    return {
+        "game": "piggy",
+        "weeks": cfg["weeks"],
+        "goal_cents": cfg["goal_cents"],
+        "allowance_cents_per_week": cfg["allowance_cents"],
+        "each_week": "you choose how much allowance to save and whether to buy one temptation",
+        "coins": (
+            f"{COINS_PER_10_CENTS_SAVED} coin per 10 cents saved, plus {COINS_FOR_RESISTING} for "
+            f"skipping the temptation, plus {COINS_FOR_REACHING_GOAL} for reaching the goal"
+        ),
+        "xp_per_week": XP_PER_WEEK,
+    }
+
+
 class PiggyEngine:
     game_type = GameType.PIGGY
 
