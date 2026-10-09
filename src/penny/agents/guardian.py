@@ -20,13 +20,14 @@ import json
 import time
 from typing import Any
 
+from penny.agents.coach import COACH_UNSURE
 from penny.agents.knowledge import NOT_SURE
 from penny.contracts import Effort, Level, LLMClient, Message, TraceEvent, TraceSink, Verdict
 from penny.graph.stubs import RuleGuardian
 from penny.graph.types import AgentReply, AgentRequest, Guardian
 from penny.observability import NullTraceSink
 
-TRUSTED_REPLIES = frozenset({NOT_SURE})
+TRUSTED_REPLIES = frozenset({NOT_SURE, COACH_UNSURE})
 
 _READERS = {
     Level.STARTER: "starter, about 8 to 9 years old: very simple words and short sentences",

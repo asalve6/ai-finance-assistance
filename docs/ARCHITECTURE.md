@@ -75,7 +75,7 @@ Different sessions never see each other. The classes stored in the state are reg
 | Piece | Today (C2) | Replaced by |
 |---|---|---|
 | Router | `KeywordRouter`: first matching keyword group | E7: LLM classification, mixed questions |
-| Specialists | `finance_qa` (E1) and `tax` (E5) are real, both built on `KnowledgeAgent`. The other three are `StubSpecialist` | E2 Coach, E3 Market, E4 Portfolio |
+| Specialists | `finance_qa` (E1), `tax` (E5) and `coach` (E2) are real. `market` and `portfolio` are `StubSpecialist` | E3 Market, E4 Portfolio |
 | Guardian | Real: `LLMGuardian` (E6), rules first, then a model review on the fast model | - |
 | Trace sink | `InMemoryTraceSink` | A2: Postgres, for the trace viewer |
 
@@ -104,6 +104,23 @@ that is appended in code, so it never depends on the model remembering it.
 Sources come back as citations and are shown under the answer. Only articles that matched nearly as
 well as the best one are cited. `src/penny/runtime.py` wires the real
 agents into the graph. Agents not built yet stay as stubs there.
+
+## The Coach (answers from tools)
+
+`CoachAgent` (`src/penny/agents/coach.py`) handles saving goals and the two games. It never does money
+maths itself. Every number comes from a tool that runs our own deterministic code:
+
+| Tool | What it runs |
+|---|---|
+| `plan_goal` | `engines/goal.py`: weekly amount to reach a goal, with savings and optional interest |
+| `weeks_to_goal` | `engines/goal.py`: how long a weekly amount takes |
+| `try_lemonade_day` | `engines/lemonade.py`: a "what if" day, the same maths as the game |
+| `game_rules` | the rules of a game, from the engine's own numbers |
+
+Tools return amounts already written as dollars ("$7.50"), so the model repeats them instead of
+converting cents. **Enforced in code:** a reply that contains a number when no tool ran successfully is
+replaced by a fixed question asking for the details. The tool results travel with the reply as
+evidence, so the Guardian checks the numbers against them.
 
 ## The Guardian
 

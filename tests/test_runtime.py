@@ -2,6 +2,7 @@ import pytest
 
 from kb_helpers import corpus
 from penny import runtime
+from penny.agents.coach import CoachAgent
 from penny.agents.guardian import LLMGuardian
 from penny.agents.knowledge import KnowledgeAgent
 from penny.contracts import LLMResponse
@@ -28,9 +29,10 @@ def setup(*responses: LLMResponse) -> LLMSetup:
 def test_the_real_agents_are_wired_in_and_the_rest_stay_stubs():
     graph = runtime.build_penny(setup=setup(), index=INDEX)
     assert tuple(graph.agents) == SPECIALISTS
+    classes = {"finance_qa": KnowledgeAgent, "tax": KnowledgeAgent, "coach": CoachAgent}
+    assert set(classes) == set(runtime.REAL_AGENTS)
     for name, agent in graph.agents.items():
-        expected = KnowledgeAgent if name in runtime.REAL_AGENTS else StubSpecialist
-        assert isinstance(agent, expected), name
+        assert isinstance(agent, classes.get(name, StubSpecialist)), name
 
 
 def test_finance_qa_uses_the_main_model_and_the_shared_trace_sink():
