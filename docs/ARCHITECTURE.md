@@ -76,7 +76,7 @@ Different sessions never see each other. The classes stored in the state are reg
 |---|---|---|
 | Router | `KeywordRouter`: first matching keyword group | E7: LLM classification, mixed questions |
 | Specialists | `finance_qa` (E1) and `tax` (E5) are real, both built on `KnowledgeAgent`. The other three are `StubSpecialist` | E2 Coach, E3 Market, E4 Portfolio |
-| Guardian | `RuleGuardian`: empty replies, advice and promise wording | E6: LLM review (tone, reading level, facts) on top |
+| Guardian | Real: `LLMGuardian` (E6), rules first, then a model review on the fast model | - |
 | Trace sink | `InMemoryTraceSink` | A2: Postgres, for the trace viewer |
 
 ## The agent loop
@@ -104,6 +104,22 @@ that is appended in code, so it never depends on the model remembering it.
 Sources come back as citations and are shown under the answer. Only articles that matched nearly as
 well as the best one are cited. `src/penny/runtime.py` wires the real
 agents into the graph. Agents not built yet stay as stubs there.
+
+## The Guardian
+
+Every reply passes `LLMGuardian` (`src/penny/agents/guardian.py`) before a child sees it. Three layers,
+cheapest first:
+
+1. **Rules in code** (`RuleGuardian`): empty replies, advice or promise wording, too many sentences for
+   the reader's level, lists, headings or bold. Free, instant, always the same answer.
+2. **Fixed replies we wrote**, such as "I don't know that one yet", are trusted without a model call.
+3. **A model review** on the fast model for what rules cannot see: one-sided claims, facts the evidence
+   does not support, unkind tone, words too hard for the reader, privacy.
+
+The reviewer sees only the reading level, the question, the evidence (the passages the writer used)
+and the draft. It does not see the writer's prompt or the conversation. Its problems go back to the
+writer as feedback for the rewrite. It **fails closed**: if the reviewer is down or returns no verdict,
+the reply is not shown and the safe fallback is used after the retries.
 
 ## Try it
 

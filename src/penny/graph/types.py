@@ -35,6 +35,8 @@ class AgentRequest(BaseModel):
 class AgentReply(BaseModel):
     text: str
     citations: list[Citation] = Field(default_factory=list)
+    # The passages or facts the reply was written from. The Guardian checks the reply against it.
+    evidence: str = ""
 
 
 class RouteDecision(BaseModel):

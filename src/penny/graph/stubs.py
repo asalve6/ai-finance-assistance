@@ -2,12 +2,14 @@
 
 - `KeywordRouter`  -> E7 (LLM classification, mixed questions)
 - `StubSpecialist` -> E1 to E5 (the real agents)
-- `RuleGuardian`   -> E6 (LLM review on top of these rules)
+- `RuleGuardian`   -> stays. `LLMGuardian` (E6) runs these rules first, then a model review
 """
 
 from __future__ import annotations
 
-from penny.contracts import Message, Verdict
+import re
+
+from penny.contracts import Level, Message, Verdict
 from penny.graph.types import (
     SPECIALISTS,
     AgentReply,
@@ -73,18 +75,38 @@ def default_agents() -> dict[str, Specialist]:
     return {name: StubSpecialist(name) for name in SPECIALISTS}
 
 
+# Hard caps the Guardian enforces. The writer is asked for fewer, so there is some slack.
+MAX_SENTENCES = {Level.STARTER: 5, Level.SAVER: 6, Level.BUILDER: 8}
+
+_SENTENCE_END = re.compile(r"(?<=[.!?])\s+")
+_LIST_OR_HEADING = re.compile(r"^\s*(?:[-*+]\s|\d+[.)]\s|#)", re.MULTILINE)
+
+
+def count_sentences(text: str) -> int:
+    return len([part for part in _SENTENCE_END.split(text.strip()) if part.strip()])
+
+
 class RuleGuardian:
-    """Rejects empty replies and advice or promise wording. The LLM Guardian (E6) adds tone,
-    reading level and fact checks on top."""
+    """The checks that need no model: empty replies, advice or promise wording, and format
+    (length for the reader's level, no lists, headings or bold). They are free, instant and
+    always give the same answer. `LLMGuardian` runs these first and adds a model review."""
 
     def review(self, request: AgentRequest, reply: AgentReply) -> Verdict:
-        if not reply.text.strip():
+        text = reply.text
+        if not text.strip():
             return Verdict(approved=False, reasons=["the reply was empty"])
-        lowered = reply.text.lower()
-        found = [p for p in BANNED_PHRASES if p in lowered]
-        if found:
-            return Verdict(
-                approved=False,
-                reasons=[f"remove advice or promise wording: '{p}'" for p in found],
-            )
-        return Verdict(approved=True)
+        # A phrase the child used in their own question may be echoed back ("nobody can promise
+        # you will get rich"). Whether the reply is really a promise is left to the model review.
+        asked, lowered = request.question.lower(), text.lower()
+        reasons = [
+            f"remove advice or promise wording: '{p}'"
+            for p in BANNED_PHRASES
+            if p in lowered and p not in asked
+        ]
+        limit = MAX_SENTENCES[request.kid.level]
+        sentences = count_sentences(text)
+        if sentences > limit:
+            reasons.append(f"too long: {sentences} sentences, the limit is {limit}")
+        if _LIST_OR_HEADING.search(text) or "**" in text:
+            reasons.append("write plain sentences: no lists, headings or bold")
+        return Verdict(approved=not reasons, reasons=reasons)
