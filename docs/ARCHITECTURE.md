@@ -138,6 +138,28 @@ and the draft. It does not see the writer's prompt or the conversation. Its prob
 writer as feedback for the rewrite. It **fails closed**: if the reviewer is down or returns no verdict,
 the reply is not shown and the safe fallback is used after the retries.
 
+## The app (Streamlit)
+
+`make run` starts **Penny the pig** (`src/penny/ui/`). It uses Streamlit's default light theme with one
+brand color (`.streamlit/config.toml`) and no custom CSS.
+
+| Part | File | What it does |
+|---|---|---|
+| Setup | `setup.py`, `quiz.py` | Nickname and a three-question quiz, scored in code, that sets the level |
+| Sidebar | `sidebar.py` | Level, coins, drop streak, XP and goal |
+| Chat tab | `chat.py`, `chat_model.py` | Asks the graph. Shows the answer, its sources, and the trace in plain words |
+| Play tab | `play.py`, `games.py` | Piggy Bank and Lemonade Stand, running the real engines |
+| Backend | `backend.py` | Live agents when the keys and the article index exist, otherwise an offline demo |
+
+Pages are thin. The logic they call (`quiz`, `session`, `games`, `chat_model`, `backend`) is plain Python
+and is tested without Streamlit. The pages themselves are tested headlessly with Streamlit's `AppTest`.
+
+**The app always opens.** With no API key or no built index it runs in offline demo mode: the chat uses
+placeholder agents and says what is missing, and the games work fully, because they need no model.
+
+The player's progress lives in the browser session and is lost when the tab closes. Saving it needs the
+database (lane A).
+
 ## Try it
 
 ```bash

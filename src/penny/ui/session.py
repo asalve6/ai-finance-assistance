@@ -9,9 +9,9 @@ from __future__ import annotations
 from collections.abc import MutableMapping
 from typing import Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
-from penny.contracts import Level
+from penny.contracts import GameFacts, GameState, Level
 from penny.graph.types import KidContext
 
 XP_PER_LEVEL = 100
@@ -26,7 +26,14 @@ class Player(BaseModel):
     streak: int = 0  # weeks in a row with something put in the jar
     goal_name: str = "Game"
     goal_cents: int = 6000
-    saved_cents: int = 0
+    saved_cents: int = 0  # everything put in the jar or earned at the stand this session
+
+    # Games in progress. `*_last` holds the latest result while it is being shown.
+    piggy: GameState | None = None
+    piggy_last: GameFacts | None = None
+    lemonade: GameState | None = None
+    lemonade_last: GameFacts | None = None
+    lemonade_profits: list[int] = Field(default_factory=list)
 
     @property
     def display_name(self) -> str:
@@ -52,7 +59,15 @@ def get_player(state: MutableMapping[str, Any]) -> Player:
 
 def reset_player(state: MutableMapping[str, Any]) -> Player:
     """Start over: a new player, and a fresh conversation with its own session id."""
-    for key in ("chat", "session_id"):
+    for key in (
+        "chat",
+        "session_id",
+        "game",
+        "piggy_save",
+        "piggy_buy",
+        "lemon_price",
+        "lemon_cups",
+    ):
         state.pop(key, None)
     state["player"] = Player()
     return state["player"]
