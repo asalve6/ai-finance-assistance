@@ -52,6 +52,61 @@ def _is_int(value: Any) -> bool:
     return isinstance(value, int) and not isinstance(value, bool)
 
 
+def _check_decision(price: Any, cups: Any) -> None:
+    if not _is_int(price) or not MIN_PRICE_CENTS <= price <= MAX_PRICE_CENTS:
+        raise ValueError(
+            f"price_cents must be a whole number from {MIN_PRICE_CENTS} to {MAX_PRICE_CENTS}"
+        )
+    if not _is_int(cups) or not MIN_CUPS <= cups <= MAX_CUPS:
+        raise ValueError(f"cups must be a whole number from {MIN_CUPS} to {MAX_CUPS}")
+
+
+def _day_outcome(weather: dict[str, Any], cost: int, price: int, cups: int) -> dict[str, Any]:
+    """The maths of one day. Used by the game and by `simulate_day`, so they can never differ."""
+    demand = demand_for(weather["base_demand"], price)
+    sold = min(cups, demand)
+    revenue, spend = sold * price, cups * cost
+    return {
+        "weather": weather["kind"],
+        "weather_label": weather["label"],
+        "demand": demand,
+        "cups_made": cups,
+        "cups_sold": sold,
+        "cups_unsold": cups - sold,
+        "customers_missed": max(0, demand - cups),
+        "sold_out": cups < demand,
+        "revenue_cents": revenue,
+        "spend_cents": spend,
+        "profit_cents": revenue - spend,
+    }
+
+
+def simulate_day(level: Level, weather: str, price_cents: int, cups: int) -> dict[str, Any]:
+    """What one day would look like for these choices, without touching any game in progress.
+    The Coach uses it to answer "what if I charged more?" with real numbers."""
+    if weather not in _WEATHER:
+        raise ValueError(f"weather must be one of: {', '.join(_WEATHER)}")
+    _check_decision(price_cents, cups)
+    kind = {"kind": weather, **_WEATHER[weather]}
+    return _day_outcome(kind, _COST_PER_CUP_CENTS[level], price_cents, cups)
+
+
+def rules(level: Level) -> dict[str, Any]:
+    """The game's rules as plain facts, for explaining them without inventing anything."""
+    return {
+        "game": "lemonade",
+        "days": TOTAL_DAYS,
+        "cost_per_cup_cents": _COST_PER_CUP_CENTS[level],
+        "price_range_cents": [MIN_PRICE_CENTS, MAX_PRICE_CENTS],
+        "cups_range": [MIN_CUPS, MAX_CUPS],
+        "customers_on_a_normal_price_day": {k: v["base_demand"] for k, v in _WEATHER.items()},
+        "first_day_weather": "sunny",
+        "how_demand_works": "the higher the price, the fewer customers; unsold cups are wasted",
+        "coins": f"1 coin per 10 cents of profit, at least {MIN_COINS_PER_DAY} per day",
+        "xp_per_day": XP_PER_DAY,
+    }
+
+
 class LemonadeEngine:
     game_type = GameType.LEMONADE
 
@@ -75,22 +130,11 @@ class LemonadeEngine:
 
         price = decision.get("price_cents")
         cups = decision.get("cups")
-        if not _is_int(price) or not MIN_PRICE_CENTS <= price <= MAX_PRICE_CENTS:
-            raise ValueError(
-                f"price_cents must be a whole number from {MIN_PRICE_CENTS} to {MAX_PRICE_CENTS}"
-            )
-        if not _is_int(cups) or not MIN_CUPS <= cups <= MAX_CUPS:
-            raise ValueError(f"cups must be a whole number from {MIN_CUPS} to {MAX_CUPS}")
+        _check_decision(price, cups)
 
         data = state.data
-        weather = data["weather"]
-        cost = data["cost_per_cup_cents"]
-
-        demand = demand_for(weather["base_demand"], price)
-        sold = min(cups, demand)
-        revenue = sold * price
-        spend = cups * cost
-        profit = revenue - spend
+        day = _day_outcome(data["weather"], data["cost_per_cup_cents"], price, cups)
+        profit = day.pop("profit_cents")
         finished = state.day >= state.total_days
 
         new_state = state.model_copy(deep=True)
@@ -105,19 +149,7 @@ class LemonadeEngine:
         facts = GameFacts(
             day=state.day,
             decision={"price_cents": price, "cups": cups},
-            outcome={
-                "weather": weather["kind"],
-                "weather_label": weather["label"],
-                "demand": demand,
-                "cups_made": cups,
-                "cups_sold": sold,
-                "cups_unsold": cups - sold,
-                "customers_missed": max(0, demand - cups),
-                "sold_out": cups < demand,
-                "revenue_cents": revenue,
-                "spend_cents": spend,
-                "total_profit_cents": new_state.data["total_profit_cents"],
-            },
+            outcome={**day, "total_profit_cents": new_state.data["total_profit_cents"]},
             profit_cents=profit,
             coins_earned=max(MIN_COINS_PER_DAY, profit // 10),
             xp_earned=XP_PER_DAY,
