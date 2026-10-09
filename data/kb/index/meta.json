@@ -1,7 +1,0 @@
-{
- "embedder": "hashing-512",
- "dim": 512,
- "content_hash": "13dd9603d691ccd0ebc3c7c41ff4f48f01222578edea2fb41afecb3806b00a1f",
- "include_drafts": true,
- "chunk_count": 47
-}
