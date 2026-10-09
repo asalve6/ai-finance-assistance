@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import os
 
-from penny.agents.knowledge import KnowledgeAgent
+from penny.agents.specialists import build_finance_qa, build_tax
 from penny.contracts import TraceSink
 from penny.graph.build import PennyGraph
 from penny.graph.stubs import default_agents
@@ -15,7 +15,7 @@ from penny.kb.embedding import DEFAULT_EMBEDDER, get_embedder
 from penny.kb.index import INDEX_DIR, KBIndex
 from penny.llm.factory import LLMSetup, get_llm
 
-REAL_AGENTS = ("finance_qa",)
+REAL_AGENTS = ("finance_qa", "tax")
 
 
 def load_index() -> KBIndex:
@@ -32,5 +32,6 @@ def build_penny(
     setup = setup or get_llm()
     index = index or load_index()
     agents = default_agents()
-    agents["finance_qa"] = KnowledgeAgent(setup.client, setup.main_model, index, sink=sink)
+    agents["finance_qa"] = build_finance_qa(setup, index, sink)
+    agents["tax"] = build_tax(setup, index, sink)
     return PennyGraph(agents=agents, sink=sink)

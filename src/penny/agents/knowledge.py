@@ -11,7 +11,8 @@ How one answer is produced:
    confident match, the model's text is discarded and a fixed "I don't know that yet" reply is
    returned. Greetings and thanks are the only exception.
 
-The Finance Q&A agent (E1) is one instance of this class. The Tax Education agent (E5) is another.
+The Finance Q&A agent (E1) and the Tax Education agent (E5) are two instances of this class,
+built in `specialists.py`.
 """
 
 from __future__ import annotations
@@ -41,6 +42,9 @@ OLDER_READER_NOTE = (
 
 MAX_TOOL_SEARCHES = 2
 MAX_CITATIONS = 3
+# Only cite articles that matched nearly as well as the best one, so weak side matches are not
+# shown as sources.
+CITATION_SCORE_RATIO = 0.75
 HISTORY_MESSAGES = 6
 
 _SMALL_TALK = re.compile(
@@ -88,6 +92,7 @@ class KnowledgeAgent:
         *,
         name: str = "finance_qa",
         role: str = "You answer children's questions about money.",
+        closing_note: str | None = None,
         sink: TraceSink | None = None,
         max_steps: int = 4,
         max_tokens: int | None = 1200,
@@ -97,6 +102,9 @@ class KnowledgeAgent:
         self.index = index
         self.name = name
         self.role = role
+        # A sentence that every grounded answer must end with (for example a disclaimer). It is
+        # added in code if the model leaves it out, so it never depends on the model remembering.
+        self.closing_note = closing_note
         self.sink = sink or NullTraceSink()
         self.max_steps = max_steps
         self.max_tokens = max_tokens
@@ -208,7 +216,10 @@ class KnowledgeAgent:
             if is_small_talk(request.question):
                 return AgentReply(text=result.text.strip())
             return AgentReply(text=NOT_SURE)  # grounding enforced here, whatever the model wrote
-        return AgentReply(text=result.text.strip(), citations=self._citations(confident))
+        text = result.text.strip()
+        if self.closing_note and self.closing_note.lower() not in text.lower():
+            text = f"{text} {self.closing_note}"
+        return AgentReply(text=text, citations=self._citations(confident))
 
     @staticmethod
     def _citations(found: list[Retrieval]) -> list[Citation]:
@@ -220,4 +231,5 @@ class KnowledgeAgent:
                 if citation.article_id not in best or score > best[citation.article_id][0]:
                     best[citation.article_id] = (score, citation)
         ranked = sorted(best.values(), key=lambda pair: pair[0], reverse=True)
-        return [citation for _, citation in ranked[:MAX_CITATIONS]]
+        cutoff = ranked[0][0] * CITATION_SCORE_RATIO
+        return [citation for score, citation in ranked[:MAX_CITATIONS] if score >= cutoff]

@@ -319,3 +319,48 @@ def test_in_the_graph_the_second_turn_sees_the_first():
         ("user", "what is a stock"),
         ("assistant", "A stock is a small piece."),
     ]
+
+
+# ------------------------------------------------------------------ closing note (used by Tax)
+
+
+def test_a_closing_note_is_added_in_code_when_the_model_leaves_it_out():
+    llm = FakeLLM([says("Taxes pay for shared things like roads.")])
+    reply = ask(
+        llm, "what are taxes used for", closing_note="This is for learning, not tax advice."
+    )
+    assert (
+        reply.text
+        == "Taxes pay for shared things like roads. This is for learning, not tax advice."
+    )
+
+
+def test_a_closing_note_is_not_repeated_if_the_model_already_said_it():
+    text = "Taxes pay for roads. This is for learning, NOT TAX ADVICE."
+    reply = ask(FakeLLM([says(text)]), "what are taxes used for", closing_note="not tax advice.")
+    assert reply.text == text
+
+
+def test_the_closing_note_is_not_added_to_not_sure_or_small_talk():
+    note = "This is for learning, not tax advice."
+    not_sure = ask(FakeLLM([says("Paris.")]), "capital of France", closing_note=note)
+    assert not_sure.text == NOT_SURE
+    greeting = ask(FakeLLM([says("Hi Sam!")]), "hello", closing_note=note)
+    assert greeting.text == "Hi Sam!"
+
+
+def test_only_articles_that_matched_nearly_as_well_as_the_best_are_cited():
+    from penny.agents.knowledge import CITATION_SCORE_RATIO
+    from penny.kb.retriever import retrieve
+
+    question = "why is tax taken from my paycheck and what is income tax"
+    found = retrieve(INDEX, question)
+    best_by_article: dict[str, float] = {}
+    for hit in found.hits:
+        best_by_article.setdefault(hit.chunk.article_id, hit.score)
+    top = max(best_by_article.values())
+    expected = [a for a, s in best_by_article.items() if s >= top * CITATION_SCORE_RATIO]
+
+    reply = ask(FakeLLM([says("Tax is taken from your pay.")]), question)
+    assert [c.article_id for c in reply.citations] == expected[:MAX_CITATIONS]
+    assert reply.citations[0].article_id == "what-are-taxes"

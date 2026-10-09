@@ -75,7 +75,7 @@ Different sessions never see each other. The classes stored in the state are reg
 | Piece | Today (C2) | Replaced by |
 |---|---|---|
 | Router | `KeywordRouter`: first matching keyword group | E7: LLM classification, mixed questions |
-| Specialists | `finance_qa` is real (`KnowledgeAgent`, E1). The other four are `StubSpecialist` | E2 Coach, E3 Market, E4 Portfolio, E5 Tax |
+| Specialists | `finance_qa` (E1) and `tax` (E5) are real, both built on `KnowledgeAgent`. The other three are `StubSpecialist` | E2 Coach, E3 Market, E4 Portfolio |
 | Guardian | `RuleGuardian`: empty replies, advice and promise wording | E6: LLM review (tone, reading level, facts) on top |
 | Trace sink | `InMemoryTraceSink` | A2: Postgres, for the trace viewer |
 
@@ -97,7 +97,12 @@ answer or a refusal raises `AgentError`, which the graph treats as a rejected dr
 3. **"I don't know" is enforced in code.** If no search in the turn found a confident match, the model's
    text is discarded and a fixed reply is returned. Greetings and thanks are the only exception.
 
-Sources come back as citations and are shown under the answer. `src/penny/runtime.py` wires the real
+The **Tax** agent is the same machinery with a tax-specific role (no rates or amounts unless the
+article has them, personal tax questions go to a grown-up or a tax professional) and a disclaimer
+that is appended in code, so it never depends on the model remembering it.
+
+Sources come back as citations and are shown under the answer. Only articles that matched nearly as
+well as the best one are cited. `src/penny/runtime.py` wires the real
 agents into the graph. Agents not built yet stay as stubs there.
 
 ## Try it
