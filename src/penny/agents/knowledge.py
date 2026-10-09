@@ -41,6 +41,7 @@ OLDER_READER_NOTE = (
 )
 
 MAX_TOOL_SEARCHES = 2
+EVIDENCE_LIMIT = 6000  # characters of passages passed on to the Guardian
 MAX_CITATIONS = 3
 # Only cite articles that matched nearly as well as the best one, so weak side matches are not
 # shown as sources.
@@ -219,7 +220,10 @@ class KnowledgeAgent:
         text = result.text.strip()
         if self.closing_note and self.closing_note.lower() not in text.lower():
             text = f"{text} {self.closing_note}"
-        return AgentReply(text=text, citations=self._citations(confident))
+        evidence = "\n\n".join(dict.fromkeys(r.as_prompt_context() for r in confident))
+        return AgentReply(
+            text=text, citations=self._citations(confident), evidence=evidence[:EVIDENCE_LIMIT]
+        )
 
     @staticmethod
     def _citations(found: list[Retrieval]) -> list[Citation]:

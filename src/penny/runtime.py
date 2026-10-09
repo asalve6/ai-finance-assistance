@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import os
 
+from penny.agents.guardian import LLMGuardian
 from penny.agents.specialists import build_finance_qa, build_tax
 from penny.contracts import TraceSink
 from penny.graph.build import PennyGraph
@@ -34,4 +35,5 @@ def build_penny(
     agents = default_agents()
     agents["finance_qa"] = build_finance_qa(setup, index, sink)
     agents["tax"] = build_tax(setup, index, sink)
-    return PennyGraph(agents=agents, sink=sink)
+    guardian = LLMGuardian(setup.client, setup.fast_model, sink=sink)
+    return PennyGraph(agents=agents, guardian=guardian, sink=sink)
