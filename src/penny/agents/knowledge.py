@@ -23,13 +23,13 @@ import time
 from pydantic import BaseModel, Field
 
 from penny.agents.loop import run_agent
+from penny.agents.prompts import recent_history, system_prompt
 from penny.agents.tools import make_tool
 from penny.contracts import Level, LLMClient, Message, TraceEvent, TraceSink
 from penny.graph.types import AgentReply, AgentRequest
 from penny.kb.index import KBIndex
 from penny.kb.retriever import Citation, Retrieval, retrieve
 from penny.observability import NullTraceSink
-from penny.principles import voice_block
 
 NOT_SURE = (
     "I don't know that one yet. I only answer from what I have learned about money so far. "
@@ -46,19 +46,11 @@ MAX_CITATIONS = 3
 # Only cite articles that matched nearly as well as the best one, so weak side matches are not
 # shown as sources.
 CITATION_SCORE_RATIO = 0.75
-HISTORY_MESSAGES = 6
 
 _SMALL_TALK = re.compile(
     r"^(hi|hello|hey|yo|thanks|thank you|thx|bye|goodbye|ok|okay|cool|nice|"
     r"good (morning|afternoon|evening|night))\b[\sa-z!,.']*$"
 )
-
-_LEVEL_STYLE = {
-    Level.STARTER: "Use very simple words and 2 to 4 short sentences. Explain any money word.",
-    Level.SAVER: "Use simple words and 3 to 5 short sentences. Explain new money words briefly.",
-    Level.BUILDER: "Use 3 to 6 sentences. You can use the correct money terms, with a quick "
-    "explanation the first time.",
-}
 
 _RULES = """\
 How to answer:
@@ -113,20 +105,7 @@ class KnowledgeAgent:
     # ------------------------------------------------------------------ prompt
 
     def system_prompt(self, request: AgentRequest) -> str:
-        parts = [
-            f"You are Penny, a friendly money coach for a child called {request.kid.nickname}. "
-            f"{self.role}",
-            voice_block(),
-            _RULES,
-            f"Reading level: {_LEVEL_STYLE[request.kid.level]}",
-        ]
-        if request.feedback:
-            problems = "\n".join(f"- {item}" for item in request.feedback)
-            parts.append(
-                "Your previous draft was not accepted by the safety reviewer. Write a new answer "
-                f"that fixes these problems:\n{problems}"
-            )
-        return "\n\n".join(parts)
+        return system_prompt(request, self.role, _RULES)
 
     @staticmethod
     def _passages(found: Retrieval, above_level: bool) -> str:
@@ -193,11 +172,7 @@ class KnowledgeAgent:
         )
 
         first, first_above_level = search(request.question)
-        history = [
-            Message(role=m.role, content=m.content)
-            for m in request.history[-HISTORY_MESSAGES:]
-            if m.role in ("user", "assistant") and m.content
-        ]
+        history = recent_history(request)
         passages = self._passages(first, first_above_level)
         prompt = f"Question: {request.question}\n\nArticle passages:\n{passages}"
         result = run_agent(
