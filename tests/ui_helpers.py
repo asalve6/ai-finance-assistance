@@ -4,10 +4,22 @@ from pathlib import Path
 
 from streamlit.testing.v1 import AppTest
 
+from penny.graph.build import PennyGraph
+from penny.observability import InMemoryTraceSink
+from penny.ui.backend import Backend
+
 APP = str(Path(__file__).resolve().parents[1] / "src" / "penny" / "ui" / "app.py")
 
 
+def offline_backend() -> Backend:
+    sink = InMemoryTraceSink()
+    return Backend(PennyGraph(sink=sink), sink, False, "TEST_KEY is not set in .env")
+
+
 def launch(**session) -> AppTest:
+    """Start the app. Unless a test passes its own, the backend is the offline one, so no test
+    can reach a real provider through keys in the developer's shell."""
+    session.setdefault("backend", offline_backend())
     app = AppTest.from_file(APP, default_timeout=30)
     for key, value in session.items():
         app.session_state[key] = value
