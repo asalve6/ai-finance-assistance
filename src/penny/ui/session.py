@@ -16,6 +16,10 @@ from penny.graph.types import KidContext
 
 XP_PER_LEVEL = 100
 
+# A practice portfolio to start from, so the tab and Penny have something to look at. The child
+# can change it in the Portfolio and Markets tab.
+STARTER_PORTFOLIO = {"DIS": 3, "NKE": 2, "KO": 5}
+
 
 class Player(BaseModel):
     started: bool = False
@@ -34,7 +38,7 @@ class Player(BaseModel):
     lemonade: GameState | None = None
     lemonade_last: GameFacts | None = None
     lemonade_profits: list[int] = Field(default_factory=list)
-    practice_holdings: dict[str, int] = Field(default_factory=dict)  # ticker -> shares
+    practice_holdings: dict[str, int] = Field(default_factory=lambda: dict(STARTER_PORTFOLIO))
 
     @property
     def display_name(self) -> str:
@@ -80,6 +84,9 @@ def reset_player(state: MutableMapping[str, Any]) -> Player:
         "goal_interest",
         "goal_rate",
         "family_prompt",
+        "portfolio_rows",
+        "portfolio_editor",
+        "market_pick",
     ):
         state.pop(key, None)
     state["player"] = Player()

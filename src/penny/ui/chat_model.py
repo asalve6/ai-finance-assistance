@@ -61,7 +61,7 @@ def describe(event: TraceEvent) -> TraceRow | None:
             what = "Searched the articles. Nothing matched well enough"
     elif event.kind == "llm":
         if event.agent == "guardian":
-            what = "Reviewed the draft with the fast model"
+            what = f"Reviewed the draft with {event.name}" if event.name else "Reviewed the draft"
         elif out.get("tool_calls"):
             what = f"Asked to use: {', '.join(out['tool_calls'])}"
         else:

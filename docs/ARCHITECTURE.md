@@ -75,7 +75,7 @@ Different sessions never see each other. The classes stored in the state are reg
 | Piece | Today (C2) | Replaced by |
 |---|---|---|
 | Router | `KeywordRouter`: first matching keyword group | E7: LLM classification, mixed questions |
-| Specialists | `finance_qa` (E1), `tax` (E5), `coach` (E2) and `market` (E3) are real. `portfolio` is a `StubSpecialist` | E4 Portfolio |
+| Specialists | All real: `finance_qa` (E1), `tax` (E5), `coach` (E2), `market` (E3) and `portfolio` (E4) | - |
 | Guardian | Real: `LLMGuardian` (E6), rules first, then a model review on the main model | - |
 | Trace sink | `InMemoryTraceSink` | A2: Postgres, for the trace viewer |
 
