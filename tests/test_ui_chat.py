@@ -65,7 +65,8 @@ def result(**overrides) -> TurnResult:
         (event("tax", "retrieval", confident=False, articles=[]), "Tax Education", "Searched the articles. Nothing matched well enough", ""),
         (event("coach", "llm", "gpt-4o", 1431, tool_calls=["plan_goal"], text=""), "Goal and Game Coach", "Asked to use: plan_goal", "1431 ms"),
         (event("coach", "llm", "gpt-4o", 950, tool_calls=[], text="Save..."), "Goal and Game Coach", "Wrote a draft", "950 ms"),
-        (event("guardian", "llm", "gpt-4o-mini", 527, text="{}", parsed=True), "Guardian", "Reviewed the draft with the fast model", "527 ms"),
+        (event("guardian", "llm", "gpt-4o-mini", 527, text="{}", parsed=True), "Guardian", "Reviewed the draft with gpt-4o-mini", "527 ms"),
+        (event("guardian", "llm", "", 5, text="{}", parsed=True), "Guardian", "Reviewed the draft", "5 ms"),
         (event("coach", "tool", "plan_goal", result="{}", is_error=False), "Goal and Game Coach", "Ran plan_goal", ""),
         (event("coach", "tool", "plan_goal", result="x", is_error=True), "Goal and Game Coach", "Ran plan_goal (it reported an error)", ""),
         (event("finance_qa", "error", error="boom"), "Finance Q&A", "Failed: boom", ""),
@@ -151,6 +152,7 @@ def test_missing_setup_names_what_to_fix(clean_env):
 def test_without_keys_the_app_gets_the_offline_backend_that_still_answers(clean_env):
     backend = load_backend()
     assert backend.live is False and "ANTHROPIC_API_KEY" in backend.note
+    assert backend.market.name == "chain"  # prices need no LLM key, so they stay real offline
     answer = backend.graph.ask("what is a stock", session_id="s")
     assert answer.reply.startswith("[finance_qa] stub answer")
 
@@ -160,10 +162,17 @@ def test_with_everything_set_the_backend_is_live(clean_env):
     clean_env.setenv("KB_EMBEDDER", "hashing")
     setup = LLMSetup(FakeLLM([]), "anthropic", "fast-m", "main-m")
     clean_env.setattr(backend_module, "get_llm", lambda: setup)
-    clean_env.setattr(backend_module, "build_penny", lambda setup, sink: PennyGraph(sink=sink))
+    given = {}
+
+    def build(setup, sink, market):
+        given["market"] = market
+        return PennyGraph(sink=sink)
+
+    clean_env.setattr(backend_module, "build_penny", build)
     backend = load_backend()
     assert (backend.live, backend.note) == (True, "anthropic, main-m")
     assert backend.graph.sink is backend.sink
+    assert backend.market is given["market"]  # the agents and the tab share one price cache
 
 
 @pytest.mark.parametrize(
@@ -178,7 +187,7 @@ def test_setup_problems_fall_back_to_offline_with_the_reason(clean_env, error, n
     clean_env.setenv("ANTHROPIC_API_KEY", "x")
     clean_env.setenv("KB_EMBEDDER", "hashing")
 
-    def broken(setup, sink):
+    def broken(setup, sink, market):
         raise error
 
     clean_env.setattr(backend_module, "get_llm", lambda: LLMSetup(FakeLLM([]), "a", "f", "m"))

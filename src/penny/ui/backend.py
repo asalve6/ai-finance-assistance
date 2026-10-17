@@ -7,12 +7,14 @@ that case it runs the same workflow with placeholder agents and says why.
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from penny.graph.build import PennyGraph
 from penny.kb.embedding import DEFAULT_EMBEDDER
 from penny.llm.errors import LLMError
 from penny.llm.factory import get_llm
+from penny.market.factory import default_market
+from penny.market.provider import MarketProvider
 from penny.observability import InMemoryTraceSink
 from penny.runtime import build_penny
 
@@ -25,6 +27,9 @@ class Backend:
     sink: InMemoryTraceSink
     live: bool
     note: str  # live: which provider and model. offline: what is missing
+    # Shared by the agents and the Portfolio and Markets tab, so both see the same cached prices.
+    # The default is the sample data, which never touches the network (handy in tests).
+    market: MarketProvider = field(default_factory=lambda: default_market(demo=True))
 
 
 def missing_setup() -> str | None:
@@ -41,14 +46,15 @@ def missing_setup() -> str | None:
 
 def load_backend() -> Backend:
     sink = InMemoryTraceSink()
+    market = default_market()  # prices need no LLM key, so the tab works offline too
     problem = missing_setup()
     if problem is None:
         try:
             setup = get_llm()
-            graph = build_penny(setup=setup, sink=sink)
-            return Backend(graph, sink, True, f"{setup.provider}, {setup.main_model}")
+            graph = build_penny(setup=setup, sink=sink, market=market)
+            return Backend(graph, sink, True, f"{setup.provider}, {setup.main_model}", market)
         except FileNotFoundError:
             problem = "the article index has not been built yet (run: make kb-index)"
         except (LLMError, RuntimeError, ValueError) as exc:
             problem = str(exc)
-    return Backend(PennyGraph(sink=sink), sink, False, problem)
+    return Backend(PennyGraph(sink=sink), sink, False, problem, market)
