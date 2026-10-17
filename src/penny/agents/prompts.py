@@ -27,6 +27,11 @@ def system_prompt(request: AgentRequest, role: str, rules: str) -> str:
         f"Reading level: {LEVEL_STYLE[request.kid.level]} Hard limit: never more than "
         f"{MAX_SENTENCES[request.kid.level]} sentences, or the reply is rejected.",
     ]
+    if request.also_ask:
+        parts.append(
+            "The question has another part that a different helper will answer next: "
+            f'"{request.also_ask}". Answer only the rest, and do not answer that part.'
+        )
     if request.feedback:
         problems = "\n".join(f"- {item}" for item in request.feedback)
         parts.append(

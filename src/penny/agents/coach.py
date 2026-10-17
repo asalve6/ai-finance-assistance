@@ -8,9 +8,10 @@ own deterministic code:
 - `try_lemonade_day`  what one lemonade day would look like for a price, cups and weather
 - `game_rules`        the rules of a game, straight from the engine
 
-This is enforced in code, not left to the model: if a reply contains a number but no tool ran
-successfully in the turn, the reply is replaced by a fixed question asking for the details. The
-tool results are passed on as evidence, so the Guardian can check the reply against them.
+This is enforced in code, not left to the model: if no tool ran successfully in the turn, the
+reply is replaced by a fixed question asking for the details (with no tool, the Coach has nothing
+checked to say, and in live tests the reviewer kept rejecting its own wording of that question).
+The tool results are passed on as evidence, so the Guardian can check the reply against them.
 """
 
 from __future__ import annotations
@@ -19,7 +20,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
-from penny.agents.grounding import tool_backed_reply
+from penny.agents.grounding import successful_runs, tool_backed_reply
 from penny.agents.loop import run_agent
 from penny.agents.prompts import recent_history, system_prompt
 from penny.agents.tools import make_tool
@@ -193,4 +194,6 @@ class CoachAgent:
             max_steps=self.max_steps,
             max_tokens=self.max_tokens,
         )
+        if not successful_runs(result):
+            return AgentReply(text=COACH_UNSURE)
         return tool_backed_reply(result, COACH_UNSURE)

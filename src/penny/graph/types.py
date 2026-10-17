@@ -32,6 +32,7 @@ class AgentRequest(BaseModel):
     question: str
     history: list[Message] = Field(default_factory=list)  # earlier turns of this session only
     feedback: list[str] = Field(default_factory=list)  # why the Guardian rejected the last draft
+    also_ask: str = ""  # a part of the question another specialist answers next, so skip it
 
 
 class AgentReply(BaseModel):
@@ -44,6 +45,8 @@ class AgentReply(BaseModel):
 class RouteDecision(BaseModel):
     agent: str
     reason: str = ""
+    # For a mixed question: the part another specialist should answer, as its own question.
+    also_ask: str = ""
 
 
 class TurnResult(BaseModel):
@@ -56,10 +59,13 @@ class TurnResult(BaseModel):
     trace_id: str
     citations: list[Citation] = Field(default_factory=list)
     last_issues: list[str] = Field(default_factory=list)
+    also_ask: str = ""  # the other part of a mixed question, offered to the child as a button
 
 
 class Router(Protocol):
-    def route(self, question: str, history: list[Message], kid: KidContext) -> RouteDecision: ...
+    def route(
+        self, question: str, history: list[Message], kid: KidContext, trace_id: str = ""
+    ) -> RouteDecision: ...
 
 
 class Specialist(Protocol):

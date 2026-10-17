@@ -6,7 +6,7 @@ from penny.agents.knowledge import KnowledgeAgent
 from penny.contracts import Level, LLMResponse, ToolCall, TraceEvent
 from penny.graph.build import PennyGraph
 from penny.graph.stubs import SAFE_FALLBACK, default_agents
-from penny.graph.types import TurnResult
+from penny.graph.types import RouteDecision, TurnResult
 from penny.kb.article import Source
 from penny.kb.embedding import HashingEmbedder
 from penny.kb.index import KBIndex
@@ -28,7 +28,7 @@ from penny.ui.chat_model import (
     label,
 )
 from penny.ui.session import Player
-from ui_helpers import click, launch
+from ui_helpers import click, has_button, launch
 
 INDEX = KBIndex.build(corpus(draft_bond=False), HashingEmbedder())
 STARTED = {"started": True, "nickname": "Sam", "level": Level.BUILDER}
@@ -67,6 +67,8 @@ def result(**overrides) -> TurnResult:
         (event("coach", "llm", "gpt-4o", 950, tool_calls=[], text="Save..."), "Goal and Game Coach", "Wrote a draft", "950 ms"),
         (event("guardian", "llm", "gpt-4o-mini", 527, text="{}", parsed=True), "Guardian", "Reviewed the draft with gpt-4o-mini", "527 ms"),
         (event("guardian", "llm", "", 5, text="{}", parsed=True), "Guardian", "Reviewed the draft", "5 ms"),
+        (event("router", "llm", "gpt-4o-mini", 300, text="{}", parsed=True), "Router", "Read the question with gpt-4o-mini", "300 ms"),
+        (event("router", "llm", "", 0, text="{}", parsed=True), "Router", "Read the question", ""),
         (event("coach", "tool", "plan_goal", result="{}", is_error=False), "Goal and Game Coach", "Ran plan_goal", ""),
         (event("coach", "tool", "plan_goal", result="x", is_error=True), "Goal and Game Coach", "Ran plan_goal (it reported an error)", ""),
         (event("finance_qa", "error", error="boom"), "Finance Q&A", "Failed: boom", ""),
@@ -305,6 +307,37 @@ def test_the_agents_get_the_players_name_and_level():
     app.chat_input[0].set_value("what is a stock and what are shares").run()
     system = backend.graph.agents["finance_qa"].llm.calls[0]["system"]
     assert "a child called Sam" in system and "correct money terms" in system
+
+
+def mixed_backend() -> Backend:
+    """Stub agents, and a router that splits off a second part the first time only."""
+
+    class Splitting:
+        def __init__(self):
+            self.calls = 0
+
+        def route(self, question, history, kid, trace_id=""):
+            self.calls += 1
+            if self.calls == 1:
+                return RouteDecision(agent="market", reason="a price", also_ask="What is tax?")
+            return RouteDecision(agent="tax", reason="tax")
+
+    sink = InMemoryTraceSink()
+    return Backend(PennyGraph(router=Splitting(), sink=sink), sink, True, "fake, main-m")
+
+
+def test_the_other_part_of_a_mixed_question_is_offered_as_a_button():
+    app = launch(player=Player(**STARTED), backend=mixed_backend())
+    assert not has_button(app, "Also ask: What is tax?")
+    app.chat_input[0].set_value("Disney price and what is tax?").run()
+    assert messages(app)[-1][1].startswith("[market] stub answer")
+    assert app.session_state["chat"][0].also_ask == "What is tax?"
+    click(app, "Also ask: What is tax?")
+    assert messages(app)[-2:] == [
+        ("user", "What is tax?"),
+        ("assistant", "[tax] stub answer for: What is tax?"),
+    ]
+    assert not has_button(app, "Also ask: What is tax?")  # only offered after the turn it came from
 
 
 def test_restart_clears_the_conversation_and_starts_a_new_session():

@@ -8,6 +8,7 @@ from __future__ import annotations
 import os
 
 from penny.agents.guardian import LLMGuardian
+from penny.agents.router import LLMRouter
 from penny.agents.specialists import (
     build_coach,
     build_finance_qa,
@@ -50,4 +51,5 @@ def build_penny(
     agents["portfolio"] = build_portfolio(setup, market, sink)
     # The main model: in live checks the fast one rejected too many fair drafts.
     guardian = LLMGuardian(setup.client, setup.main_model, sink=sink)
-    return PennyGraph(agents=agents, guardian=guardian, sink=sink)
+    router = LLMRouter(setup.client, setup.fast_model, sink=sink)
+    return PennyGraph(agents=agents, router=router, guardian=guardian, sink=sink)
