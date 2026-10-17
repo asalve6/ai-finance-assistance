@@ -70,7 +70,7 @@ def render(player: Player) -> None:
     picked = None
     columns = st.columns(2)  # two per row, so the full question fits on the button
     for i, suggestion in enumerate(SUGGESTIONS):
-        if columns[i % 2].button(md(suggestion), key=f"suggest_{i}", use_container_width=True):
+        if columns[i % 2].button(md(suggestion), key=f"suggest_{i}", width="stretch"):
             picked = suggestion
     typed = st.chat_input("Ask Penny a money question")
 
