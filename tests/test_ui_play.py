@@ -184,10 +184,10 @@ def assistant_text(app) -> str:
 def test_the_play_tab_opens_on_the_piggy_bank_with_this_weeks_choices():
     player = with_piggy()
     app = launch(player=player)
-    assert app.radio(key="game").value == "Piggy Bank"
+    assert app.segmented_control(key="game").value == "Piggy Bank"
     assert "Week 1 of 4" in [s.value for s in app.subheader]
     assert app.slider(key="piggy_save").value == 5
-    assert app.radio(key="piggy_buy").options == ["Skip it", "Buy it"]
+    assert app.segmented_control(key="piggy_buy").options == ["Skip it", "Buy it"]
     temptation = player.piggy.data["event"]["name"]
     assert any(temptation in m.value for m in app.markdown)
 
@@ -210,12 +210,12 @@ def test_the_temptation_can_be_bought_only_when_there_is_money_left():
     app = launch(player=player)
 
     app.slider(key="piggy_save").set_value(10).run()  # everything saved: cannot afford it
-    assert app.radio(key="piggy_buy").disabled is True
+    assert app.segmented_control(key="piggy_buy").disabled is True
     assert any("cannot afford it this week" in c.value for c in app.caption)
 
     app.slider(key="piggy_save").set_value(10 - price).run()
-    assert app.radio(key="piggy_buy").disabled is False
-    app.radio(key="piggy_buy").set_value("Buy it").run()
+    assert app.segmented_control(key="piggy_buy").disabled is False
+    app.segmented_control(key="piggy_buy").set_value("Buy it").run()
     click(app, "Finish the week")
     assert " and bought " in assistant_text(app)
     assert sidebar(app)["Coins"] == str((10 - price) * 10)  # no bonus for resisting
@@ -235,9 +235,14 @@ def test_a_whole_piggy_game_ends_with_the_goal_and_can_be_played_again():
     assert sidebar(app)["Coins"] == "580"  # rewards carry over to the new game
 
 
+def lemonade_metrics(app) -> dict:
+    """Only the lemonade result metrics (every tab renders, so the page has others too)."""
+    return {m.label: m.value for m in app.main.metric if m.label in ("Profit", "Sold", "Money in")}
+
+
 def lemonade_app(player=None):
     app = launch(player=player or with_lemonade())
-    app.radio(key="game").set_value("Lemonade Stand").run()
+    app.segmented_control(key="game").set_value("Lemonade Stand").run()
     assert not app.exception
     return app
 
@@ -256,8 +261,7 @@ def test_switching_to_lemonade_shows_the_first_sunny_day():
 def test_opening_the_stand_shows_the_result_the_feedback_and_the_chart():
     app = lemonade_app()
     click(app, "Open the stand")
-    results = {m.label: m.value for m in app.main.metric}
-    assert results == {"Profit": "$11.00", "Sold": "20 of 20", "Money in": "$15.00"}
+    assert lemonade_metrics(app) == {"Profit": "$11.00", "Sold": "20 of 20", "Money in": "$15.00"}
     assert assistant_text(app) == (
         "You made exactly as many cups as people wanted. That is hard to do. "
         "You kept \\$11.00 as profit."
@@ -274,7 +278,7 @@ def test_changing_price_and_cups_changes_the_outcome():
     app.slider(key="lemon_cups").set_value(60).run()
     assert any("Supplies will cost \\$12.00." == c.value for c in app.caption)
     click(app, "Open the stand")
-    assert {m.label: m.value for m in app.main.metric}["Profit"].startswith("-$")
+    assert lemonade_metrics(app)["Profit"].startswith("-$")
     assert "You lost money today" in assistant_text(app)
 
 
@@ -294,7 +298,7 @@ def test_three_lemonade_days_then_play_again():
 def test_a_game_is_started_automatically_the_first_time_the_tab_is_shown():
     app = launch(player=started())
     assert app.session_state["player"].piggy is not None
-    app.radio(key="game").set_value("Lemonade Stand").run()
+    app.segmented_control(key="game").set_value("Lemonade Stand").run()
     assert app.session_state["player"].lemonade is not None
 
 

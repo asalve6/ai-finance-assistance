@@ -14,7 +14,7 @@ SKIP, BUY = "Skip it", "Buy it"
 
 
 def render(player: Player) -> None:
-    game = st.radio("Game", GAMES, horizontal=True, key="game")
+    game = st.segmented_control("Game", GAMES, default=GAMES[0], required=True, key="game")
     if game == GAMES[0]:
         _piggy(player)
     else:
@@ -55,8 +55,13 @@ def _piggy_decide(player: Player, week: int, total: int, data: dict) -> None:
     )
     save_cents = save * 100
     affordable = games.can_afford_temptation(player, save_cents)
-    choice = st.radio(
-        "The temptation", (SKIP, BUY), horizontal=True, key="piggy_buy", disabled=not affordable
+    choice = st.segmented_control(
+        "The temptation",
+        (SKIP, BUY),
+        default=SKIP,
+        required=True,
+        key="piggy_buy",
+        disabled=not affordable,
     )
     left = dollars(allowance - save_cents)
     if affordable:
@@ -104,7 +109,12 @@ def _lemonade(player: Player) -> None:
         if player.lemonade_profits:
             days = [f"Day {n}" for n in range(1, len(player.lemonade_profits) + 1)]
             profit = [cents / 100 for cents in player.lemonade_profits]
-            st.bar_chart({"Day": days, "Profit ($)": profit}, x="Day", y="Profit ($)")
+            st.bar_chart(
+                {"Day": days, "Profit ($)": profit},
+                x="Day",
+                y="Profit ($)",
+                alt=f"Lemonade profit for each of the {len(days)} days played",
+            )
             st.caption("Bars above zero are profit. Bars below zero are a loss.")
         else:
             st.caption("Play a day to see your profit here.")

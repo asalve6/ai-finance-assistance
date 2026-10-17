@@ -5,7 +5,7 @@ from __future__ import annotations
 import streamlit as st
 
 from penny.config import load_env
-from penny.ui import APP_NAME, chat, play, setup, sidebar
+from penny.ui import APP_NAME, chat, goal_tab, play, setup, sidebar
 from penny.ui.session import get_player
 
 TABS = ("Chat", "Play", "Portfolio and Markets", "Goals")
@@ -28,4 +28,4 @@ def run() -> None:
     with portfolio_tab:
         st.info("Practice portfolio and market quotes are coming soon.")
     with goals_tab:
-        st.info("The saving goal planner is coming soon.")
+        goal_tab.render(player)
