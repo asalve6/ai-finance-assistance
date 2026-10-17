@@ -67,6 +67,14 @@ def reset_player(state: MutableMapping[str, Any]) -> Player:
         "piggy_buy",
         "lemon_price",
         "lemon_cups",
+        "goal_choice",
+        "goal_own_name",
+        "goal_own_price",
+        "goal_weeks",
+        "goal_use_saved",
+        "goal_interest",
+        "goal_rate",
+        "family_prompt",
     ):
         state.pop(key, None)
     state["player"] = Player()

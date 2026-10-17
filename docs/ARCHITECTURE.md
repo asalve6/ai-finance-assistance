@@ -149,6 +149,7 @@ brand color (`.streamlit/config.toml`) and no custom CSS.
 | Sidebar | `sidebar.py` | Level, coins, drop streak, XP and goal |
 | Chat tab | `chat.py`, `chat_model.py` | Asks the graph. Shows the answer, its sources, and the trace in plain words |
 | Play tab | `play.py`, `games.py` | Piggy Bank and Lemonade Stand, running the real engines |
+| Goals tab | `goal_tab.py`, `goals.py` | Pick a goal, see the weekly amount from the goal planner (with optional savings and interest), a week-by-week chart, and the family challenge |
 | Backend | `backend.py` | Live agents when the keys and the article index exist, otherwise an offline demo |
 
 Pages are thin. The logic they call (`quiz`, `session`, `games`, `chat_model`, `backend`) is plain Python

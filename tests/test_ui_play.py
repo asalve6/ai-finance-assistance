@@ -235,6 +235,11 @@ def test_a_whole_piggy_game_ends_with_the_goal_and_can_be_played_again():
     assert sidebar(app)["Coins"] == "580"  # rewards carry over to the new game
 
 
+def lemonade_metrics(app) -> dict:
+    """Only the lemonade result metrics (every tab renders, so the page has others too)."""
+    return {m.label: m.value for m in app.main.metric if m.label in ("Profit", "Sold", "Money in")}
+
+
 def lemonade_app(player=None):
     app = launch(player=player or with_lemonade())
     app.segmented_control(key="game").set_value("Lemonade Stand").run()
@@ -256,8 +261,7 @@ def test_switching_to_lemonade_shows_the_first_sunny_day():
 def test_opening_the_stand_shows_the_result_the_feedback_and_the_chart():
     app = lemonade_app()
     click(app, "Open the stand")
-    results = {m.label: m.value for m in app.main.metric}
-    assert results == {"Profit": "$11.00", "Sold": "20 of 20", "Money in": "$15.00"}
+    assert lemonade_metrics(app) == {"Profit": "$11.00", "Sold": "20 of 20", "Money in": "$15.00"}
     assert assistant_text(app) == (
         "You made exactly as many cups as people wanted. That is hard to do. "
         "You kept \\$11.00 as profit."
@@ -274,7 +278,7 @@ def test_changing_price_and_cups_changes_the_outcome():
     app.slider(key="lemon_cups").set_value(60).run()
     assert any("Supplies will cost \\$12.00." == c.value for c in app.caption)
     click(app, "Open the stand")
-    assert {m.label: m.value for m in app.main.metric}["Profit"].startswith("-$")
+    assert lemonade_metrics(app)["Profit"].startswith("-$")
     assert "You lost money today" in assistant_text(app)
 
 
