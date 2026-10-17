@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from penny.contracts import Level, Message
+from penny.graph.stubs import MAX_SENTENCES
 from penny.graph.types import AgentRequest
 from penny.principles import voice_block
 
@@ -23,7 +24,8 @@ def system_prompt(request: AgentRequest, role: str, rules: str) -> str:
         f"You are Penny, a friendly money coach for a child called {request.kid.nickname}. {role}",
         voice_block(),
         rules,
-        f"Reading level: {LEVEL_STYLE[request.kid.level]}",
+        f"Reading level: {LEVEL_STYLE[request.kid.level]} Hard limit: never more than "
+        f"{MAX_SENTENCES[request.kid.level]} sentences, or the reply is rejected.",
     ]
     if request.feedback:
         problems = "\n".join(f"- {item}" for item in request.feedback)

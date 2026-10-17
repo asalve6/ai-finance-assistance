@@ -5,6 +5,7 @@ from __future__ import annotations
 from penny.agents.coach import CoachAgent
 from penny.agents.knowledge import KnowledgeAgent
 from penny.agents.market_agent import MarketAgent
+from penny.agents.portfolio_agent import PortfolioAgent
 from penny.contracts import TraceSink
 from penny.kb.index import KBIndex
 from penny.llm.factory import LLMSetup
@@ -49,3 +50,10 @@ def build_market(
 ) -> MarketAgent:
     """Prices of companies children know, explained. Every number comes from the market chain."""
     return MarketAgent(setup.client, setup.main_model, market, sink=sink)
+
+
+def build_portfolio(
+    setup: LLMSetup, market: MarketProvider, sink: TraceSink | None = None
+) -> PortfolioAgent:
+    """The child's practice portfolio, priced by the market chain and explained."""
+    return PortfolioAgent(setup.client, setup.main_model, market, sink=sink)

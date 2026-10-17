@@ -34,6 +34,7 @@ class Player(BaseModel):
     lemonade: GameState | None = None
     lemonade_last: GameFacts | None = None
     lemonade_profits: list[int] = Field(default_factory=list)
+    practice_holdings: dict[str, int] = Field(default_factory=dict)  # ticker -> shares
 
     @property
     def display_name(self) -> str:
@@ -48,7 +49,11 @@ class Player(BaseModel):
         return min(1.0, max(0.0, self.saved_cents / self.goal_cents))
 
     def kid(self) -> KidContext:
-        return KidContext(nickname=self.display_name, level=self.level)
+        return KidContext(
+            nickname=self.display_name,
+            level=self.level,
+            practice_holdings=dict(self.practice_holdings),
+        )
 
 
 def get_player(state: MutableMapping[str, Any]) -> Player:

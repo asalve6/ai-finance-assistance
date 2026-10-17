@@ -4,7 +4,7 @@ Three layers, cheapest first:
 
 1. Rules in code (`RuleGuardian`): empty replies, advice or promise wording, length and format.
 2. Fixed replies we wrote ourselves, such as "I don't know that one yet", are trusted as they are.
-3. A model review on the fast model, for what rules cannot see: one-sided claims, facts that the
+3. A model review on the main model, for what rules cannot see: one-sided claims, facts that the
    evidence does not support, unkind tone, words too hard for the reader, privacy.
 
 The reviewer sees only the question, the evidence and the draft. It never sees the writer's prompt
@@ -22,12 +22,14 @@ from typing import Any
 
 from penny.agents.coach import COACH_UNSURE
 from penny.agents.knowledge import NOT_SURE
+from penny.agents.market_agent import MARKET_UNSURE
+from penny.agents.portfolio_agent import NO_PORTFOLIO, PORTFOLIO_UNSURE
 from penny.contracts import Effort, Level, LLMClient, Message, TraceEvent, TraceSink, Verdict
 from penny.graph.stubs import RuleGuardian
 from penny.graph.types import AgentReply, AgentRequest, Guardian
 from penny.observability import NullTraceSink
 
-TRUSTED_REPLIES = frozenset({NOT_SURE, COACH_UNSURE})
+TRUSTED_REPLIES = frozenset({NOT_SURE, COACH_UNSURE, MARKET_UNSURE, PORTFOLIO_UNSURE, NO_PORTFOLIO})
 
 _READERS = {
     Level.STARTER: "starter, about 8 to 9 years old: very simple words and short sentences",
@@ -55,9 +57,15 @@ Reject the draft if any of these is true:
 6. Privacy: it asks for personal or family details such as incomes, balances, addresses or
    passwords.
 
-Do not reject for small matters of style. A friendly comparison taken from the evidence is fine.
-A closing note such as "This is for learning, not tax advice." is fine. Declining to give advice
-and suggesting the child talk with a grown-up is fine.
+Only reject for a clear problem in what the draft says. Do not reject because it could say more,
+or for small matters of style. These are fine:
+- numbers and percentages that appear in the evidence;
+- a money word such as "concentrated" or "diversification" when the draft explains it simply;
+- describing a result from the evidence, such as a practice portfolio being worth more after
+  practice shares are added (that is arithmetic, not a promise of growth);
+- a friendly comparison, a closing note such as "This is for learning, not tax advice.", and
+  declining to give advice while suggesting the child talk with a grown-up.
+When you reject, give one short, specific instruction per problem.
 
 Answer with ONLY a JSON object and no other text:
 {"approved": true or false, "problems": ["a short instruction to the writer on what to fix"]}
