@@ -22,6 +22,8 @@ class KidContext(BaseModel):
     kid_id: int = 0
     nickname: str = "friend"
     level: Level = Level.STARTER
+    # The child's practice portfolio: ticker -> number of shares. Practice money only.
+    practice_holdings: dict[str, int] = Field(default_factory=dict)
 
 
 class AgentRequest(BaseModel):

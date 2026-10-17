@@ -11,12 +11,11 @@ The agent explains; it never predicts a price or says whether to buy.
 
 from __future__ import annotations
 
-import json
 from typing import Any
 
 from pydantic import BaseModel, Field
 
-from penny.agents.grounding import successful_runs, tool_backed_reply
+from penny.agents.grounding import disclose_sample_data, tool_backed_reply
 from penny.agents.loop import run_agent
 from penny.agents.prompts import recent_history, system_prompt
 from penny.agents.tools import make_tool
@@ -37,8 +36,6 @@ MARKET_UNSURE = (
     "I can look that up for you. Which company do you mean? You can tell me its name, like "
     "Disney or Roblox."
 )
-
-SAMPLE_NOTE = "These prices are sample data for practice, not live prices."
 
 _RULES = """\
 How to answer:
@@ -166,16 +163,6 @@ def market_tools(market: MarketProvider) -> list[ToolSpec]:
     ]
 
 
-def used_sample_data(result_runs: list[Any]) -> bool:
-    for run in result_runs:
-        try:
-            if json.loads(run.output).get("source") == "sample":
-                return True
-        except (ValueError, AttributeError):
-            continue
-    return False
-
-
 class MarketAgent:
     def __init__(
         self,
@@ -210,10 +197,4 @@ class MarketAgent:
             max_tokens=self.max_tokens,
         )
         reply = tool_backed_reply(result, MARKET_UNSURE)
-        if (
-            reply.text != MARKET_UNSURE
-            and used_sample_data(successful_runs(result))
-            and "sample" not in reply.text.lower()
-        ):
-            reply.text = f"{reply.text} {SAMPLE_NOTE}"
-        return reply
+        return disclose_sample_data(reply, result, {MARKET_UNSURE})

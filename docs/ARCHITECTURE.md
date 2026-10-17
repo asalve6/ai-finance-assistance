@@ -76,7 +76,7 @@ Different sessions never see each other. The classes stored in the state are reg
 |---|---|---|
 | Router | `KeywordRouter`: first matching keyword group | E7: LLM classification, mixed questions |
 | Specialists | `finance_qa` (E1), `tax` (E5), `coach` (E2) and `market` (E3) are real. `portfolio` is a `StubSpecialist` | E4 Portfolio |
-| Guardian | Real: `LLMGuardian` (E6), rules first, then a model review on the fast model | - |
+| Guardian | Real: `LLMGuardian` (E6), rules first, then a model review on the main model | - |
 | Trace sink | `InMemoryTraceSink` | A2: Postgres, for the trace viewer |
 
 ## The agent loop
@@ -142,7 +142,7 @@ cheapest first:
 1. **Rules in code** (`RuleGuardian`): empty replies, advice or promise wording, too many sentences for
    the reader's level, lists, headings or bold. Free, instant, always the same answer.
 2. **Fixed replies we wrote**, such as "I don't know that one yet", are trusted without a model call.
-3. **A model review** on the fast model for what rules cannot see: one-sided claims, facts the evidence
+3. **A model review** on the main model for what rules cannot see: one-sided claims, facts the evidence
    does not support, unkind tone, words too hard for the reader, privacy.
 
 The reviewer sees only the reading level, the question, the evidence (the passages the writer used)

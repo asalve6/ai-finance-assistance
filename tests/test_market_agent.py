@@ -3,9 +3,9 @@ from datetime import UTC, date, datetime
 
 import pytest
 
+from penny.agents.grounding import SAMPLE_NOTE
 from penny.agents.market_agent import (
     MARKET_UNSURE,
-    SAMPLE_NOTE,
     MarketAgent,
     direction,
     find_ticker,

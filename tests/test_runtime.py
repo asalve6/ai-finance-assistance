@@ -6,6 +6,7 @@ from penny.agents.coach import CoachAgent
 from penny.agents.guardian import LLMGuardian
 from penny.agents.knowledge import KnowledgeAgent
 from penny.agents.market_agent import MarketAgent
+from penny.agents.portfolio_agent import PortfolioAgent
 from penny.contracts import LLMResponse
 from penny.graph import demo
 from penny.graph.stubs import StubSpecialist
@@ -35,6 +36,7 @@ def test_the_real_agents_are_wired_in_and_the_rest_stay_stubs():
         "tax": KnowledgeAgent,
         "coach": CoachAgent,
         "market": MarketAgent,
+        "portfolio": PortfolioAgent,
     }
     assert set(classes) == set(runtime.REAL_AGENTS)
     for name, agent in graph.agents.items():
@@ -47,7 +49,7 @@ def test_finance_qa_uses_the_main_model_and_the_shared_trace_sink():
     graph = runtime.build_penny(setup=llm_setup, index=INDEX, sink=sink)
     result = graph.ask("what is a stock", session_id="s")
     assert result.reply == "A stock is a small piece of a company."
-    assert [c["model"] for c in llm_setup.client.calls] == ["main-model", "fast-model"]
+    assert [c["model"] for c in llm_setup.client.calls] == ["main-model", "main-model"]
     kinds = [(e.agent, e.kind) for e in sink.for_trace(result.trace_id)]
     assert kinds == [
         ("router", "route"),
@@ -60,10 +62,10 @@ def test_finance_qa_uses_the_main_model_and_the_shared_trace_sink():
     ]
 
 
-def test_the_guardian_is_the_llm_reviewer_on_the_fast_model():
+def test_the_guardian_is_the_llm_reviewer_on_the_main_model():
     graph = runtime.build_penny(setup=setup(), index=INDEX)
     assert isinstance(graph.guardian, LLMGuardian)
-    assert graph.guardian.model == "fast-model"
+    assert graph.guardian.model == "main-model"
 
 
 def test_load_index_reads_the_saved_index_with_the_configured_embedder(tmp_path, monkeypatch):
