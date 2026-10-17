@@ -8,15 +8,17 @@ from __future__ import annotations
 import os
 
 from penny.agents.guardian import LLMGuardian
-from penny.agents.specialists import build_coach, build_finance_qa, build_tax
+from penny.agents.specialists import build_coach, build_finance_qa, build_market, build_tax
 from penny.contracts import TraceSink
 from penny.graph.build import PennyGraph
 from penny.graph.stubs import default_agents
 from penny.kb.embedding import DEFAULT_EMBEDDER, get_embedder
 from penny.kb.index import INDEX_DIR, KBIndex
 from penny.llm.factory import LLMSetup, get_llm
+from penny.market.factory import default_market
+from penny.market.provider import MarketProvider
 
-REAL_AGENTS = ("finance_qa", "tax", "coach")
+REAL_AGENTS = ("finance_qa", "tax", "coach", "market")
 
 
 def load_index() -> KBIndex:
@@ -29,12 +31,15 @@ def build_penny(
     setup: LLMSetup | None = None,
     index: KBIndex | None = None,
     sink: TraceSink | None = None,
+    market: MarketProvider | None = None,
 ) -> PennyGraph:
     setup = setup or get_llm()
     index = index or load_index()
+    market = market or default_market()
     agents = default_agents()
     agents["finance_qa"] = build_finance_qa(setup, index, sink)
     agents["tax"] = build_tax(setup, index, sink)
     agents["coach"] = build_coach(setup, sink)
+    agents["market"] = build_market(setup, market, sink)
     guardian = LLMGuardian(setup.client, setup.fast_model, sink=sink)
     return PennyGraph(agents=agents, guardian=guardian, sink=sink)

@@ -31,7 +31,25 @@ _ROUTES: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("portfolio", ("portfolio", "diversif", "holdings", "asset allocation", "my stocks")),
     (
         "market",
-        ("stock price", "share price", "price of", "quote", "ticker", "trading at", "how much is"),
+        (
+            "stock price",
+            "share price",
+            "price of",
+            "quote",
+            "ticker",
+            "trading at",
+            "how much is",
+            # companies on Penny's watchlist, by the names children use
+            "disney",
+            "nintendo",
+            "roblox",
+            "mcdonald",
+            "nike",
+            "mattel",
+            "hasbro",
+            "coca-cola",
+            "sony",
+        ),
     ),
     (
         "coach",
