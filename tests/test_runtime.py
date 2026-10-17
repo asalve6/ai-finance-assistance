@@ -5,6 +5,7 @@ from penny import runtime
 from penny.agents.coach import CoachAgent
 from penny.agents.guardian import LLMGuardian
 from penny.agents.knowledge import KnowledgeAgent
+from penny.agents.market_agent import MarketAgent
 from penny.contracts import LLMResponse
 from penny.graph import demo
 from penny.graph.stubs import StubSpecialist
@@ -29,7 +30,12 @@ def setup(*responses: LLMResponse) -> LLMSetup:
 def test_the_real_agents_are_wired_in_and_the_rest_stay_stubs():
     graph = runtime.build_penny(setup=setup(), index=INDEX)
     assert tuple(graph.agents) == SPECIALISTS
-    classes = {"finance_qa": KnowledgeAgent, "tax": KnowledgeAgent, "coach": CoachAgent}
+    classes = {
+        "finance_qa": KnowledgeAgent,
+        "tax": KnowledgeAgent,
+        "coach": CoachAgent,
+        "market": MarketAgent,
+    }
     assert set(classes) == set(runtime.REAL_AGENTS)
     for name, agent in graph.agents.items():
         assert isinstance(agent, classes.get(name, StubSpecialist)), name

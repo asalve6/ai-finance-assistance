@@ -4,9 +4,11 @@ from __future__ import annotations
 
 from penny.agents.coach import CoachAgent
 from penny.agents.knowledge import KnowledgeAgent
+from penny.agents.market_agent import MarketAgent
 from penny.contracts import TraceSink
 from penny.kb.index import KBIndex
 from penny.llm.factory import LLMSetup
+from penny.market.provider import MarketProvider
 
 TAX_ROLE = (
     "You explain what taxes are and how they work, for learning only. Tax rules differ from place "
@@ -40,3 +42,10 @@ def build_tax(setup: LLMSetup, index: KBIndex, sink: TraceSink | None = None) ->
 def build_coach(setup: LLMSetup, sink: TraceSink | None = None) -> CoachAgent:
     """Saving goals and the two games. Every number comes from a tool, so it needs no index."""
     return CoachAgent(setup.client, setup.main_model, sink=sink)
+
+
+def build_market(
+    setup: LLMSetup, market: MarketProvider, sink: TraceSink | None = None
+) -> MarketAgent:
+    """Prices of companies children know, explained. Every number comes from the market chain."""
+    return MarketAgent(setup.client, setup.main_model, market, sink=sink)

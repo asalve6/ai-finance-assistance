@@ -75,7 +75,7 @@ Different sessions never see each other. The classes stored in the state are reg
 | Piece | Today (C2) | Replaced by |
 |---|---|---|
 | Router | `KeywordRouter`: first matching keyword group | E7: LLM classification, mixed questions |
-| Specialists | `finance_qa` (E1), `tax` (E5) and `coach` (E2) are real. `market` and `portfolio` are `StubSpecialist` | E3 Market, E4 Portfolio |
+| Specialists | `finance_qa` (E1), `tax` (E5), `coach` (E2) and `market` (E3) are real. `portfolio` is a `StubSpecialist` | E4 Portfolio |
 | Guardian | Real: `LLMGuardian` (E6), rules first, then a model review on the fast model | - |
 | Trace sink | `InMemoryTraceSink` | A2: Postgres, for the trace viewer |
 
@@ -121,6 +121,18 @@ Tools return amounts already written as dollars ("$7.50"), so the model repeats 
 converting cents. **Enforced in code:** a reply that contains a number when no tool ran successfully is
 replaced by a fixed question asking for the details. The tool results travel with the reply as
 evidence, so the Guardian checks the numbers against them.
+
+## The Market agent (live prices, explained)
+
+`MarketAgent` (`src/penny/agents/market_agent.py`) answers "what's Roblox's price?" with three tools:
+`find_ticker` (company name to ticker, for Penny's watchlist of ten companies children know),
+`get_quote` and `get_price_history`. Prices come from the market chain (`src/penny/market/`):
+Yahoo Finance, then Alpha Vantage, then sample data, behind a 30-minute cache. Tools report a change
+as a direction and a size ("down", "3.09%"), so replies never say "down by -3.09%".
+
+Enforced in code, as for the Coach (`agents/grounding.py`): a number with no successful tool behind it
+replaces the reply with a fixed question. If any price came from sample data, the reply must say so,
+and a note is added when it does not. The agent explains; it never predicts or says whether to buy.
 
 ## The Guardian
 

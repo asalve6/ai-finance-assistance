@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
+from penny.money import dollars
 
-def dollars(cents: int) -> str:
-    return f"{'-' if cents < 0 else ''}${abs(cents) / 100:.2f}"
+__all__ = ["dollars", "md", "weeks"]
 
 
 def md(text: str) -> str:

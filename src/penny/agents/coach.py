@@ -15,18 +15,18 @@ tool results are passed on as evidence, so the Guardian can check the reply agai
 
 from __future__ import annotations
 
-import json
-import re
 from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
+from penny.agents.grounding import tool_backed_reply
 from penny.agents.loop import run_agent
 from penny.agents.prompts import recent_history, system_prompt
 from penny.agents.tools import make_tool
 from penny.contracts import Level, LLMClient, Message, ToolSpec, TraceSink
 from penny.engines import goal, lemonade, piggy
 from penny.graph.types import AgentReply, AgentRequest
+from penny.money import dollars
 from penny.observability import NullTraceSink
 
 COACH_ROLE = "You help with saving goals and with the Piggy Bank and Lemonade Stand games."
@@ -35,8 +35,6 @@ COACH_UNSURE = (
     "I want to get the numbers right, so I need a bit more. What are you saving for and how much "
     "does it cost, or which game do you want to know about?"
 )
-
-EVIDENCE_LIMIT = 6000
 
 _RULES = """\
 How to answer:
@@ -51,10 +49,6 @@ How to answer:
 - This is for learning. Never tell the child what to buy, and never promise that money will grow.
 - If the question is not about saving goals or the games, say in one friendly sentence that
   those are what you help with."""
-
-
-def dollars(cents: int) -> str:
-    return f"{'-' if cents < 0 else ''}${abs(cents) / 100:.2f}"
 
 
 class PlanGoalArgs(BaseModel):
@@ -199,9 +193,4 @@ class CoachAgent:
             max_steps=self.max_steps,
             max_tokens=self.max_tokens,
         )
-        text = result.text.strip()
-        worked = [run for run in result.tool_runs if not run.is_error]
-        if not worked and re.search(r"\d", text):
-            return AgentReply(text=COACH_UNSURE)  # a number with no tool behind it is not allowed
-        evidence = "\n".join(f"{r.name}({json.dumps(r.input)}) -> {r.output}" for r in worked)
-        return AgentReply(text=text, evidence=evidence[:EVIDENCE_LIMIT])
+        return tool_backed_reply(result, COACH_UNSURE)
