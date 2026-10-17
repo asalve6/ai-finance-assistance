@@ -202,6 +202,24 @@ def test_retrieval_checks_the_first_article_and_skips_articles_not_in_the_index(
     assert suite.metrics["off-topic left unmatched"] == "1/2 (50%)"
 
 
+def test_also_ok_articles_count_and_keep_a_case_alive_when_the_main_one_is_missing():
+    suite = run_retrieval(
+        INDEX,
+        [
+            # the main article is a draft (not indexed), but an accepted one is there
+            RetrievalCase(
+                id="alt",
+                question="what is a stock and who owns shares",
+                article="what-is-a-bond",
+                also_ok=["what-is-a-stock"],
+            ),
+            RetrievalCase(id="none", question="zebra", article=None, also_ok=["what-is-a-stock"]),
+        ],
+    )
+    assert suite.results[0].passed is True and suite.metrics["right article first"] == "1/1 (100%)"
+    assert RetrievalCase(id="n", question="q", article=None, also_ok=["x"]).acceptable == []
+
+
 def test_a_question_with_no_match_says_so():
     suite = run_retrieval(
         INDEX, [RetrievalCase(id="x", question="zebra", article="what-is-a-stock")]
