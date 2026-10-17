@@ -1,0 +1,7 @@
+# The whole look of the app: Streamlit's default light theme with one brand color. No custom CSS.
+[theme]
+base = "light"
+primaryColor = "#0B7A57"
+
+[browser]
+gatherUsageStats = false
