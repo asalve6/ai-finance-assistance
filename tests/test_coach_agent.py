@@ -162,10 +162,10 @@ def test_a_number_with_no_tool_behind_it_is_replaced():
     assert reply.text == COACH_UNSURE and reply.evidence == ""
 
 
-def test_a_question_back_to_the_child_needs_no_tool():
-    question = "What are you saving for, and how much does it cost?"
-    reply = CoachAgent(FakeLLM([says(question)]), "m").respond(request("how much should I save"))
-    assert reply.text == question
+def test_with_no_tool_behind_it_any_reply_becomes_the_fixed_question():
+    for draft in ("What are you saving for, and how much does it cost?", "Saving is great!"):
+        reply = CoachAgent(FakeLLM([says(draft)]), "m").respond(request("how do I save for a bike"))
+        assert reply.text == COACH_UNSURE and reply.evidence == ""
 
 
 def test_a_tool_that_only_failed_does_not_count_as_backing_for_a_number():

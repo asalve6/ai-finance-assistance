@@ -60,6 +60,7 @@ class State(TypedDict, total=False):
     # Turn-scoped working state
     route: str
     route_reason: str
+    also_ask: str
     draft: AgentReply | None
     agent_error: str | None
     verdict: Verdict | None
@@ -117,6 +118,7 @@ class PennyGraph:
             trace_id=trace_id,
             citations=[] if used_fallback or draft is None else draft.citations,
             last_issues=[] if verdict is None or verdict.approved else verdict.reasons,
+            also_ask="" if used_fallback else state.get("also_ask", ""),
         )
 
     def history(self, session_id: str) -> list[Message]:
@@ -159,6 +161,7 @@ class PennyGraph:
             question=state["question"],
             history=state["history"][:-1],  # the last entry is the current question
             feedback=state.get("feedback", []),
+            also_ask=state.get("also_ask", ""),
         )
 
     def _build(self) -> Any:
@@ -192,6 +195,7 @@ class PennyGraph:
             "history": [Message.user(state["question"])],
             "route": DEFAULT_AGENT,
             "route_reason": "",
+            "also_ask": "",
             "draft": None,
             "agent_error": None,
             "verdict": None,
@@ -206,16 +210,22 @@ class PennyGraph:
         started = time.perf_counter()
         history = state["history"][:-1]
         try:
-            decision = self.router.route(state["question"], history, state["kid"])
+            decision = self.router.route(
+                state["question"], history, state["kid"], trace_id=state["trace_id"]
+            )
         except Exception as exc:  # a broken router must not break the conversation
             decision = RouteDecision(agent=DEFAULT_AGENT, reason=f"router failed: {exc}")
         if decision.agent not in self.agents:
             decision = RouteDecision(
                 agent=DEFAULT_AGENT, reason=f"unknown agent '{decision.agent}', used the default"
             )
-        output = {"agent": decision.agent, "reason": decision.reason}
+        output = {"agent": decision.agent, "reason": decision.reason, "also_ask": decision.also_ask}
         self._emit(state, "router", "route", "route", started, output)
-        return {"route": decision.agent, "route_reason": decision.reason}
+        return {
+            "route": decision.agent,
+            "route_reason": decision.reason,
+            "also_ask": decision.also_ask,
+        }
 
     def _specialist(self, name: str) -> Callable[[State], dict[str, Any]]:
         def run(state: State) -> dict[str, Any]:

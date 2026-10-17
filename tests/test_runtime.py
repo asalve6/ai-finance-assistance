@@ -7,6 +7,7 @@ from penny.agents.guardian import LLMGuardian
 from penny.agents.knowledge import KnowledgeAgent
 from penny.agents.market_agent import MarketAgent
 from penny.agents.portfolio_agent import PortfolioAgent
+from penny.agents.router import LLMRouter
 from penny.contracts import LLMResponse
 from penny.graph import demo
 from penny.graph.stubs import StubSpecialist
@@ -22,6 +23,9 @@ INDEX = KBIndex.build(corpus(draft_bond=False), HashingEmbedder())
 
 
 APPROVED = LLMResponse(text='{"approved": true, "problems": []}')
+TO_FINANCE_QA = LLMResponse(
+    text='{"agent": "finance_qa", "reason": "a money idea", "also_ask": ""}'
+)
 
 
 def setup(*responses: LLMResponse) -> LLMSetup:
@@ -41,17 +45,26 @@ def test_the_real_agents_are_wired_in_and_the_rest_stay_stubs():
     assert set(classes) == set(runtime.REAL_AGENTS)
     for name, agent in graph.agents.items():
         assert isinstance(agent, classes.get(name, StubSpecialist)), name
+    assert isinstance(graph.router, LLMRouter) and graph.router.model == "fast-model"
 
 
 def test_finance_qa_uses_the_main_model_and_the_shared_trace_sink():
     sink = InMemoryTraceSink()
-    llm_setup = setup(LLMResponse(text="A stock is a small piece of a company."), APPROVED)
+    llm_setup = setup(
+        TO_FINANCE_QA, LLMResponse(text="A stock is a small piece of a company."), APPROVED
+    )
     graph = runtime.build_penny(setup=llm_setup, index=INDEX, sink=sink)
     result = graph.ask("what is a stock", session_id="s")
     assert result.reply == "A stock is a small piece of a company."
-    assert [c["model"] for c in llm_setup.client.calls] == ["main-model", "main-model"]
+    assert [c["model"] for c in llm_setup.client.calls] == [
+        "fast-model",
+        "main-model",
+        "main-model",
+    ]
+    assert result.route_reason == "a money idea"
     kinds = [(e.agent, e.kind) for e in sink.for_trace(result.trace_id)]
     assert kinds == [
+        ("router", "llm"),
         ("router", "route"),
         ("finance_qa", "retrieval"),
         ("finance_qa", "llm"),
@@ -87,7 +100,9 @@ def test_load_index_fails_clearly_when_nothing_was_built(tmp_path, monkeypatch):
 
 def test_the_live_demo_shows_the_answer_its_source_and_the_trace(monkeypatch, capsys):
     def fake_live(sink):
-        llm_setup = setup(LLMResponse(text="A stock is a small piece of a company."), APPROVED)
+        llm_setup = setup(
+            TO_FINANCE_QA, LLMResponse(text="A stock is a small piece of a company."), APPROVED
+        )
         return runtime.build_penny(setup=llm_setup, index=INDEX, sink=sink)
 
     monkeypatch.setattr(demo, "_live_graph", fake_live)

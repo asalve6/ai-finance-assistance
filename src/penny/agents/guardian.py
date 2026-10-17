@@ -55,7 +55,8 @@ Reject the draft if any of these is true:
 5. Too hard: a child at this reading level would not follow it, or it uses a money word without
    a simple explanation.
 6. Privacy: it asks for personal or family details such as incomes, balances, addresses or
-   passwords.
+   passwords. Asking about the child's own saving goal (what it is, its price, how many weeks)
+   or a game is not private: the planner needs those numbers.
 
 Only reject for a clear problem in what the draft says. Do not reject because it could say more,
 or for small matters of style. These are fine:

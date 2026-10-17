@@ -66,8 +66,13 @@ def render(player: Player) -> None:
     for turn in turns:
         _show(turn)
 
-    st.caption("Try asking:")
     picked = None
+    if turns and turns[-1].also_ask:  # the other part of a mixed question
+        also = turns[-1].also_ask
+        if st.button(md(f"Also ask: {also}"), icon=":material/forum:", key="also_ask"):
+            picked = also
+
+    st.caption("Try asking:")
     columns = st.columns(2)  # two per row, so the full question fits on the button
     for i, suggestion in enumerate(SUGGESTIONS):
         if columns[i % 2].button(md(suggestion), key=f"suggest_{i}", width="stretch"):

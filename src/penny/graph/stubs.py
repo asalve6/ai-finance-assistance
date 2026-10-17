@@ -1,6 +1,6 @@
 """Simple stand-ins so the whole graph runs offline. Each is replaced by a real agent later.
 
-- `KeywordRouter`  -> E7 (LLM classification, mixed questions)
+- `KeywordRouter`  -> stays. `LLMRouter` (E7) uses it when the model cannot route
 - `StubSpecialist` -> E1 to E5 (the real agents)
 - `RuleGuardian`   -> stays. `LLMGuardian` (E6) runs these rules first, then a model review
 """
@@ -71,7 +71,9 @@ _ROUTES: tuple[tuple[str, tuple[str, ...]], ...] = (
 class KeywordRouter:
     """First matching keyword group wins; anything else goes to finance_qa."""
 
-    def route(self, question: str, history: list[Message], kid: KidContext) -> RouteDecision:
+    def route(
+        self, question: str, history: list[Message], kid: KidContext, trace_id: str = ""
+    ) -> RouteDecision:
         text = f" {question.lower()} "
         for agent, keywords in _ROUTES:
             for keyword in keywords:

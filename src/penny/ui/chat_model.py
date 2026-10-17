@@ -42,6 +42,7 @@ class ChatTurn(BaseModel):
     caption: str
     citations: list[Citation] = Field(default_factory=list)
     trace: list[TraceRow] = Field(default_factory=list)
+    also_ask: str = ""
 
 
 def label(agent: str) -> str:
@@ -60,7 +61,9 @@ def describe(event: TraceEvent) -> TraceRow | None:
         else:
             what = "Searched the articles. Nothing matched well enough"
     elif event.kind == "llm":
-        if event.agent == "guardian":
+        if event.agent == "router":
+            what = f"Read the question with {event.name}" if event.name else "Read the question"
+        elif event.agent == "guardian":
             what = f"Reviewed the draft with {event.name}" if event.name else "Reviewed the draft"
         elif out.get("tool_calls"):
             what = f"Asked to use: {', '.join(out['tool_calls'])}"
@@ -98,6 +101,7 @@ def build_turn(question: str, result: TurnResult, events: list[TraceEvent]) -> C
         caption=caption_for(result),
         citations=result.citations,
         trace=rows,
+        also_ask=result.also_ask,
     )
 
 

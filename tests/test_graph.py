@@ -54,7 +54,7 @@ class FixedRouter:
     def __init__(self, decision=None, error=None):
         self.decision, self.error = decision, error
 
-    def route(self, question, history, kid):
+    def route(self, question, history, kid, trace_id=""):
         if self.error:
             raise self.error
         return self.decision
@@ -105,6 +105,49 @@ def test_a_crashing_router_does_not_break_the_conversation():
     assert result.approved is True
 
 
+class RecordingRouter(FixedRouter):
+    def __init__(self, decision):
+        super().__init__(decision)
+        self.trace_ids = []
+
+    def route(self, question, history, kid, trace_id=""):
+        self.trace_ids.append(trace_id)
+        return super().route(question, history, kid, trace_id)
+
+
+def test_the_other_part_of_a_mixed_question_comes_back_and_is_traced():
+    sink = InMemoryTraceSink()
+    router = RecordingRouter(
+        RouteDecision(agent="market", reason="a price", also_ask="How do I save for a bike?")
+    )
+    result = make(router=router, sink=sink).ask("Disney price and bike saving?", session_id="s")
+    assert (result.route, result.also_ask) == ("market", "How do I save for a bike?")
+    assert router.trace_ids == [result.trace_id]  # so the router can trace its own model call
+    route_event = sink.for_trace(result.trace_id)[0]
+    assert route_event.output["also_ask"] == "How do I save for a bike?"
+
+
+def test_the_specialist_is_told_which_part_to_leave_out():
+    specialist = Scripted("ok")
+    router = FixedRouter(RouteDecision(agent="finance_qa", also_ask="What is tax?"))
+    make(specialist=specialist, router=router).ask("stocks and tax?", session_id="s")
+    assert specialist.requests[0].also_ask == "What is tax?"
+
+
+def test_also_ask_is_reset_each_turn():
+    router = FixedRouter(RouteDecision(agent="finance_qa", also_ask="What is tax?"))
+    graph = make(router=router)
+    assert graph.ask("a and b", session_id="s").also_ask == "What is tax?"
+    router.decision = RouteDecision(agent="finance_qa")
+    assert graph.ask("just a", session_id="s").also_ask == ""  # same session, new turn
+
+
+def test_the_safe_fallback_offers_nothing_else():
+    router = FixedRouter(RouteDecision(agent="finance_qa", also_ask="What is tax?"))
+    result = make(router=router, guardian=ScriptedGuardian(reject("no"))).ask("a", session_id="s")
+    assert result.fallback_used and result.also_ask == ""
+
+
 # ------------------------------------------------------------------ the happy path and tracing
 
 
@@ -119,7 +162,7 @@ def test_a_clean_turn_goes_route_agent_guardian_respond():
         ("graph", "respond"),
     ]
     events = sink.for_trace(result.trace_id)
-    assert events[0].output == {"agent": "finance_qa", "reason": "default"}
+    assert events[0].output == {"agent": "finance_qa", "reason": "default", "also_ask": ""}
     assert events[2].output == {"approved": True, "reasons": []}
     assert all(e.latency_ms >= 0 for e in events)
 

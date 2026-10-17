@@ -74,7 +74,7 @@ Different sessions never see each other. The classes stored in the state are reg
 
 | Piece | Today (C2) | Replaced by |
 |---|---|---|
-| Router | `KeywordRouter`: first matching keyword group | E7: LLM classification, mixed questions |
+| Router | Real: `LLMRouter` (E7) on the fast model, with recent turns for follow-ups. Falls back to `KeywordRouter` if the model fails. A mixed question's other part comes back as `also_ask`, shown as a button | - |
 | Specialists | All real: `finance_qa` (E1), `tax` (E5), `coach` (E2), `market` (E3) and `portfolio` (E4) | - |
 | Guardian | Real: `LLMGuardian` (E6), rules first, then a model review on the main model | - |
 | Trace sink | `InMemoryTraceSink` | A2: Postgres, for the trace viewer |
