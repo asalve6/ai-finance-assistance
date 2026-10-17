@@ -15,6 +15,7 @@ dependencies = [
     "openai>=3.26.0",
     "python-dotenv>=1.2.4",
     "langgraph>=1.2.14",
+    "yfinance>=1.7.0",
 ]
 
 [project.optional-dependencies]
