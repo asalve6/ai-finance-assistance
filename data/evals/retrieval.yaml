@@ -1,0 +1,15 @@
+# The article that should come back first. `article: null` means nothing should match.
+# Cases whose article is not in the index (not reviewed yet) are skipped, not failed.
+- {id: stock-plain, question: "What is a stock?", article: what-is-a-stock}
+- {id: stock-kid-words, question: "Can I own a tiny piece of a company?", article: what-is-a-stock}
+- {id: stock-price-falls, question: "Can a share price go down?", article: what-is-a-stock}
+- {id: taxes-plain, question: "What are taxes?", article: what-are-taxes}
+- {id: paycheck, question: "Why is my first paycheck smaller than I expected?", article: what-are-taxes}
+- {id: sales-tax, question: "Why does the store add money at the checkout?", article: what-are-taxes}
+- {id: piggy, question: "How does a piggy bank help me save?", article: piggy-bank-basics}
+- {id: needs-wants, question: "How do I know if I need something or just want it?", article: needs-vs-wants}
+- {id: compound, question: "How does interest earn more interest?", article: compound-interest}
+- {id: small-habits, question: "Do small amounts really add up?", article: drop-by-drop}
+- {id: family-talk, question: "How can I talk about money with my family?", article: family-money-talks}
+- {id: off-topic-pasta, question: "How do I cook pasta?", article: null}
+- {id: off-topic-dinosaur, question: "What is the biggest dinosaur?", article: null}

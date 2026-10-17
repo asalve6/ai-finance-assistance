@@ -173,6 +173,26 @@ placeholder agents and says what is missing, and the games work fully, because t
 The player's progress lives in the browser session and is lost when the tab closes. Saving it needs the
 database (lane A).
 
+## Evaluation
+
+`make evals` runs four suites against the real models, prices and article index, and writes
+[docs/evals/report.md](evals/report.md) (plus `report.json` for comparing runs). The cases are
+plain YAML in `data/evals/`, so adding one needs no code.
+
+| Suite | What it measures |
+|---|---|
+| routing | the right specialist for each question, follow-ups using the earlier turns, and mixed questions split into `also_ask` (with no false splits) |
+| guardian | planted bad drafts (advice, promises, one-sided, unsupported, unkind, too hard, privacy) are rejected, and good ones approved |
+| retrieval | the right article comes back first, and off-topic questions match nothing. Articles not reviewed yet are skipped, not failed |
+| answers | whole questions through the graph: route, Guardian approval, text checks on the reply, rewrites, tokens and latency |
+
+`make test` checks the eval code itself with fakes, so it never calls a model. Use
+`make evals ARGS="--repeat 3"` to see how much the model-based numbers vary between runs.
+
+Known issue the evals show: at the starter reading level the Guardian's model review is
+sometimes stricter than needed (a fair draft called "too hard", or asking a goal's price called
+private), so an occasional answer ends in the safe fallback. It fails safe, never unsafe.
+
 ## Try it
 
 ```bash

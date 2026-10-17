@@ -1,0 +1,29 @@
+# Which specialist should answer. `history` gives earlier turns for follow-ups.
+# `mixed: true` means the question has a second part for another specialist (also_ask).
+- {id: what-is-a-stock, question: "What is a stock?", agent: finance_qa}
+- {id: bank, question: "Why do people put money in a bank?", agent: finance_qa}
+- {id: ipo, question: "What is an IPO?", agent: finance_qa}
+- {id: off-topic, question: "How do I cook pasta?", agent: finance_qa}
+- {id: asks-for-a-tip, question: "Should I buy Tesla stock?", agent: finance_qa}
+- {id: paycheck, question: "Why is my first paycheck smaller?", agent: tax}
+- {id: sales-tax-no-keyword, question: "Why do I pay extra at the store checkout?", agent: tax}
+- {id: roth, question: "What is a Roth IRA?", agent: tax}
+- {id: goal-per-week, question: "I want a $60 game in 8 weeks. How much per week?", agent: coach}
+- {id: lemonade, question: "How do I win the lemonade stand?", agent: coach}
+- {id: weeks-no-keyword, question: "If I save $5 a week how long until I have $100?", agent: coach}
+- {id: disney-price, question: "How much is Disney stock today?", agent: market}
+- {id: roblox-month, question: "Did Roblox go up or down this month?", agent: market}
+- {id: fortnite-maker, question: "How much is a share of the company that makes Fortnite?", agent: market}
+- {id: spread, question: "Is my portfolio spread out?", agent: portfolio}
+- {id: what-if, question: "What if I added 4 shares of Nike to my practice stocks?", agent: portfolio}
+- {id: eggs-basket, question: "Are all my eggs in one basket?", agent: portfolio}
+- id: follow-up-market
+  question: "what about Nike?"
+  history: ["How much is Disney?", "Disney is $110.59 today."]
+  agent: market
+- id: follow-up-coach
+  question: "how long would that take?"
+  history: ["I want a bike for $120", "Save $15 a week for 8 weeks."]
+  agent: coach
+- {id: mixed-price-and-bike, question: "What is Disney's price, and how do I save for a bike?", agent: market, mixed: true}
+- {id: mixed-paycheck-and-stock, question: "Why is my paycheck smaller, and what is a stock?", agent: tax, mixed: true}

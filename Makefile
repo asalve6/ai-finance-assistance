@@ -1,4 +1,4 @@
-.PHONY: setup test lint fmt run kb-check kb-links kb-index kb-index-dev kb-ask llm-smoke demo demo-live
+.PHONY: setup test lint fmt run evals kb-check kb-links kb-index kb-index-dev kb-ask llm-smoke demo demo-live
 
 setup:
 	uv sync
@@ -44,3 +44,8 @@ demo:
 # Usage: make demo-live Q="what is a stock?"   (real LLM and article index)
 demo-live:
 	uv run python -m penny.graph.demo --live "$(Q)"
+
+# Live evals (real models, prices and index). Writes docs/evals/report.md.
+# Usage: make evals        or  make evals ARGS="routing --repeat 3"
+evals:
+	uv run python -m penny.evals $(ARGS)
