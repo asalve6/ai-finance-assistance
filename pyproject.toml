@@ -42,3 +42,7 @@ src = ["src", "tests"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+# Table-style tests read better with one case per line, even when the line is long.
+"tests/*" = ["E501"]

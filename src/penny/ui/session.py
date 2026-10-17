@@ -51,5 +51,8 @@ def get_player(state: MutableMapping[str, Any]) -> Player:
 
 
 def reset_player(state: MutableMapping[str, Any]) -> Player:
+    """Start over: a new player, and a fresh conversation with its own session id."""
+    for key in ("chat", "session_id"):
+        state.pop(key, None)
     state["player"] = Player()
     return state["player"]
