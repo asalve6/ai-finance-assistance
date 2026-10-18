@@ -10,7 +10,7 @@ sources:
     url: https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/
   - title: Investor.gov, Stocks
     url: https://www.investor.gov/introduction-investing/investing-basics/investment-products/stocks
-reviewed: false
+reviewed: true
 ---
 
 The cereal you eat, the shoes you wear, and the games you play were all made by companies. But what is a company, exactly?

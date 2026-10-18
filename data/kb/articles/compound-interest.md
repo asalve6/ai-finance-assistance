@@ -10,7 +10,7 @@ sources:
     url: https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator
   - title: Investor.gov, Glossary
     url: https://www.investor.gov/introduction-investing/investing-basics/glossary
-reviewed: false
+reviewed: true
 ---
 
 When you keep money in a savings account, the bank pays you a small extra amount for holding it. That extra amount is called interest. You can think of it as a thank-you from the bank.

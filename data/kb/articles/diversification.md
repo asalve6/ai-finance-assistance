@@ -10,7 +10,7 @@ sources:
     url: https://www.investor.gov/introduction-investing/investing-basics/glossary
   - title: Investor.gov, Stocks
     url: https://www.investor.gov/introduction-investing/investing-basics/investment-products/stocks
-reviewed: false
+reviewed: true
 ---
 
 Imagine carrying all your eggs in one basket. If you trip, every egg could break. If you split them into a few baskets, one fall breaks only some. That is the idea behind **diversification**.

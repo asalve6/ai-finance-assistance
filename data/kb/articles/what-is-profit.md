@@ -10,7 +10,7 @@ sources:
     url: https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/
   - title: MyMoney.gov
     url: https://www.mymoney.gov/
-reviewed: false
+reviewed: true
 ---
 
 When you sell something, the money you get is not all yours to keep. First you have to pay for what it cost you. What is left over is called **profit**.

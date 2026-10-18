@@ -10,7 +10,7 @@ sources:
     url: https://www.usa.gov/taxes
   - title: IRS
     url: https://www.irs.gov/
-reviewed: false
+reviewed: true
 ---
 
 Have you ever had exactly enough money for something, then found out at the checkout that it costs more? That surprise is usually **sales tax**.

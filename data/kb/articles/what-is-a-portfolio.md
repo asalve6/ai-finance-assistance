@@ -10,7 +10,7 @@ sources:
     url: https://www.investor.gov/introduction-investing/investing-basics/glossary
   - title: Investor.gov, Stocks
     url: https://www.investor.gov/introduction-investing/investing-basics/investment-products/stocks
-reviewed: false
+reviewed: true
 ---
 
 Artists keep a portfolio, a folder of their best work. Investors have one too. An investment **portfolio** is everything a person has invested in, looked at as one group.

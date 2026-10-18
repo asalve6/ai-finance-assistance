@@ -10,7 +10,7 @@ sources:
     url: https://consumer.ftc.gov/
   - title: FDIC, Money Smart
     url: https://www.fdic.gov/resources/consumers/money-smart/
-reviewed: false
+reviewed: true
 ---
 
 A **scam** is a trick. Someone pretends to be helpful, or offers something amazing, so they can take your money or your private information. Scammers are good at sounding real. Knowing the warning signs keeps you safe.

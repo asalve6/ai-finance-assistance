@@ -10,7 +10,7 @@ sources:
     url: https://www.investor.gov/introduction-investing/investing-basics/glossary
   - title: Investor.gov, Stocks
     url: https://www.investor.gov/introduction-investing/investing-basics/investment-products/stocks
-reviewed: false
+reviewed: true
 ---
 
 Some share prices move gently, like a calm lake. Others jump around like a bouncy ride. The word for this is **volatility**.

@@ -10,7 +10,7 @@ sources:
     url: https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/
   - title: FDIC, Money Smart
     url: https://www.fdic.gov/resources/consumers/money-smart/
-reviewed: false
+reviewed: true
 ---
 
 Have you ever bought something, then wished you had not? Many people have. Often it was an **impulse buy**.

@@ -10,7 +10,7 @@ sources:
     url: https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/
   - title: FDIC, Money Smart
     url: https://www.fdic.gov/resources/consumers/money-smart/
-reviewed: false
+reviewed: true
 ---
 
 A lemonade stand is a tiny business. Running one teaches the same ideas that big companies use every day.

@@ -10,7 +10,7 @@ sources:
     url: https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/
   - title: MyMoney.gov
     url: https://www.mymoney.gov/
-reviewed: false
+reviewed: true
 ---
 
 There is an old saying that water drops, one at a time, can fill a very large jar. One drop looks like nothing. But the drops keep coming, and over time the jar fills up.

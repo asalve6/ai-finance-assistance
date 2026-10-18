@@ -10,7 +10,7 @@ sources:
     url: https://www.irs.gov/individuals/tax-withholding-estimator
   - title: USA.gov, Taxes
     url: https://www.usa.gov/taxes
-reviewed: false
+reviewed: true
 ---
 
 Many people feel surprised by their first paycheck. They worked 10 hours at $12 an hour and expected $120. But the check says less. Where did the rest go?

@@ -10,7 +10,7 @@ sources:
     url: https://www.investor.gov/introduction-investing/investing-basics/investment-products/stocks
   - title: Investor.gov, Glossary
     url: https://www.investor.gov/introduction-investing/investing-basics/glossary
-reviewed: false
+reviewed: true
 ---
 
 If you watch a company's share price, you will see it change all day long. Why does it keep moving?

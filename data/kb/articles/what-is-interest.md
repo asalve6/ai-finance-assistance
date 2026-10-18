@@ -10,7 +10,7 @@ sources:
     url: https://www.investor.gov/introduction-investing/investing-basics/glossary
   - title: FDIC, Money Smart
     url: https://www.fdic.gov/resources/consumers/money-smart/
-reviewed: false
+reviewed: true
 ---
 
 Interest is the price of using someone else's money. It can work for you, or against you. It depends on which side you are on.

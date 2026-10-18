@@ -10,7 +10,7 @@ sources:
     url: https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/
   - title: FDIC, Money Smart
     url: https://www.fdic.gov/resources/consumers/money-smart/
-reviewed: false
+reviewed: true
 ---
 
 Money is something every family deals with. Many families do not talk about it much, but talking about money together can help everyone learn.

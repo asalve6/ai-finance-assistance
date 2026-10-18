@@ -10,7 +10,7 @@ sources:
     url: https://www.investor.gov/introduction-investing/investing-basics/glossary
   - title: Investor.gov, Stocks
     url: https://www.investor.gov/introduction-investing/investing-basics/investment-products/stocks
-reviewed: false
+reviewed: true
 ---
 
 Many companies start small and private. The owners and a few early backers own all of it. One day, the company may decide to let the public buy a piece. The first time it does that is called an **IPO**, short for **initial public offering**. People also call it "going public."
