@@ -90,8 +90,10 @@ answer or a refusal raises `AgentError`, which the graph treats as a rejected dr
 
 `KnowledgeAgent` (`src/penny/agents/knowledge.py`) answers only from reviewed articles:
 
-1. The code searches the index first. The reader's level is a preference: articles at or below it are
-   tried first, and harder ones are used only if nothing matches, with a note to explain extra simply.
+1. The code searches the index first. The reader's level is a preference: an article at or below it
+   is used if it scores at least 85% of the best match. A harder article is used when nothing at their
+   level matches, or when it answers much better ("What is a stock?" for a starter reader), with a
+   note to the writer to explain it extra simply.
 2. The model writes a short answer from those passages. It may search again (`search_articles`, at
    most twice), which rescues follow-ups such as "tell me more".
 3. **"I don't know" is enforced in code.** If no search in the turn found a confident match, the model's
@@ -189,9 +191,10 @@ plain YAML in `data/evals/`, so adding one needs no code.
 `make test` checks the eval code itself with fakes, so it never calls a model. Use
 `make evals ARGS="--repeat 3"` to see how much the model-based numbers vary between runs.
 
-Known issue the evals show: at the starter reading level the Guardian's model review is
+Known issue the evals have shown: at the starter reading level the Guardian's model review is
 sometimes stricter than needed (a fair draft called "too hard", or asking a goal's price called
-private), so an occasional answer ends in the safe fallback. It fails safe, never unsafe.
+private), so an occasional answer ends in the safe fallback. It fails safe, never unsafe. See the
+latest report for how often.
 
 ## Try it
 

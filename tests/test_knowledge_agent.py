@@ -138,7 +138,7 @@ def test_articles_at_the_readers_level_are_preferred():
     assert OLDER_READER_NOTE not in prompt
 
 
-def test_a_harder_article_is_used_only_when_nothing_at_their_level_matches():
+def test_a_harder_article_is_used_when_nothing_at_their_level_matches():
     question = "a bond is a loan that pays interest until maturity"
     starter_llm = FakeLLM([says("A bond is like lending money.")])
     starter = ask(starter_llm, question, level=Level.STARTER)
@@ -150,6 +150,27 @@ def test_a_harder_article_is_used_only_when_nothing_at_their_level_matches():
     builder = ask(builder_llm, question, level=Level.BUILDER)
     assert builder.citations[0].article_id == "what-is-a-bond"
     assert OLDER_READER_NOTE not in builder_llm.calls[0]["messages"][-1].content
+
+
+def test_a_harder_article_that_matches_much_better_beats_a_weak_one_at_their_level():
+    # piggy-bank-basics (starter) matches "company" weakly; what-is-a-stock (saver) is the answer
+    question = "what is a stock share shareholder ownership in a company"
+    sink = InMemoryTraceSink()
+    llm = FakeLLM([says("A stock is a small piece of a company.")])
+    reply = ask(llm, question, level=Level.STARTER, sink=sink)
+    assert reply.citations[0].article_id == "what-is-a-stock"
+    assert OLDER_READER_NOTE in llm.calls[0]["messages"][-1].content
+    assert sink.for_trace("t1")[0].output["above_level"] is True
+
+
+def test_a_close_match_at_their_level_still_wins(monkeypatch):
+    import penny.agents.knowledge as knowledge
+
+    monkeypatch.setattr(knowledge, "LEVEL_SCORE_RATIO", 0.0)  # any match at their level is close
+    llm = FakeLLM([says("A stock is a small piece of a company.")])
+    reply = ask(llm, "what is a stock share shareholder ownership taxes", level=Level.STARTER)
+    assert reply.citations[0].article_id in {"what-are-taxes", "piggy-bank-basics"}
+    assert OLDER_READER_NOTE not in llm.calls[0]["messages"][-1].content
 
 
 def test_the_models_own_search_follows_the_same_level_rule():

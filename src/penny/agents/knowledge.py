@@ -25,9 +25,9 @@ from pydantic import BaseModel, Field
 from penny.agents.loop import run_agent
 from penny.agents.prompts import recent_history, system_prompt
 from penny.agents.tools import make_tool
-from penny.contracts import Level, LLMClient, Message, TraceEvent, TraceSink
+from penny.contracts import LLMClient, Message, TraceEvent, TraceSink
 from penny.graph.types import AgentReply, AgentRequest
-from penny.kb.index import KBIndex
+from penny.kb.index import LEVEL_ORDER, KBIndex
 from penny.kb.retriever import Citation, Retrieval, retrieve
 from penny.observability import NullTraceSink
 
@@ -46,6 +46,11 @@ MAX_CITATIONS = 3
 # Only cite articles that matched nearly as well as the best one, so weak side matches are not
 # shown as sources.
 CITATION_SCORE_RATIO = 0.75
+# An article at the reader's level is used if it scores at least this share of the best match at
+# any level. Below that, the harder article answers the question much better, so it is used and
+# the writer is told to simplify. (With many articles, a weak starter-level match otherwise hides
+# the exact answer: "What is a stock?" found only "What is a company?".)
+LEVEL_SCORE_RATIO = 0.85
 
 _SMALL_TALK = re.compile(
     r"^(hi|hello|hey|yo|thanks|thank you|thx|bye|goodbye|ok|okay|cool|nice|"
@@ -124,12 +129,16 @@ class KnowledgeAgent:
         def search(query: str) -> tuple[Retrieval, bool]:
             """Returns (what was found, whether it came from above the reader's level)."""
             started = time.perf_counter()
-            found = retrieve(self.index, query, max_level=level)
-            above_level = False
-            if not found.confident and level is not Level.BUILDER:
-                wider = retrieve(self.index, query)  # nothing at their level: try every level
-                if wider.confident:
-                    found, above_level = wider, True
+            found = retrieve(self.index, query)  # every level first
+            above_level = bool(found.hits) and (
+                LEVEL_ORDER[found.hits[0].chunk.level] > LEVEL_ORDER[level]
+            )
+            if above_level:  # the best match is harder than the reader's level
+                at_level = retrieve(self.index, query, max_level=level)
+                if at_level.confident and (
+                    at_level.top_score >= LEVEL_SCORE_RATIO * found.top_score
+                ):
+                    found, above_level = at_level, False  # nearly as good, and easier to read
             if found.confident:
                 confident.append(found)
             self.sink.record(
