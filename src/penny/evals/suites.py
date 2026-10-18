@@ -175,7 +175,8 @@ def run_retrieval(index: KBIndex, cases: Sequence[RetrievalCase]) -> SuiteResult
     results: list[CaseResult] = []
     first = in_top = expected_total = quiet = off_topic = 0
     for case in cases:
-        if case.article is not None and case.article not in in_index:
+        acceptable = [a for a in case.acceptable if a in in_index]
+        if case.article is not None and not acceptable:
             results.append(
                 CaseResult(id=case.id, passed=None, detail=f"{case.article} is not in the index")
             )
@@ -191,9 +192,9 @@ def run_retrieval(index: KBIndex, cases: Sequence[RetrievalCase]) -> SuiteResult
             )
         else:
             expected_total += 1
-            passed = bool(articles) and articles[0] == case.article
+            passed = bool(articles) and articles[0] in acceptable
             first += passed
-            in_top += case.article in articles
+            in_top += any(a in articles for a in acceptable)
             detail = (
                 f"top: {articles[0]} ({found.top_score:.2f})" if articles else "nothing matched"
             )
@@ -203,7 +204,7 @@ def run_retrieval(index: KBIndex, cases: Sequence[RetrievalCase]) -> SuiteResult
         results=results,
         metrics={
             "articles in the index": len(in_index),
-            "right article first": rate(first, expected_total),
+            "right article first": rate(first, expected_total),  # or one listed in also_ok
             f"right article in top {RETRIEVAL_K}": rate(in_top, expected_total),
             "off-topic left unmatched": rate(quiet, off_topic),
         },

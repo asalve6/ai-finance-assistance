@@ -42,6 +42,11 @@ class RetrievalCase(BaseModel):
     id: str
     question: str
     article: str | None  # None: nothing should match well enough
+    also_ok: list[str] = Field(default_factory=list)  # other articles that answer it fairly
+
+    @property
+    def acceptable(self) -> list[str]:
+        return [] if self.article is None else [self.article, *self.also_ok]
 
 
 class AnswerCase(BaseModel):
