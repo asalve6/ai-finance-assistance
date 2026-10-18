@@ -1,4 +1,4 @@
-# The 64 planned topics. An article's id must match its file name and an entry here.
+# The planned topics (64 at first, more added as gaps were found). An article's id must match its file name and an entry here.
 # area: saving | interest | earning | budgeting | markets | risk | companies | taxes | safety | mindset
 # level: starter | saver | builder
 
@@ -39,7 +39,7 @@
 - {id: sharing-and-giving, title: "Sharing and giving", area: budgeting, level: starter}
 - {id: save-spend-give-split, title: "Save, spend, give: splitting your money", area: budgeting, level: saver}
 
-# markets (10)
+# markets (11)
 - {id: what-is-a-stock, title: "What is a stock?", area: markets, level: saver}
 - {id: stock-exchange, title: "The stock exchange", area: markets, level: saver}
 - {id: share-prices-move, title: "Why share prices move", area: markets, level: saver}
@@ -50,6 +50,7 @@
 - {id: mutual-funds, title: "Mutual funds", area: markets, level: builder}
 - {id: reading-a-stock-quote, title: "How to read a stock quote", area: markets, level: saver}
 - {id: stock-market-indexes, title: "Stock market indexes", area: markets, level: builder}
+- {id: cryptocurrency, title: "What is cryptocurrency?", area: markets, level: builder}
 
 # risk (7)
 - {id: risk-and-reward, title: "Risk and reward", area: risk, level: saver}
@@ -66,18 +67,21 @@
 - {id: owning-part-of-a-company, title: "Owning part of a company", area: companies, level: saver}
 - {id: market-cap, title: "Market cap: how big is a company?", area: companies, level: builder}
 
-# taxes (6)
+# taxes (8)
 - {id: what-are-taxes, title: "What are taxes?", area: taxes, level: starter}
 - {id: income-tax, title: "Income tax", area: taxes, level: saver}
 - {id: sales-tax, title: "Sales tax", area: taxes, level: starter}
 - {id: paycheck-withholding, title: "Why your paycheck is smaller", area: taxes, level: saver}
 - {id: retirement-accounts-401k-ira-roth, title: "401(k), IRA and Roth: retirement accounts", area: taxes, level: builder}
+- {id: what-is-a-401k, title: "What is a 401(k)?", area: taxes, level: builder}
+- {id: iras-traditional-and-roth, title: "IRAs: traditional and Roth", area: taxes, level: builder}
 - {id: where-taxes-go, title: "Where taxes go", area: taxes, level: starter}
 
-# safety (4)
+# safety (5)
 - {id: scams-and-fraud, title: "Spotting scams", area: safety, level: starter}
 - {id: debit-vs-credit, title: "Debit cards and credit cards", area: safety, level: saver}
 - {id: borrowing-and-debt, title: "Borrowing and debt", area: safety, level: saver}
+- {id: loans-and-mortgages, title: "Loans and mortgages", area: safety, level: saver}
 - {id: online-privacy-and-money, title: "Keeping your money info private", area: safety, level: starter}
 
 # mindset (4): see docs/PHILOSOPHY.md

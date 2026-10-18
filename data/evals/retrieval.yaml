@@ -33,7 +33,7 @@
 - {id: company, question: "Who owns a company and who works there?", article: what-is-a-company}
 - {id: checkout-tax, question: "Why did my toy cost more at the register than on the tag?", article: sales-tax}
 - {id: paycheck-withheld, question: "What is taken out of a paycheck before I get it?", article: paycheck-withholding}
-- {id: roth, question: "What is the difference between a Roth IRA and a 401k?", article: retirement-accounts-401k-ira-roth}
+- {id: roth, question: "What is the difference between a Roth IRA and a 401k?", article: retirement-accounts-401k-ira-roth, also_ok: [iras-traditional-and-roth, what-is-a-401k]}
 - {id: scam, question: "Someone online says I won a prize but must pay a fee. Is it real?", article: scams-and-fraud}
 - {id: allowance-first, question: "What should I do first when I get my allowance?", article: allowance-and-habits}
 - {id: spend-or-save, question: "How do I decide whether to spend or save my money?", article: saving-vs-spending}
@@ -57,6 +57,15 @@
 - {id: brackets, question: "What are tax brackets?", article: income-tax}
 - {id: tax-uses, question: "What does tax money pay for in my town?", article: where-taxes-go, also_ok: [what-are-taxes]}
 - {id: cards, question: "What is the difference between a debit card and a credit card?", article: debit-vs-credit}
-- {id: loan, question: "What happens when you borrow money?", article: borrowing-and-debt}
+- {id: loan, question: "What happens when you borrow money?", article: borrowing-and-debt, also_ok: [loans-and-mortgages]}
 - {id: thankful, question: "How can I feel happy with what I already have?", article: enough-and-gratitude}
 - {id: mistake, question: "I spent all my money and regret it. What can I learn?", article: mistakes-are-practice}
+- {id: how-loans-work, question: "How does a loan work?", article: loans-and-mortgages, also_ok: [borrowing-and-debt]}
+- {id: mortgage, question: "What is a mortgage?", article: loans-and-mortgages}
+- {id: roth-ira, question: "What is a Roth IRA?", article: iras-traditional-and-roth, also_ok: [retirement-accounts-401k-ira-roth]}
+- {id: ira-allowance, question: "Can I put my allowance in an IRA?", article: iras-traditional-and-roth, also_ok: [retirement-accounts-401k-ira-roth]}
+- {id: 401k-match, question: "How does a 401k employer match work?", article: what-is-a-401k, also_ok: [retirement-accounts-401k-ira-roth]}
+- {id: bond, question: "What is a bond?", article: what-is-a-bond}
+- {id: savings-bond, question: "My grandma gave me a savings bond. What is it?", article: what-is-a-bond}
+- {id: bitcoin, question: "What is bitcoin?", article: cryptocurrency}
+- {id: crypto-scam, question: "Someone online wants me to pay them in crypto. Is that okay?", article: cryptocurrency, also_ok: [scams-and-fraud]}
