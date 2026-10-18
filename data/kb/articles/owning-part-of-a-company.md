@@ -10,7 +10,7 @@ sources:
     url: https://www.investor.gov/introduction-investing/investing-basics/investment-products/stocks
   - title: Investor.gov, Glossary
     url: https://www.investor.gov/introduction-investing/investing-basics/glossary
-reviewed: false
+reviewed: true
 ---
 
 When you own a share of a company, you are a part owner. It might be a very tiny part, but it is real ownership. What does that actually mean?

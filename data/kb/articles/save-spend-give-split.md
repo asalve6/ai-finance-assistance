@@ -10,7 +10,7 @@ sources:
     url: https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/
   - title: MyMoney.gov
     url: https://www.mymoney.gov/
-reviewed: false
+reviewed: true
 ---
 
 One of the simplest money plans uses three jars: **save**, **spend**, and **give**. Every time you get money, you split it among them.

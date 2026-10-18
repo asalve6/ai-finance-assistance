@@ -10,7 +10,7 @@ sources:
     url: https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/
   - title: MyMoney.gov
     url: https://www.mymoney.gov/
-reviewed: false
+reviewed: true
 ---
 
 Every company you know started with someone who had an idea and decided to try it. That person is called an **entrepreneur**.

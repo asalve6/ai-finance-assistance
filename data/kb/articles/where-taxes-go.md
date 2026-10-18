@@ -10,7 +10,7 @@ sources:
     url: https://www.usa.gov/taxes
   - title: IRS
     url: https://www.irs.gov/
-reviewed: false
+reviewed: true
 ---
 
 People pay taxes in many ways: on what they earn, what they buy, and the homes they own. But where does all that money go?

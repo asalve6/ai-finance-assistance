@@ -11,7 +11,7 @@ sources:
     url: https://www.fdic.gov/resources/consumers/money-smart/
   - title: FDIC, Deposit insurance
     url: https://www.fdic.gov/resources/deposit-insurance/
-reviewed: false
+reviewed: true
 ---
 
 A piggy bank is a great start. But as your savings grow, a real bank can be a safer home for your money.

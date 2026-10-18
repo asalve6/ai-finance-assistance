@@ -10,7 +10,7 @@ sources:
     url: https://www.investor.gov/introduction-investing/investing-basics/investment-products/bonds-or-fixed-income-products/bonds
   - title: TreasuryDirect, Savings bonds
     url: https://www.treasurydirect.gov/savings-bonds/
-reviewed: false
+reviewed: true
 ---
 
 When you buy a share of stock, you own a piece of a company. When you buy a **bond**, you do something different. You lend money.

@@ -10,7 +10,7 @@ sources:
     url: https://www.irs.gov/
   - title: USA.gov, Taxes
     url: https://www.usa.gov/taxes
-reviewed: false
+reviewed: true
 ---
 
 When people earn money from a job or a business, part of it goes to the government. That part is called **income tax**.

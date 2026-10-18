@@ -10,7 +10,7 @@ sources:
     url: https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator
   - title: Investor.gov, Glossary
     url: https://www.investor.gov/introduction-investing/investing-basics/glossary
-reviewed: false
+reviewed: true
 ---
 
 How long would it take for money to double? You could use a calculator. Or you could use a quick shortcut called the **rule of 72**.

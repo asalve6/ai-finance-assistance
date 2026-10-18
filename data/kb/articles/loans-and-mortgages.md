@@ -12,7 +12,7 @@ sources:
     url: https://www.consumerfinance.gov/consumer-tools/auto-loans/
   - title: Federal Student Aid, Loans
     url: https://studentaid.gov/understand-aid/types/loans
-reviewed: false
+reviewed: true
 ---
 
 Most people can't pay for a home or a car all at once. So they borrow money with a **loan** and pay it back a little at a time.

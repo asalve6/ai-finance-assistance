@@ -10,7 +10,7 @@ sources:
     url: https://www.irs.gov/retirement-plans/401k-plans
   - title: IRS, Retirement plans
     url: https://www.irs.gov/retirement-plans
-reviewed: false
+reviewed: true
 ---
 
 Many grown-ups save for retirement through their job using a **401(k)**. The odd name comes from a section of the US tax law.

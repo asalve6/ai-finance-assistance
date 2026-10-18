@@ -10,7 +10,7 @@ sources:
     url: https://www.irs.gov/retirement-plans
   - title: IRS, Individual retirement arrangements (IRAs)
     url: https://www.irs.gov/retirement-plans/individual-retirement-arrangements-iras
-reviewed: false
+reviewed: true
 ---
 
 Retirement is the time when people stop working, often in their 60s. Money still has to come from somewhere. Retirement accounts are special accounts that help people save for that time, with tax benefits as a reward.

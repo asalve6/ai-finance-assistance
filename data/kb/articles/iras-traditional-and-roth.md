@@ -10,7 +10,7 @@ sources:
     url: https://www.irs.gov/retirement-plans/traditional-iras
   - title: IRS, Roth IRAs
     url: https://www.irs.gov/retirement-plans/roth-iras
-reviewed: false
+reviewed: true
 ---
 
 An **IRA**, short for individual retirement arrangement, is a retirement savings account. Unlike a 401(k), you don't need an employer to offer it. People open IRAs on their own at a bank or brokerage.

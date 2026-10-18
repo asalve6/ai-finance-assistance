@@ -10,7 +10,7 @@ sources:
     url: https://www.bls.gov/cpi/
   - title: Investor.gov, Glossary
     url: https://www.investor.gov/introduction-investing/investing-basics/glossary
-reviewed: false
+reviewed: true
 ---
 
 Have you heard a grown-up say, "When I was a kid, this only cost a dollar"? They are talking about inflation.

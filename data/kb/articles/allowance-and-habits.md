@@ -10,7 +10,7 @@ sources:
     url: https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/
   - title: MyMoney.gov
     url: https://www.mymoney.gov/
-reviewed: false
+reviewed: true
 ---
 
 An allowance is money a grown-up gives you on a regular schedule, like every week. Some families tie it to chores. Others give it so kids can practice managing money. Either way, it is your chance to build good habits.

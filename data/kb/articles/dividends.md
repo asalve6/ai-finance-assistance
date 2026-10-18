@@ -10,7 +10,7 @@ sources:
     url: https://www.investor.gov/introduction-investing/investing-basics/glossary
   - title: Investor.gov, Stocks
     url: https://www.investor.gov/introduction-investing/investing-basics/investment-products/stocks
-reviewed: false
+reviewed: true
 ---
 
 When a company makes a profit, it has choices. It can use the money to grow, save it, or share some of it with its owners. When it shares money with shareholders, that payment is called a **dividend**.

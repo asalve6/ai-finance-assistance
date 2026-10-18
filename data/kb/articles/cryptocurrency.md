@@ -10,7 +10,7 @@ sources:
     url: https://consumer.ftc.gov/articles/what-know-about-cryptocurrency-scams
   - title: Investor.gov, Crypto assets
     url: https://www.investor.gov/additional-resources/spotlight/crypto-assets
-reviewed: false
+reviewed: true
 ---
 
 You may have heard of **bitcoin**. It is one kind of **cryptocurrency**, often called crypto. Crypto is digital money that exists only on computers.

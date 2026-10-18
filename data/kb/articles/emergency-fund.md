@@ -10,7 +10,7 @@ sources:
     url: https://www.fdic.gov/resources/consumers/money-smart/
   - title: MyMoney.gov
     url: https://www.mymoney.gov/
-reviewed: false
+reviewed: true
 ---
 
 Surprises happen. A bike tire pops, a phone screen cracks, or a favorite pair of shoes falls apart. An **emergency fund** is money you keep just for moments like these.

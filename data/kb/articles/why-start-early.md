@@ -10,7 +10,7 @@ sources:
     url: https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator
   - title: Investor.gov, Glossary
     url: https://www.investor.gov/introduction-investing/investing-basics/glossary
-reviewed: false
+reviewed: true
 ---
 
 When it comes to growing savings, time is one of your best helpers. That is why people say starting early wins.

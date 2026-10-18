@@ -10,7 +10,7 @@ sources:
     url: https://www.fdic.gov/resources/consumers/money-smart/
   - title: Investor.gov, Glossary
     url: https://www.investor.gov/introduction-investing/investing-basics/glossary
-reviewed: false
+reviewed: true
 ---
 
 When banks advertise savings accounts, you will often see the letters **APY**. They are important for comparing accounts.

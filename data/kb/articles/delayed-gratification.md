@@ -10,7 +10,7 @@ sources:
     url: https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/
   - title: MyMoney.gov
     url: https://www.mymoney.gov/
-reviewed: false
+reviewed: true
 ---
 
 Would you rather have one cookie now, or two cookies if you wait 15 minutes? Choosing to wait for something better is a skill. It is sometimes called **delayed gratification**, which means waiting for a reward.

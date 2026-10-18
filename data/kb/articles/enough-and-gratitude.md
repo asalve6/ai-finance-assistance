@@ -10,7 +10,7 @@ sources:
     url: https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/
   - title: MyMoney.gov
     url: https://www.mymoney.gov/
-reviewed: false
+reviewed: true
 ---
 
 There is always something new to want. A new game, new shoes, a new gadget. Ads and friends can make it feel like you never have enough. Learning to notice what you already have is a powerful money skill.
