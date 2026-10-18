@@ -21,7 +21,7 @@
 - {id: profit, question: "How much money do I keep after paying for supplies?", article: what-is-profit}
 - {id: lemonade-weather, question: "Why did I sell fewer cups of lemonade on a rainy day?", article: running-a-lemonade-stand}
 - {id: sold-out, question: "Why are popular toys so expensive when they sell out?", article: supply-and-demand}
-- {id: budget, question: "How do I make a plan for my allowance?", article: what-is-a-budget}
+- {id: budget, question: "How do I make a plan for my allowance?", article: what-is-a-budget, also_ok: [allowance-and-habits, save-spend-give-split]}
 - {id: impulse, question: "Why do stores put candy next to the checkout?", article: impulse-buying}
 - {id: price-moves, question: "Why does a share price change during the day?", article: share-prices-move}
 - {id: ticker, question: "What does the ticker symbol DIS mean on a stock quote?", article: reading-a-stock-quote}
@@ -35,3 +35,28 @@
 - {id: paycheck-withheld, question: "What is taken out of a paycheck before I get it?", article: paycheck-withholding}
 - {id: roth, question: "What is the difference between a Roth IRA and a 401k?", article: retirement-accounts-401k-ira-roth}
 - {id: scam, question: "Someone online says I won a prize but must pay a fee. Is it real?", article: scams-and-fraud}
+- {id: allowance-first, question: "What should I do first when I get my allowance?", article: allowance-and-habits}
+- {id: spend-or-save, question: "How do I decide whether to spend or save my money?", article: saving-vs-spending}
+- {id: rainy-day, question: "What is a rainy day fund for?", article: emergency-fund}
+- {id: wait-treat, question: "Is it better to wait for two treats instead of one now?", article: delayed-gratification}
+- {id: simple-formula, question: "How do I work out simple interest on $100?", article: simple-interest}
+- {id: doubling, question: "How long does it take money to double?", article: rule-of-72}
+- {id: apy, question: "What does APY mean on a savings account?", article: savings-accounts-and-apy}
+- {id: start-young, question: "Why is it good to start saving when you are young?", article: why-start-early}
+- {id: fixed-costs, question: "What is the difference between fixed and variable costs?", article: costs-and-revenue}
+- {id: pricing, question: "How much should I charge for my cookies?", article: setting-a-price}
+- {id: earn-ideas, question: "How can a kid earn some money?", article: ways-kids-earn-money}
+- {id: entrepreneur, question: "What does an entrepreneur do?", article: entrepreneurship}
+- {id: tracking, question: "Where did all my money go this week?", article: tracking-spending}
+- {id: unit-price, question: "Is the big pack really cheaper than the small one?", article: comparing-prices}
+- {id: charity, question: "How can I help an animal shelter with my money?", article: sharing-and-giving}
+- {id: three-jars, question: "How do I split money into save, spend and give jars?", article: save-spend-give-split}
+- {id: nyse, question: "Where do people buy and sell shares?", article: stock-exchange, also_ok: [what-is-a-stock]}
+- {id: dividend, question: "Do companies pay their shareholders?", article: dividends, also_ok: [what-is-a-stock]}
+- {id: part-owner, question: "If I own one share, do I get a vote?", article: owning-part-of-a-company}
+- {id: brackets, question: "What are tax brackets?", article: income-tax}
+- {id: tax-uses, question: "What does tax money pay for in my town?", article: where-taxes-go, also_ok: [what-are-taxes]}
+- {id: cards, question: "What is the difference between a debit card and a credit card?", article: debit-vs-credit}
+- {id: loan, question: "What happens when you borrow money?", article: borrowing-and-debt}
+- {id: thankful, question: "How can I feel happy with what I already have?", article: enough-and-gratitude}
+- {id: mistake, question: "I spent all my money and regret it. What can I learn?", article: mistakes-are-practice}
