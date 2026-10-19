@@ -188,6 +188,7 @@ plain YAML in `data/evals/`, so adding one needs no code.
 | retrieval | the right article comes back first, and off-topic questions match nothing. Articles not reviewed yet are skipped, not failed |
 | answers | whole questions through the graph: route, Guardian approval, text checks on the reply, rewrites, tokens and latency |
 
+`make cov` runs every test with line and branch coverage and fails below 90% (99% today).
 `make test` checks the eval code itself with fakes, so it never calls a model. Use
 `make evals ARGS="--repeat 3"` to see how much the model-based numbers vary between runs.
 

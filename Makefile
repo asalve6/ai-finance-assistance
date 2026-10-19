@@ -1,10 +1,14 @@
-.PHONY: setup test lint fmt run evals kb-check kb-links kb-index kb-index-dev kb-ask llm-smoke demo demo-live
+.PHONY: setup test cov lint fmt run evals kb-check kb-links kb-index kb-index-dev kb-ask llm-smoke demo demo-live
 
 setup:
 	uv sync
 
 test:
 	uv run pytest -q
+
+# Tests with line and branch coverage. Fails if coverage drops below 90% (see pyproject.toml).
+cov:
+	uv run pytest -q --cov --cov-report=term
 
 lint:
 	uv run ruff check .
