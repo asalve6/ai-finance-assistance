@@ -70,14 +70,14 @@ A checkpointer keeps state per `session_id`, so later questions see earlier turn
 Different sessions never see each other. The classes stored in the state are registered in
 `STATE_TYPES` in `build.py`, which also works with LangGraph's strict serialization mode.
 
-## What is a stand-in today
+## The pieces and what is still missing
 
-| Piece | Today (C2) | Replaced by |
+| Piece | Today | Still to do |
 |---|---|---|
 | Router | Real: `LLMRouter` (E7) on the fast model, with recent turns for follow-ups. Falls back to `KeywordRouter` if the model fails. A mixed question's other part comes back as `also_ask`, shown as a button | - |
 | Specialists | All real: `finance_qa` (E1), `tax` (E5), `coach` (E2), `market` (E3) and `portfolio` (E4) | - |
 | Guardian | Real: `LLMGuardian` (E6), rules first, then a model review on the main model | - |
-| Trace sink | `InMemoryTraceSink` | A2: Postgres, for the trace viewer |
+| Trace sink | `InMemoryTraceSink`: traces shown in the chat, kept for the session | Postgres, to keep traces for a parent view (not built) |
 
 ## The agent loop
 
@@ -163,6 +163,7 @@ brand color (`.streamlit/config.toml`) and no custom CSS.
 | Sidebar | `sidebar.py` | Level, coins, drop streak, XP and goal |
 | Chat tab | `chat.py`, `chat_model.py` | Asks the graph. Shows the answer, its sources, and the trace in plain words |
 | Play tab | `play.py`, `games.py` | Piggy Bank and Lemonade Stand, running the real engines |
+| Portfolio and Markets tab | `portfolio_tab.py`, `portfolio_view.py` | Practice-portfolio editor with value, biggest share, bumpiness and an allocation chart; a company's live price with a 30-day chart and its source |
 | Goals tab | `goal_tab.py`, `goals.py` | Pick a goal, see the weekly amount from the goal planner (with optional savings and interest), a week-by-week chart, and the family challenge |
 | Backend | `backend.py` | Live agents when the keys and the article index exist, otherwise an offline demo |
 
