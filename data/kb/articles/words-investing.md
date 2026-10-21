@@ -10,7 +10,7 @@ sources:
     url: https://www.investor.gov/introduction-investing/investing-basics/glossary
   - title: Investor.gov, Exchange-traded funds (ETFs)
     url: https://www.investor.gov/introduction-investing/investing-basics/investment-products/mutual-funds-and-exchange-traded-2
-reviewed: false
+reviewed: true
 ---
 
 Investing has a lot of special words. Here are some of the most common, explained simply.

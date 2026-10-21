@@ -10,7 +10,7 @@ sources:
     url: https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/
   - title: FTC, Consumer advice
     url: https://consumer.ftc.gov/
-reviewed: false
+reviewed: true
 ---
 
 Stores and apps use special words when you buy things. Here are some common ones, explained simply.

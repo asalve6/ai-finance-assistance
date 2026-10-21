@@ -10,7 +10,7 @@ sources:
     url: https://www.consumerfinance.gov/consumer-tools/credit-reports-and-scores/
   - title: CFPB, Auto loans
     url: https://www.consumerfinance.gov/consumer-tools/auto-loans/
-reviewed: false
+reviewed: true
 ---
 
 When people borrow money, a few special words come up again and again. Here they are, explained simply.

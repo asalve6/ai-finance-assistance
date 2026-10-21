@@ -10,7 +10,7 @@ sources:
     url: https://consumer.ftc.gov/
   - title: IdentityTheft.gov
     url: https://www.identitytheft.gov/
-reviewed: false
+reviewed: true
 ---
 
 Some information is like a key to your money. If the wrong person gets it, they could use it to take money or pretend to be you. Keeping that information private is an important money skill.

@@ -10,7 +10,7 @@ sources:
     url: https://www.investor.gov/introduction-investing/investing-basics/how-stock-markets-work
   - title: Investor.gov, Glossary
     url: https://www.investor.gov/introduction-investing/investing-basics/glossary
-reviewed: false
+reviewed: true
 ---
 
 When the news says "stocks fell today," nobody checked every single company. They looked at a **stock market index**, a kind of scoreboard for a group of companies.

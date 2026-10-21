@@ -10,7 +10,7 @@ sources:
     url: https://www.irs.gov/individuals/tax-withholding-estimator
   - title: MyMoney.gov
     url: https://www.mymoney.gov/
-reviewed: false
+reviewed: true
 ---
 
 People earn money in different ways, and each way has its own word. Here are some common ones, explained simply.

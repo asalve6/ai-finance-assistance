@@ -10,7 +10,7 @@ sources:
     url: https://www.investor.gov/introduction-investing/getting-started/asset-allocation
   - title: Investor.gov, Glossary
     url: https://www.investor.gov/introduction-investing/investing-basics/glossary
-reviewed: false
+reviewed: true
 ---
 
 When prices fall fast, people can feel scared and want to get out right away. Selling quickly because of fear is called **panic selling**.

@@ -10,7 +10,7 @@ sources:
     url: https://www.investor.gov/introduction-investing/getting-started/asset-allocation
   - title: Investor.gov, Glossary
     url: https://www.investor.gov/introduction-investing/investing-basics/glossary
-reviewed: false
+reviewed: true
 ---
 
 Diversification means not putting all your eggs in one basket. **Asset allocation** goes one step further. It decides what kinds of baskets you use, and how many eggs go in each.

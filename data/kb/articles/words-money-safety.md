@@ -10,7 +10,7 @@ sources:
     url: https://www.identitytheft.gov/
   - title: FTC, Consumer advice
     url: https://consumer.ftc.gov/
-reviewed: false
+reviewed: true
 ---
 
 Keeping money safe has its own words. Knowing them helps you spot trouble early.

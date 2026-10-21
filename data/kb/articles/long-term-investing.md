@@ -10,7 +10,7 @@ sources:
     url: https://www.investor.gov/introduction-investing/getting-started/asset-allocation
   - title: Investor.gov, Compound interest calculator
     url: https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator
-reviewed: false
+reviewed: true
 ---
 
 If you planted a tree, you wouldn't dig it up every day to check the roots. You'd water it and wait. Thinking long term about money works a bit like that.
