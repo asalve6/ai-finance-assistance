@@ -40,6 +40,11 @@ OLDER_READER_NOTE = (
     "(These passages were written for older readers. Explain the idea in extra simple words.)"
 )
 
+# The model replies with exactly this when the passages do not answer the question. Code turns it
+# into NOT_SURE with no sources, so a weak match is never shown as the source of "I don't know".
+NOT_COVERED = "NOT_COVERED"
+_DONT_KNOW = re.compile(r"^\s*(i\s+(do\s*n[o']?t|do not)\s+know|i'm not sure)\b", re.IGNORECASE)
+
 MAX_TOOL_SEARCHES = 2
 EVIDENCE_LIMIT = 6000  # characters of passages passed on to the Guardian
 MAX_CITATIONS = 3
@@ -61,7 +66,8 @@ _RULES = """\
 How to answer:
 - Answer ONLY from the article passages you are given or that search_articles returns. Do not use
   anything else you know, even if you are sure it is right.
-- If the passages do not answer the question, say you do not know that yet.
+- If the passages do not answer the question, reply with only the word NOT_COVERED and nothing
+  else. Do not guess, and do not answer a different question instead.
 - Write plain sentences and stay inside the sentence limit below. No lists, headings or bold.
 - You may reuse a comparison from the passages. Do not invent new ones, and never make money sound
   like it grows by itself.
@@ -202,6 +208,8 @@ class KnowledgeAgent:
                 return AgentReply(text=result.text.strip())
             return AgentReply(text=NOT_SURE)  # grounding enforced here, whatever the model wrote
         text = result.text.strip()
+        if text.strip(". ") == NOT_COVERED or _DONT_KNOW.match(text):
+            return AgentReply(text=NOT_SURE)  # not covered: say so, and cite nothing
         if self.closing_note and self.closing_note.lower() not in text.lower():
             text = f"{text} {self.closing_note}"
         evidence = "\n\n".join(dict.fromkeys(r.as_prompt_context() for r in confident))
