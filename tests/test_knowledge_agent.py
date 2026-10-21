@@ -3,6 +3,7 @@ import pytest
 from kb_helpers import corpus
 from penny.agents.knowledge import (
     MAX_CITATIONS,
+    NOT_COVERED,
     NOT_SURE,
     OLDER_READER_NOTE,
     KnowledgeAgent,
@@ -76,6 +77,36 @@ def test_an_uncovered_question_gets_the_fixed_not_sure_reply_whatever_the_model_
     reply = ask(llm, "what is the capital of France")
     assert reply.text == NOT_SURE and reply.citations == []
     assert "(no matching articles)" in llm.calls[0]["messages"][-1].content
+
+
+@pytest.mark.parametrize(
+    "draft",
+    [
+        NOT_COVERED,
+        f"{NOT_COVERED}.",
+        "I don't know what an ETF is yet. Would you like to ask something else?",
+        "I do not know that yet.",
+        "i dont know",
+        "I'm not sure about that one.",
+    ],
+)
+def test_a_weak_match_the_model_cannot_use_ends_in_not_sure_with_no_sources(draft):
+    # the search finds something (the stock article), but it does not answer the question
+    reply = ask(FakeLLM([says(draft)]), "what is a stock share company")
+    assert reply.text == NOT_SURE
+    assert reply.citations == [] and reply.evidence == ""
+
+
+def test_a_refusal_to_advise_is_not_mistaken_for_not_knowing():
+    draft = "I can't tell you what to buy. A stock is a small piece of a company."
+    reply = ask(FakeLLM([says(draft)]), "should I buy a stock share company")
+    assert reply.text == draft and reply.citations
+
+
+def test_the_prompt_asks_for_the_not_covered_signal():
+    llm = FakeLLM([says("A stock is a piece of a company.")])
+    ask(llm, "what is a stock")
+    assert f"reply with only the word {NOT_COVERED}" in llm.calls[0]["system"]
 
 
 def test_a_search_that_finds_nothing_still_ends_in_not_sure():
