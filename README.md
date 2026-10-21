@@ -35,7 +35,7 @@ flowchart LR
 
     S --- QA["Finance Q&A"] & TX["Tax Education"] & CO["Goal and Game Coach"] & MA["Market Analysis"] & PO["Portfolio Analysis"]
 
-    QA & TX --> KB[("58 reviewed articles<br/>FAISS + OpenAI embeddings")]
+    QA & TX --> KB[("74 reviewed articles<br/>FAISS + OpenAI embeddings")]
     CO --> EN["Engines in plain Python<br/>goal planner, piggy, lemonade"]
     MA & PO --> MK["Market chain, 30-min cache<br/>Yahoo Finance, then Alpha Vantage, then sample data"]
     PO --> PE["Portfolio analytics<br/>spread and bumpiness"]
@@ -82,7 +82,7 @@ network is unavailable.
 | Command | What it does |
 |---|---|
 | `make run` | Start the app |
-| `make test` | Run the 818 tests (no keys or network needed) |
+| `make test` | Run the 826 tests (no keys or network needed) |
 | `make cov` | Tests with line and branch coverage; fails below 90% |
 | `make lint`, `make fmt` | Ruff checks and formatting |
 | `make evals` | Live evals against the real models, prices and index; writes `docs/evals/report.md` |
@@ -93,7 +93,7 @@ network is unavailable.
 
 ## Quality
 
-- **Tests:** 818 tests, 99% line and branch coverage, all hermetic (no keys, network or `.env`).
+- **Tests:** 826 tests, 99% line and branch coverage, all hermetic (no keys, network or `.env`).
   The Streamlit pages are tested headlessly with `AppTest`.
 - **Evals** ([latest report](docs/evals/report.md), two rounds, gpt-4o-mini router and gpt-4o writer
   and reviewer):
@@ -101,13 +101,15 @@ network is unavailable.
   | Suite | Result |
   |---|---|
   | Routing (21 questions, including follow-ups and two-part questions) | 42/42 |
-  | Guardian (13 planted drafts: advice, promises, privacy, too hard...) | 26/26: every bad draft caught, every good one approved |
-  | Retrieval (66 questions with a known best article, plus 2 off-topic, over 58 articles) | 66/68 |
+  | Guardian (13 planted drafts: advice, promises, privacy, too hard...) | 25/26: every bad draft caught; one fair draft called too hard |
+  | Retrieval (83 questions with a known best article, plus 2 off-topic, over 74 articles) | 84/85 |
   | Whole answers (17 questions through the graph, every agent) | 34/34 approved, 0 safe fallbacks |
 
-- **Knowledge base:** 58 original articles at a grade-6 reading level across 10 areas (saving,
-  interest, earning, budgeting, markets, risk, companies, taxes, safety, mindset), each with public
-  government sources, all reviewed by a parent before indexing (`docs/KB_GUIDE.md`).
+- **Knowledge base:** 74 original articles at a grade-6 reading level across 10 areas (saving,
+  interest, earning, budgeting, markets, risk, companies, taxes, safety, mindset), including six
+  "word bank" articles with about 48 short definitions. Each cites public government sources, and
+  all were reviewed by a parent before indexing (`docs/KB_GUIDE.md`). When a question is not
+  covered, Penny says she doesn't know yet and cites nothing.
 
 ## Safety and privacy
 
@@ -149,9 +151,9 @@ tests/        unit, graph, UI and eval tests
 | RAG with source attribution | `src/penny/kb/`, Finance Q&A and Tax agents; every answer lists its articles and their sources |
 | Real-time data | `src/penny/market/`: Yahoo Finance with Alpha Vantage fallback, 30-minute cache, sample data offline |
 | Multi-tab UI, conversation, charts | `src/penny/ui/`: four tabs, chat history and follow-ups, allocation, price, goal and profit charts |
-| Knowledge base | 58 reviewed articles, `data/kb/` |
+| Knowledge base | 74 reviewed articles, `data/kb/` |
 | Portfolio analysis, market intelligence | `engines/portfolio.py`, Portfolio and Market agents, the Portfolio and Markets tab |
-| Code quality, docs, testing | This README, `docs/`, 818 tests at 99% coverage, live evals |
+| Code quality, docs, testing | This README, `docs/`, 826 tests at 99% coverage, live evals |
 
 Left out by choice: an MCP server (5 rubric points) and a sixth News agent. The time went into the
 Guardian, the grounding rules and the evals instead.
@@ -163,7 +165,8 @@ Guardian, the grounding rules and the evals instead.
   traces. The database dependencies are installed but not wired yet.
 - **The starter reading level.** The Guardian is sometimes stricter than needed for the youngest
   readers, so an occasional answer ends in the safe fallback. It fails safe; the evals track it.
-- **Ten more planned articles**, mostly advanced investing (ETFs, index funds, market cap...).
+- **More articles.** All 74 planned topics are written; the knowledge base grows by adding a topic
+  and an article, or a term to a word bank (`docs/KB_GUIDE.md`).
 - **Ideas:** a News agent that explains one kid-relevant headline a week, voice input for younger
   readers, a parent dashboard with weekly progress, and Spanish articles.
 

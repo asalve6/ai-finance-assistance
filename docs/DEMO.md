@@ -71,5 +71,5 @@ Show the family challenge question: Penny's "together" idea.
 ## 8. Engineering (6:20 to 7:00)
 
 Show `docs/evals/report.md`: routing 42/42, every planted bad draft caught, every whole answer
-approved. Run `make cov` in a terminal: 818 tests, 99% coverage. Close with one line on the
+approved. Run `make cov` in a terminal: 826 tests, 99% coverage. Close with one line on the
 roadmap: saved progress in Postgres, a parent view, a weekly news explainer.
