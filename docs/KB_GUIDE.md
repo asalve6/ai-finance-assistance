@@ -1,12 +1,12 @@
 # Knowledge base guide
 
-68 planned original, kid-level articles (64 on money topics plus 4 on money mindset, see PHILOSOPHY.md). They power the Finance Q&A and Tax Education agents (RAG), and every answer shows the article it came from.
+74 planned original, kid-level articles: 64 on money topics, 4 on money mindset (see PHILOSOPHY.md) and 6 "word bank" articles of short definitions. They power the Finance Q&A and Tax Education agents (RAG), and every answer shows the article it came from.
 
 ## Where things live
 
 | Path | What |
 |---|---|
-| `data/kb/topics.yaml` | The 68 planned topics: id, title, area, level |
+| `data/kb/topics.yaml` | The 74 planned topics: id, title, area, level |
 | `data/kb/articles/<id>.md` | One article per topic. File name must equal the id |
 | `src/penny/kb/` | Parsing and checks (retrieval comes in a later PR) |
 
@@ -27,6 +27,13 @@ reviewed: false                  # the owner flips this to true after review
 ---
 Body in markdown, 200 to 450 words, with a final "## Try it" section.
 ```
+
+## Word bank articles
+
+The `words-*` articles (banking, investing, borrowing, earning, shopping, money safety) hold short
+definitions, one term per `##` heading. Search splits articles at headings, so each term is found
+on its own. To add a term, add a heading and two or three sentences to the right word bank, keep
+the article within the word limit, and start a new word bank when one gets full.
 
 ## Writing rules
 - Original wording at about a grade 6 reading level. Facts come from public sources (US government sites are the preferred ones). Never copy text from other sites.

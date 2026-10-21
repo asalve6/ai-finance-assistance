@@ -6,7 +6,7 @@
 - {id: stock-price-falls, question: "Can a share price go down?", article: what-is-a-stock}
 - {id: taxes-plain, question: "What are taxes?", article: what-are-taxes}
 - {id: paycheck, question: "Why is my first paycheck smaller than I expected?", article: paycheck-withholding, also_ok: [what-are-taxes]}
-- {id: sales-tax, question: "Why does the store add money at the checkout?", article: sales-tax, also_ok: [what-are-taxes]}
+- {id: sales-tax, question: "Why does the store add money at the checkout?", article: sales-tax, also_ok: [what-are-taxes, words-shopping]}
 - {id: piggy, question: "How does a piggy bank help me save?", article: piggy-bank-basics}
 - {id: needs-wants, question: "How do I know if I need something or just want it?", article: needs-vs-wants}
 - {id: compound, question: "How does interest earn more interest?", article: compound-interest, also_ok: [what-is-interest]}
@@ -18,13 +18,13 @@
 - {id: bank-safe, question: "Is my money safe if I put it in a bank?", article: banks-and-accounts}
 - {id: interest-plain, question: "Why does the bank pay me extra money?", article: what-is-interest, also_ok: [compound-interest, banks-and-accounts]}
 - {id: inflation, question: "Why do things cost more than when my parents were kids?", article: inflation}
-- {id: profit, question: "How much money do I keep after paying for supplies?", article: what-is-profit}
+- {id: profit, question: "How much money do I keep after paying for supplies?", article: what-is-profit, also_ok: [profit-per-sale]}
 - {id: lemonade-weather, question: "Why did I sell fewer cups of lemonade on a rainy day?", article: running-a-lemonade-stand}
 - {id: sold-out, question: "Why are popular toys so expensive when they sell out?", article: supply-and-demand}
 - {id: budget, question: "How do I make a plan for my allowance?", article: what-is-a-budget, also_ok: [allowance-and-habits, save-spend-give-split]}
 - {id: impulse, question: "Why do stores put candy next to the checkout?", article: impulse-buying}
 - {id: price-moves, question: "Why does a share price change during the day?", article: share-prices-move}
-- {id: ticker, question: "What does the ticker symbol DIS mean on a stock quote?", article: reading-a-stock-quote}
+- {id: ticker, question: "What does the ticker symbol DIS mean on a stock quote?", article: reading-a-stock-quote, also_ok: [words-investing]}
 - {id: eggs-basket, question: "Why shouldn't I put all my money in one company?", article: diversification}
 - {id: portfolio, question: "What is a portfolio and how do I find what it is worth?", article: what-is-a-portfolio}
 - {id: bumpy, question: "Why are some stock prices so bumpy?", article: volatility}
@@ -69,3 +69,20 @@
 - {id: savings-bond, question: "My grandma gave me a savings bond. What is it?", article: what-is-a-bond}
 - {id: bitcoin, question: "What is bitcoin?", article: cryptocurrency}
 - {id: crypto-scam, question: "Someone online wants me to pay them in crypto. Is that okay?", article: cryptocurrency, also_ok: [scams-and-fraud]}
+- {id: etf, question: "What is an ETF?", article: what-is-an-etf, also_ok: [words-investing]}
+- {id: etf-lowercase, question: "what is etf", article: what-is-an-etf, also_ok: [words-investing]}
+- {id: index-fund, question: "What is an index fund?", article: index-funds, also_ok: [words-investing]}
+- {id: mutual-fund, question: "How does a mutual fund work?", article: mutual-funds}
+- {id: sp500, question: "What does the S&P 500 measure?", article: stock-market-indexes, also_ok: [index-funds]}
+- {id: market-cap, question: "How do you work out how big a company is?", article: market-cap}
+- {id: stocks-bonds-mix, question: "How should money be split between stocks, bonds and cash?", article: asset-allocation}
+- {id: long-term, question: "Why should I not worry about daily price changes?", article: long-term-investing, also_ok: [share-prices-move, volatility]}
+- {id: panic, question: "Should I sell when prices drop fast?", article: panic-selling}
+- {id: margin, question: "What is a profit margin?", article: profit-per-sale}
+- {id: privacy, question: "What information should I keep private online?", article: online-privacy-and-money, also_ok: [words-money-safety]}
+- {id: overdraft, question: "What is an overdraft?", article: words-banking}
+- {id: bear-market, question: "What is a bear market?", article: words-investing}
+- {id: credit-score, question: "What is a credit score?", article: words-borrowing, also_ok: [debit-vs-credit]}
+- {id: commission, question: "What does it mean to earn a commission?", article: words-earning}
+- {id: subscription, question: "Why does my game pass keep charging every month?", article: words-shopping}
+- {id: phishing, question: "What is phishing?", article: words-money-safety, also_ok: [scams-and-fraud]}

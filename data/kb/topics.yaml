@@ -2,7 +2,7 @@
 # area: saving | interest | earning | budgeting | markets | risk | companies | taxes | safety | mindset
 # level: starter | saver | builder
 
-# saving (8)
+# saving (9)
 - {id: piggy-bank-basics, title: "Your piggy bank: where saving starts", area: saving, level: starter}
 - {id: needs-vs-wants, title: "Needs and wants: spending on purpose", area: saving, level: starter}
 - {id: setting-a-savings-goal, title: "Setting a savings goal", area: saving, level: starter}
@@ -11,6 +11,7 @@
 - {id: banks-and-accounts, title: "Banks and accounts", area: saving, level: saver}
 - {id: emergency-fund, title: "The emergency fund", area: saving, level: saver}
 - {id: delayed-gratification, title: "The power of waiting", area: saving, level: starter}
+- {id: words-banking, title: "Banking words", area: saving, level: saver}
 
 # interest (7)
 - {id: what-is-interest, title: "What is interest?", area: interest, level: saver}
@@ -21,7 +22,7 @@
 - {id: savings-accounts-and-apy, title: "Savings accounts and APY", area: interest, level: saver}
 - {id: why-start-early, title: "Why starting early wins", area: interest, level: saver}
 
-# earning (8)
+# earning (9)
 - {id: what-is-profit, title: "What is profit?", area: earning, level: starter}
 - {id: costs-and-revenue, title: "Costs and revenue", area: earning, level: starter}
 - {id: supply-and-demand, title: "Supply and demand", area: earning, level: saver}
@@ -30,16 +31,18 @@
 - {id: ways-kids-earn-money, title: "Ways kids can earn money", area: earning, level: starter}
 - {id: profit-per-sale, title: "How much you keep from each sale", area: earning, level: builder}
 - {id: entrepreneurship, title: "What is an entrepreneur?", area: earning, level: saver}
+- {id: words-earning, title: "Earning words", area: earning, level: saver}
 
-# budgeting (6)
+# budgeting (7)
 - {id: what-is-a-budget, title: "What is a budget?", area: budgeting, level: starter}
 - {id: tracking-spending, title: "Tracking where your money goes", area: budgeting, level: starter}
 - {id: impulse-buying, title: "Impulse buying and the 24-hour rule", area: budgeting, level: starter}
 - {id: comparing-prices, title: "Comparing prices", area: budgeting, level: starter}
 - {id: sharing-and-giving, title: "Sharing and giving", area: budgeting, level: starter}
 - {id: save-spend-give-split, title: "Save, spend, give: splitting your money", area: budgeting, level: saver}
+- {id: words-shopping, title: "Shopping words", area: budgeting, level: starter}
 
-# markets (11)
+# markets (12)
 - {id: what-is-a-stock, title: "What is a stock?", area: markets, level: saver}
 - {id: stock-exchange, title: "The stock exchange", area: markets, level: saver}
 - {id: share-prices-move, title: "Why share prices move", area: markets, level: saver}
@@ -51,6 +54,7 @@
 - {id: reading-a-stock-quote, title: "How to read a stock quote", area: markets, level: saver}
 - {id: stock-market-indexes, title: "Stock market indexes", area: markets, level: builder}
 - {id: cryptocurrency, title: "What is cryptocurrency?", area: markets, level: builder}
+- {id: words-investing, title: "Investing words", area: markets, level: saver}
 
 # risk (7)
 - {id: risk-and-reward, title: "Risk and reward", area: risk, level: saver}
@@ -77,11 +81,13 @@
 - {id: iras-traditional-and-roth, title: "IRAs: traditional and Roth", area: taxes, level: builder}
 - {id: where-taxes-go, title: "Where taxes go", area: taxes, level: starter}
 
-# safety (5)
+# safety (7)
 - {id: scams-and-fraud, title: "Spotting scams", area: safety, level: starter}
 - {id: debit-vs-credit, title: "Debit cards and credit cards", area: safety, level: saver}
 - {id: borrowing-and-debt, title: "Borrowing and debt", area: safety, level: saver}
 - {id: loans-and-mortgages, title: "Loans and mortgages", area: safety, level: saver}
+- {id: words-borrowing, title: "Borrowing words", area: safety, level: saver}
+- {id: words-money-safety, title: "Money safety words", area: safety, level: starter}
 - {id: online-privacy-and-money, title: "Keeping your money info private", area: safety, level: starter}
 
 # mindset (4): see docs/PHILOSOPHY.md

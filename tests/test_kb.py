@@ -281,21 +281,21 @@ def test_fetch_status_retries_with_a_browser_user_agent_when_blocked(monkeypatch
 # ------------------------------------------------------------------ the real data
 
 
-def test_topic_manifest_has_68_unique_topics_in_the_planned_split():
+def test_topic_manifest_has_74_unique_topics_in_the_planned_split():
     topics = load_topics(KB_DIR / "topics.yaml")
-    assert len(topics) == 68
-    assert len({t.id for t in topics}) == 68
+    assert len(topics) == 74
+    assert len({t.id for t in topics}) == 74
     by_area = {a: sum(1 for t in topics if t.area == a) for a in Area}
     assert by_area == {
-        Area.SAVING: 8,
+        Area.SAVING: 9,
         Area.INTEREST: 7,
-        Area.EARNING: 8,
-        Area.BUDGETING: 6,
-        Area.MARKETS: 11,
+        Area.EARNING: 9,
+        Area.BUDGETING: 7,
+        Area.MARKETS: 12,
         Area.RISK: 7,
         Area.COMPANIES: 4,
         Area.TAXES: 8,
-        Area.SAFETY: 5,
+        Area.SAFETY: 7,
         Area.MINDSET: 4,
     }
 
