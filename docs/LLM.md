@@ -12,6 +12,13 @@ and `get_llm()` picks one from the environment.
 
 Defaults: Anthropic `claude-haiku-5-5` / `claude-sonnet-5-5`. OpenAI `gpt-4o-mini` / `gpt-4o`.
 
+**Temperature.** Both adapters send `temperature=0` by default, which makes repeated questions give
+steadier answers. OpenAI reasoning models (`o1`, `o3`, `o4`, `gpt-5`) accept only their own fixed
+temperature, so it is left out for them. Even at 0, providers do not guarantee identical text, and
+the Guardian may ask for a rewrite, so the same question can still be worded differently. The facts
+and sources are what should stay the same. Pass `temperature=None` to an adapter to leave it to the
+provider.
+
 ## Check it works
 
 ```bash

@@ -40,9 +40,9 @@ class FakeAnthropic:
         return outcome
 
 
-def make(*outcomes):
+def make(*outcomes, **options):
     fake = FakeAnthropic(*outcomes)
-    return AnthropicClient(fake), fake
+    return AnthropicClient(fake, **options), fake
 
 
 LOOKUP = ToolSpec(
@@ -67,10 +67,20 @@ def test_a_plain_request_has_only_what_it_needs():
             "max_tokens": DEFAULT_MAX_TOKENS,
             "messages": [{"role": "user", "content": "Hi"}],
             "system": "Be kind.",
+            "temperature": 0.0,
         }
     ]
     assert (result.text, result.stop_reason) == ("Hello!", "end_turn")
     assert (result.input_tokens, result.output_tokens) == (11, 7)
+
+
+def test_the_default_temperature_is_zero_and_can_be_changed_or_left_out():
+    client, fake = make(reply([text_block("a")]))
+    client.complete(model="m", system="", messages=[])
+    assert fake.requests[0]["temperature"] == 0.0
+    client, fake = make(reply([text_block("a")]), temperature=None)
+    client.complete(model="m", system="", messages=[])
+    assert "temperature" not in fake.requests[0]
 
 
 def test_max_tokens_effort_and_empty_system_are_passed_correctly():

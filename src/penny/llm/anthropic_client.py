@@ -19,6 +19,8 @@ from penny.contracts import Effort, LLMResponse, Message, StopReason, ToolCall, 
 from penny.llm.errors import LLMError, status_is_retryable
 
 DEFAULT_MAX_TOKENS = 4096  # thinking tokens count toward this, so do not set it too low
+# 0 makes repeated questions give steadier replies. Reasoning models ignore it (see complete()).
+DEFAULT_TEMPERATURE = 0.0
 
 _STOP_REASONS: dict[str, StopReason] = {
     "end_turn": "end_turn",
@@ -93,9 +95,16 @@ def response_from_wire(response: Any) -> LLMResponse:
 
 
 class AnthropicClient:
-    def __init__(self, client: Any = None, *, default_max_tokens: int = DEFAULT_MAX_TOKENS) -> None:
+    def __init__(
+        self,
+        client: Any = None,
+        *,
+        default_max_tokens: int = DEFAULT_MAX_TOKENS,
+        temperature: float | None = DEFAULT_TEMPERATURE,
+    ) -> None:
         self._client = client
         self._default_max_tokens = default_max_tokens
+        self._temperature = temperature
 
     def _api(self) -> Any:
         if self._client is None:
@@ -125,6 +134,8 @@ class AnthropicClient:
             request["system"] = system
         if tools:
             request["tools"] = [_tool_to_wire(t) for t in tools]
+        if self._temperature is not None:
+            request["temperature"] = self._temperature
         if effort:
             request["output_config"] = {"effort": effort}
         try:

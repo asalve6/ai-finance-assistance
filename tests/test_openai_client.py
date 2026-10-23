@@ -47,9 +47,9 @@ class FakeOpenAI:
         return outcome
 
 
-def make(*outcomes):
+def make(*outcomes, **options):
     fake = FakeOpenAI(*outcomes)
-    return OpenAIClient(fake), fake
+    return OpenAIClient(fake, **options), fake
 
 
 LOOKUP = ToolSpec(
@@ -76,6 +76,7 @@ def test_a_plain_request_puts_the_system_prompt_first():
                 {"role": "user", "content": "Hi"},
             ],
             "max_completion_tokens": DEFAULT_MAX_TOKENS,
+            "temperature": 0.0,
         }
     ]
     assert (result.text, result.stop_reason) == ("Hello!", "end_turn")
@@ -102,6 +103,18 @@ def test_tools_are_translated_to_the_function_shape():
             },
         }
     ]
+
+
+def test_temperature_is_sent_to_normal_models_and_left_out_for_reasoning_models():
+    client, fake = make(reply("ok"))
+    client.complete(model="gpt-4o", system="", messages=[])
+    assert fake.requests[0]["temperature"] == 0.0
+    client, fake = make(reply("ok"))
+    client.complete(model="gpt-5", system="", messages=[])
+    assert "temperature" not in fake.requests[0]
+    client, fake = make(reply("ok"), temperature=None)
+    client.complete(model="gpt-4o", system="", messages=[])
+    assert "temperature" not in fake.requests[0]
 
 
 @pytest.mark.parametrize(
