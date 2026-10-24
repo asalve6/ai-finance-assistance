@@ -26,7 +26,7 @@ from penny.agents.prompts import recent_history, system_prompt
 from penny.agents.tools import make_tool
 from penny.contracts import Level, LLMClient, Message, ToolSpec, TraceSink
 from penny.engines import goal, lemonade, piggy
-from penny.graph.types import AgentReply, AgentRequest
+from penny.graph.types import AgentReply, AgentRequest, KidContext
 from penny.money import dollars
 from penny.observability import NullTraceSink
 
@@ -39,8 +39,11 @@ COACH_UNSURE = (
 
 _RULES = """\
 How to answer:
-- Never do money maths yourself. Use a tool for every number you give: plan_goal, weeks_to_goal,
-  try_lemonade_day or game_rules. Tool inputs are in cents: $60 is 6000 and 75 cents is 75.
+- Never do money maths yourself. Use a tool for every number you give: my_goal_status, plan_goal,
+  weeks_to_goal, try_lemonade_day or game_rules. Tool inputs are in cents: $60 is 6000 and 75
+  cents is 75.
+- If the child asks how much more they need for the goal they already set, or how it is going,
+  call my_goal_status. If they give a price and a number of weeks, use plan_goal instead.
 - Say amounts exactly the way the tool wrote them, for example "$7.50".
 - If you are missing a detail a tool needs (the price of the goal, how many weeks, the weather),
   ask for it in one short question instead of guessing.
@@ -50,6 +53,10 @@ How to answer:
 - This is for learning. Never tell the child what to buy, and never promise that money will grow.
 - If the question is not about saving goals or the games, say in one friendly sentence that
   those are what you help with."""
+
+
+class NoArgs(BaseModel):
+    pass
 
 
 class PlanGoalArgs(BaseModel):
@@ -77,8 +84,26 @@ class GameRulesArgs(BaseModel):
     game: Literal["piggy", "lemonade"]
 
 
-def coach_tools(level: Level) -> list[ToolSpec]:
-    """The Coach's tools for a reader at `level` (the level sets the games' difficulty)."""
+def goal_status(goal_name: str, goal_cents: int, saved_cents: int) -> dict[str, Any]:
+    """Where the child's saving goal stands right now, in ready-to-say words."""
+    left = max(0, goal_cents - saved_cents)
+    return {
+        "goal": goal_name,
+        "price": dollars(goal_cents),
+        "already_saved": dollars(saved_cents),
+        "still_to_save": dollars(left),
+        "percent_saved": f"{min(100, saved_cents * 100 // goal_cents)}%",
+        "goal_reached": left == 0,
+    }
+
+
+def coach_tools(level: Level, kid: KidContext | None = None) -> list[ToolSpec]:
+    """The Coach's tools for a reader at `level` (the level sets the games' difficulty). `kid`
+    supplies the child's own saving goal, for the my_goal_status tool."""
+    kid = kid or KidContext(level=level)
+
+    def my_goal_status() -> dict[str, Any]:
+        return goal_status(kid.goal_name, kid.goal_cents, kid.saved_cents)
 
     def plan_goal(
         goal_cents: int, weeks: int, saved_cents: int, yearly_interest_pct: float
@@ -131,6 +156,15 @@ def coach_tools(level: Level) -> list[ToolSpec]:
         return friendly
 
     return [
+        make_tool(
+            "my_goal_status",
+            "Look up the goal the child already set on the Goals tab: its name, price, how much is "
+            "saved and how much is still to save. Use it only for questions about that existing "
+            "goal ('how much more do I need for my bike'). For planning a new amount, use "
+            "plan_goal. It takes no arguments.",
+            NoArgs,
+            my_goal_status,
+        ),
         make_tool(
             "plan_goal",
             "Work out how much to save each week to reach a goal by a number of weeks. Use it for "
@@ -187,7 +221,7 @@ class CoachAgent:
             model=self.model,
             system=system_prompt(request, COACH_ROLE, _RULES),
             messages=[*recent_history(request), Message.user(request.question)],
-            tools=coach_tools(request.kid.level),
+            tools=coach_tools(request.kid.level, request.kid),
             sink=self.sink,
             trace_id=request.trace_id,
             agent=self.name,

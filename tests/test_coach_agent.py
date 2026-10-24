@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from penny.agents.coach import COACH_UNSURE, CoachAgent, coach_tools, dollars
+from penny.agents.coach import COACH_UNSURE, CoachAgent, coach_tools, dollars, goal_status
 from penny.agents.guardian import TRUSTED_REPLIES, LLMGuardian
 from penny.agents.loop import AgentError
 from penny.contracts import Level, LLMResponse, Message, ToolCall
@@ -125,15 +125,46 @@ def test_tools_refuse_bad_arguments(name, arguments):
         tool(name).fn(**arguments)
 
 
-def test_the_coach_has_exactly_four_tools_with_real_descriptions():
+def test_the_coach_has_exactly_five_tools_with_real_descriptions():
     tools = coach_tools(Level.STARTER)
     assert [t.name for t in tools] == [
+        "my_goal_status",
         "plan_goal",
         "weeks_to_goal",
         "try_lemonade_day",
         "game_rules",
     ]
     assert all(len(t.description) > 60 for t in tools)
+
+
+def test_goal_status_reads_the_childs_own_goal_from_the_context():
+    kid = KidContext(nickname="Sam", goal_name="Bike", goal_cents=12000, saved_cents=4500)
+    tools = coach_tools(Level.STARTER, kid)
+    status = next(t for t in tools if t.name == "my_goal_status").fn()
+    assert status == {
+        "goal": "Bike",
+        "price": "$120.00",
+        "already_saved": "$45.00",
+        "still_to_save": "$75.00",
+        "percent_saved": "37%",
+        "goal_reached": False,
+    }
+
+
+def test_goal_status_says_when_the_goal_is_reached():
+    status = goal_status("Game", 6000, 7000)
+    assert status["still_to_save"] == "$0.00" and status["goal_reached"] is True
+    assert status["percent_saved"] == "100%"
+
+
+def test_a_goal_question_is_answered_from_the_goal_tool_not_by_asking():
+    kid = KidContext(nickname="Sam", goal_name="Bike", goal_cents=12000, saved_cents=4500)
+    llm = FakeLLM([calls("my_goal_status"), says("You still need $75.00 for your bike.")])
+    reply = CoachAgent(llm, "m").respond(
+        AgentRequest(trace_id="t1", kid=kid, question="how much more do I need for my bike?")
+    )
+    assert reply.text == "You still need $75.00 for your bike."
+    assert "$75.00" in reply.evidence
 
 
 # ------------------------------------------------------------------ answering
@@ -211,6 +242,7 @@ def test_the_prompt_has_the_coachs_rules_pennys_values_and_the_reading_level():
     ):
         assert phrase in call["system"], phrase
     assert [t.name for t in call["tools"]] == [
+        "my_goal_status",
         "plan_goal",
         "weeks_to_goal",
         "try_lemonade_day",

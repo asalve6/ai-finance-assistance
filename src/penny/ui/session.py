@@ -57,6 +57,9 @@ class Player(BaseModel):
             nickname=self.display_name,
             level=self.level,
             practice_holdings=dict(self.practice_holdings),
+            goal_name=self.goal_name,
+            goal_cents=self.goal_cents,
+            saved_cents=self.saved_cents,
         )
 
 
