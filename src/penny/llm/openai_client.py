@@ -22,6 +22,8 @@ from penny.contracts import Effort, LLMResponse, Message, StopReason, ToolCall, 
 from penny.llm.errors import LLMError, status_is_retryable
 
 DEFAULT_MAX_TOKENS = 4096
+# 0 makes repeated questions give steadier replies. Reasoning models ignore it (see complete()).
+DEFAULT_TEMPERATURE = 0.0
 _REASONING_MODEL_PREFIXES = ("o1", "o3", "o4", "gpt-5")
 
 _FINISH_REASONS: dict[str, StopReason] = {
@@ -107,9 +109,16 @@ def response_from_wire(response: Any) -> LLMResponse:
 
 
 class OpenAIClient:
-    def __init__(self, client: Any = None, *, default_max_tokens: int = DEFAULT_MAX_TOKENS) -> None:
+    def __init__(
+        self,
+        client: Any = None,
+        *,
+        default_max_tokens: int = DEFAULT_MAX_TOKENS,
+        temperature: float | None = DEFAULT_TEMPERATURE,
+    ) -> None:
         self._client = client
         self._default_max_tokens = default_max_tokens
+        self._temperature = temperature
 
     def _api(self) -> Any:
         if self._client is None:
@@ -137,8 +146,12 @@ class OpenAIClient:
         }
         if tools:
             request["tools"] = [_tool_to_wire(t) for t in tools]
-        if effort and model.startswith(_REASONING_MODEL_PREFIXES):
-            request["reasoning_effort"] = effort
+        if model.startswith(_REASONING_MODEL_PREFIXES):
+            # Reasoning models only accept their own fixed temperature, so it is left out.
+            if effort:
+                request["reasoning_effort"] = effort
+        elif self._temperature is not None:
+            request["temperature"] = self._temperature
         try:
             return response_from_wire(self._api().chat.completions.create(**request))
         except openai.APIStatusError as exc:
