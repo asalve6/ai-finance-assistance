@@ -235,7 +235,13 @@ def run_answers(
     results: list[CaseResult] = []
     routed = approved = fallbacks = rewrites = 0
     for case_id, case in _repeat(cases, repeat):
-        kid = KidContext(level=case.level, practice_holdings=case.holdings)
+        kid = KidContext(
+            level=case.level,
+            practice_holdings=case.holdings,
+            goal_name=case.goal_name,
+            goal_cents=case.goal_cents,
+            saved_cents=case.saved_cents,
+        )
         session = f"eval-{case_id}"
         for earlier in case.before:
             graph.ask(earlier, session_id=session, kid=kid)

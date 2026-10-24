@@ -24,6 +24,10 @@ class KidContext(BaseModel):
     level: Level = Level.STARTER
     # The child's practice portfolio: ticker -> number of shares. Practice money only.
     practice_holdings: dict[str, int] = Field(default_factory=dict)
+    # The savings goal the child set on the Goals tab, and what they have saved toward it.
+    goal_name: str = "Game"
+    goal_cents: int = 6000
+    saved_cents: int = 0
 
 
 class AgentRequest(BaseModel):

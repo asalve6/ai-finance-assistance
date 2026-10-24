@@ -55,6 +55,9 @@ class AnswerCase(BaseModel):
     level: Level = Level.STARTER
     before: list[str] = Field(default_factory=list)  # asked first, in the same session
     holdings: dict[str, int] = Field(default_factory=dict)
+    goal_name: str = "Game"  # the child's savings goal, as set on the Goals tab
+    goal_cents: int = 6000
+    saved_cents: int = 0
     route: str | None = None
     approved: bool = True
     contains: list[str] = Field(default_factory=list)
