@@ -14,12 +14,13 @@ disclosed.
 
 from __future__ import annotations
 
+import json
 from typing import Any
 
 from pydantic import BaseModel, Field
 
 from penny.agents.grounding import disclose_sample_data, tool_backed_reply
-from penny.agents.loop import run_agent
+from penny.agents.loop import ToolRun, run_agent
 from penny.agents.prompts import recent_history, system_prompt
 from penny.agents.tools import make_tool
 from penny.contracts import LLMClient, Message, ToolSpec, TraceSink
@@ -72,14 +73,20 @@ BUMPINESS_MEANS = {
 
 _RULES = """\
 How to answer:
-- Never state a value, a share or a percentage yourself. Call analyze_my_portfolio first. To show
-  what a change would do, call try_a_change.
+- Never state a value, a share or a percentage yourself. The analysis of the child's portfolio is
+  already given to you below the question: use it, even for a follow-up. To show what a change
+  would do, call try_a_change.
 - Say amounts exactly the way the tools wrote them, and give each number once. Pick the one or two
   numbers that matter most for the question; you do not need to list every holding.
 - Explain the spread and the bumpiness in plain words, using the tool's own words. Spreading money
   across different companies means one company's bad day hurts the whole portfolio less.
 - Describe the portfolio; do not tell the child what to change, add, buy or sell. If they want to
   see a change, they can ask "what if" and you show it with try_a_change.
+- If the child asks whether to keep it, change it, or for advice: say that Penny can't give advice,
+  and do not say yes or no or what to do. Do not name any change, such as adding or selling
+  shares. Say what the numbers show and what spreading money out does. You may say they can ask a
+  "what if" question to try a change in the practice portfolio, and suggest talking it over with
+  a grown-up.
 - If a tool says the prices are sample data, say so in your answer.
 - Keep the jar and drops comparison for saving questions.
 - Write plain sentences and stay inside the sentence limit below. No lists, headings or bold."""
@@ -216,15 +223,28 @@ class PortfolioAgent:
         self.max_steps = max_steps
         self.max_tokens = max_tokens
 
+    def _analysis(self, holdings: dict[str, int]) -> ToolRun | None:
+        """The portfolio analysis, run in code before the model writes anything. Without it a
+        follow-up such as "should I keep it?" is answered from memory, with no evidence."""
+        try:
+            summary = summarise(holdings, self.market)
+        except MarketDataError:
+            return None  # the model's own tool will report the problem
+        return ToolRun(name="analyze_my_portfolio", input={}, output=json.dumps(summary))
+
     def respond(self, request: AgentRequest) -> AgentReply:
         holdings = request.kid.practice_holdings
         if not holdings:
             return AgentReply(text=NO_PORTFOLIO)  # nothing to analyse, so no model call
+        analysis = self._analysis(holdings)
+        question = request.question
+        if analysis is not None:
+            question += f"\n\nAnalysis of the child's practice portfolio:\n{analysis.output}"
         result = run_agent(
             self.llm,
             model=self.model,
             system=system_prompt(request, PORTFOLIO_ROLE, _RULES),
-            messages=[*recent_history(request), Message.user(request.question)],
+            messages=[*recent_history(request), Message.user(question)],
             tools=portfolio_tools(holdings, self.market),
             sink=self.sink,
             trace_id=request.trace_id,
@@ -232,5 +252,7 @@ class PortfolioAgent:
             max_steps=self.max_steps,
             max_tokens=self.max_tokens,
         )
+        if analysis is not None:
+            result.tool_runs.insert(0, analysis)  # evidence for the Guardian, like any tool run
         reply = tool_backed_reply(result, PORTFOLIO_UNSURE)
         return disclose_sample_data(reply, result, {PORTFOLIO_UNSURE})

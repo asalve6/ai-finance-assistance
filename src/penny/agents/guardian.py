@@ -130,9 +130,16 @@ class LLMGuardian:
 
     @staticmethod
     def _case(request: AgentRequest, reply: AgentReply) -> str:
+        split = ""
+        if request.also_ask:
+            split = (
+                f'Note: the question has another part, "{request.also_ask}", which another helper '
+                "answers separately. Judge the draft only on the rest. Do not reject it for "
+                "leaving that part out.\n\n"
+            )
         return (
             f"Reading level: {_READERS[request.kid.level]}\n\n"
-            f"Child's question:\n{request.question}\n\n"
+            f"Child's question:\n{request.question}\n\n{split}"
             f"Evidence:\n{reply.evidence or '(none)'}\n\n"
             f"Draft reply:\n{reply.text}"
         )

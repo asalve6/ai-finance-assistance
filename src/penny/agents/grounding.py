@@ -24,8 +24,8 @@ def successful_runs(result: AgentResult) -> list[ToolRun]:
 
 
 def evidence_from(runs: list[ToolRun]) -> str:
-    text = "\n".join(f"{r.name}({json.dumps(r.input)}) -> {r.output}" for r in runs)
-    return text[:EVIDENCE_LIMIT]
+    lines = dict.fromkeys(f"{r.name}({json.dumps(r.input)}) -> {r.output}" for r in runs)
+    return "\n".join(lines)[:EVIDENCE_LIMIT]  # a result seen twice is shown once
 
 
 def tool_backed_reply(result: AgentResult, unsure: str) -> AgentReply:

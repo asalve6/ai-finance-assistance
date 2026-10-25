@@ -32,8 +32,8 @@ def verdict_json(approved: bool, *problems: str) -> LLMResponse:
 OK = verdict_json(True)
 
 
-def request(question="what is a stock", level=Level.STARTER):
-    return AgentRequest(trace_id="t1", kid=KidContext(level=level), question=question)
+def request(question="what is a stock", level=Level.STARTER, **fields):
+    return AgentRequest(trace_id="t1", kid=KidContext(level=level), question=question, **fields)
 
 
 def draft(text="A stock is a small piece of a company.", evidence="A stock is a tiny slice."):
@@ -174,6 +174,27 @@ def test_the_reviewer_sees_the_level_question_evidence_and_draft_and_nothing_els
         "\n\nDraft reply:\nA stock is a slice."
     )
     assert "Sam" not in case and "earlier feedback" not in case  # context isolation
+
+
+def test_the_reviewer_is_told_when_another_helper_answers_part_of_the_question():
+    llm = FakeLLM([OK])
+    req = request(
+        "What is Disney's price, and how do I save for a bike?",
+        also_ask="How do I save for a bike?",
+    )
+    review(llm, draft("Disney is $110.59.", "get_quote -> $110.59"), req)
+    case = llm.calls[0]["messages"][0].content
+    assert 'the question has another part, "How do I save for a bike?"' in case
+    assert "Do not reject it for leaving that part out" in case
+    assert case.index("another part") < case.index(
+        "Evidence:"
+    )  # part of the question, not evidence
+
+
+def test_a_plain_question_has_no_split_note():
+    llm = FakeLLM([OK])
+    review(llm)
+    assert "another part" not in llm.calls[0]["messages"][0].content
 
 
 def test_missing_evidence_is_shown_as_none():
