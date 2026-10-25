@@ -106,7 +106,10 @@ def test_replies_longer_than_the_readers_limit_are_rejected(level, limit):
     over = AgentReply(text=" ".join(["A short one."] * (limit + 1)))
     assert RuleGuardian().review(level_request(level), at_limit).approved is True
     verdict = RuleGuardian().review(level_request(level), over)
-    assert verdict.reasons == [f"too long: {limit + 1} sentences, the limit is {limit}"]
+    assert verdict.reasons == [
+        f"too long: {limit + 1} sentences, the limit is {limit}. Rewrite it in {limit - 1} "
+        "sentences or fewer, leaving out the least important details"
+    ]
 
 
 @pytest.mark.parametrize(

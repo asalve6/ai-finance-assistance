@@ -126,7 +126,10 @@ class RuleGuardian:
         limit = MAX_SENTENCES[request.kid.level]
         sentences = count_sentences(text)
         if sentences > limit:
-            reasons.append(f"too long: {sentences} sentences, the limit is {limit}")
+            reasons.append(
+                f"too long: {sentences} sentences, the limit is {limit}. Rewrite it in "
+                f"{limit - 1} sentences or fewer, leaving out the least important details"
+            )
         if _LIST_OR_HEADING.search(text) or "**" in text:
             reasons.append("write plain sentences: no lists, headings or bold")
         return Verdict(approved=not reasons, reasons=reasons)

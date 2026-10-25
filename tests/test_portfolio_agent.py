@@ -13,7 +13,7 @@ from penny.agents.portfolio_agent import (
     portfolio_tools,
     summarise,
 )
-from penny.contracts import Level, LLMResponse, ToolCall
+from penny.contracts import Level, LLMResponse, Message, ToolCall
 from penny.graph.build import PennyGraph
 from penny.graph.stubs import KeywordRouter, default_agents
 from penny.graph.types import AgentRequest, KidContext
@@ -184,9 +184,73 @@ def test_a_spread_question_is_answered_from_the_analysis():
     assert json.loads(reply.evidence.split(" -> ", 1)[1])["total_value"] == "$390.00"
 
 
-def test_a_number_with_no_tool_behind_it_is_replaced():
-    reply = ask(FakeLLM([says("It is worth about $400.")]), "how much is it worth", {"DIS": 3})
+def test_the_analysis_is_run_in_code_and_given_to_the_model_with_every_question():
+    llm = FakeLLM([says("Most of it is in Disney, so Disney's ups and downs matter a lot.")])
+    market = Market()
+    reply = ask(llm, "should I keep it like that?", {"DIS": 3, "KO": 1}, market=market)
+    sent = llm.calls[0]["messages"][-1].content
+    assert sent.startswith("should I keep it like that?")
+    assert '"total_value": "$390.00"' in sent  # the model sees the current analysis
+    assert reply.text.startswith("Most of it is in Disney")
+    # no tool call by the model, yet the Guardian still has the evidence to check against
+    assert reply.evidence.startswith("analyze_my_portfolio({}) -> ")
+    assert json.loads(reply.evidence.split(" -> ", 1)[1])["total_value"] == "$390.00"
+
+
+def test_a_follow_up_with_no_tool_call_is_not_left_without_evidence():
+    # the exact failure: "how is my portfolio" worked, then "should I keep it like that?" had no
+    # evidence and the Guardian rejected every draft as unsupported
+    llm = FakeLLM([says("Your portfolio is mostly in Disney."), says("It is mostly in Disney.")])
+    sink = InMemoryTraceSink()
+    agent = PortfolioAgent(llm, "main-m", Market(), sink=sink)
+    kid = KidContext(nickname="Sam", level=Level.SAVER, practice_holdings={"DIS": 3, "KO": 1})
+    first = agent.respond(AgentRequest(trace_id="t1", kid=kid, question="how is my portfolio"))
+    second = agent.respond(
+        AgentRequest(
+            trace_id="t2",
+            kid=kid,
+            question="should I keep it like that?",
+            history=[
+                Message.user("how is my portfolio"),
+                Message(role="assistant", content=first.text),
+            ],
+        )
+    )
+    assert first.evidence and second.evidence
+
+
+def test_a_model_that_also_calls_the_tool_does_not_duplicate_the_evidence():
+    llm = FakeLLM([calls("analyze_my_portfolio"), says("It is mostly in Disney.")])
+    reply = ask(llm, "is it spread out?", {"DIS": 3, "KO": 1})
+    assert reply.evidence.count("analyze_my_portfolio({}) ->") == 1
+
+
+def test_without_prices_a_number_with_no_tool_behind_it_is_still_replaced():
+    class Down:
+        name = "down"
+
+        def quote(self, symbol):
+            raise MarketDataError("no provider could answer")
+
+        def history(self, symbol, days=30):
+            raise MarketDataError("no provider could answer")
+
+    reply = ask(
+        FakeLLM([says("It is worth about $400.")]),
+        "how much is it worth",
+        {"DIS": 3},
+        market=Down(),
+    )
     assert reply.text == PORTFOLIO_UNSURE
+
+
+def test_the_rules_tell_the_agent_not_to_answer_keep_or_change_questions_yes_or_no():
+    llm = FakeLLM([says("I can't say what to do. Most of it is in Disney.")])
+    ask(llm, "should I keep it like that?", {"DIS": 3})
+    system = " ".join(llm.calls[0]["system"].split())  # the prompt wraps lines
+    assert "can't give advice" in system and "Do not name any change" in system
+    assert "talking it over with a grown-up" in system
+    assert "already run" not in system  # the analysis comes with the question, not the rules
 
 
 def test_sample_prices_must_be_disclosed():
